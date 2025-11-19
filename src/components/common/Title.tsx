@@ -1,3 +1,12 @@
+interface TitleProps {
+  as?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+  children: React.ReactNode;
+  className?: string;
+  size?: '3xl' | '2xl' | 'xl' | '2lg' | 'lg' | 'md' | 'sm' | 'xs';
+  weight?: 'bold' | 'semibold' | 'medium' | 'regular';
+  color?: string;
+}
+
 /**
  * Title 컴포넌트
  *
@@ -13,16 +22,7 @@
  * </Title>
  */
 
-interface TitleProps {
-  as?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
-  children: React.ReactNode;
-  className?: string;
-  size?: '3xl' | '2xl' | 'xl' | '2lg' | 'lg' | 'md' | 'sm' | 'xs';
-  weight?: 'bold' | 'semibold' | 'medium' | 'regular';
-  color?: string;
-}
-
-function Title({
+export default function Title({
   as: Component = 'h2',
   children,
   className = '',
@@ -78,5 +78,3 @@ function Title({
     </Component>
   );
 }
-
-export default Title;
