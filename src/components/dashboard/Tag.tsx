@@ -22,6 +22,12 @@ interface TagProps {
   color: ColorType;
 }
 
+/**
+ * @example
+ * ```tsx
+ * <Tag color='orange'>태그</Tag>
+ * ```
+ */
 export default function Tag({ children, color }: TagProps) {
   return <span className={cn(tagStyles({ color }))}>{children}</span>;
 }
