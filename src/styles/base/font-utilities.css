@@ -3,13 +3,11 @@
 
   .font-3xl-bold {
     @apply text-[2rem] leading-[2.625rem];
-
     font-weight: 700; /* Pretendard Bold */
   }
 
   .font-3xl-semibold {
     @apply text-[2rem] leading-[2.625rem];
-
     font-weight: 600; /* Pretendard SemiBold */
   }
 
@@ -17,25 +15,21 @@
 
   .font-2xl-bold {
     @apply text-[1.5rem] leading-[2rem];
-
     font-weight: 700;
   }
 
   .font-2xl-semibold {
     @apply text-[1.5rem] leading-[2rem];
-
     font-weight: 600;
   }
 
   .font-2xl-medium {
     @apply text-[1.5rem] leading-[2rem];
-
     font-weight: 500;
   }
 
   .font-2xl-regular {
     @apply text-[1.5rem] leading-[2rem];
-
     font-weight: 400;
   }
 
@@ -43,25 +37,21 @@
 
   .font-xl-bold {
     @apply text-[1.25rem] leading-[2rem];
-
     font-weight: 700;
   }
 
   .font-xl-semibold {
     @apply text-[1.25rem] leading-[2rem];
-
     font-weight: 600;
   }
 
   .font-xl-medium {
     @apply text-[1.25rem] leading-[2rem];
-
     font-weight: 500;
   }
 
   .font-xl-regular {
     @apply text-[1.25rem] leading-[2rem];
-
     font-weight: 400;
   }
 
@@ -69,25 +59,21 @@
 
   .font-2lg-bold {
     @apply text-[1.125rem] leading-[1.625rem];
-
     font-weight: 700;
   }
 
   .font-2lg-semibold {
     @apply text-[1.125rem] leading-[1.625rem];
-
     font-weight: 600;
   }
 
   .font-2lg-medium {
     @apply text-[1.125rem] leading-[1.625rem];
-
     font-weight: 500;
   }
 
   .font-2lg-regular {
     @apply text-[1.125rem] leading-[1.625rem];
-
     font-weight: 400;
   }
 
@@ -95,25 +81,21 @@
 
   .font-lg-bold {
     @apply text-[1rem] leading-[1.625rem];
-
     font-weight: 700;
   }
 
   .font-lg-semibold {
     @apply text-[1rem] leading-[1.625rem];
-
     font-weight: 600;
   }
 
   .font-lg-medium {
     @apply text-[1rem] leading-[1.625rem];
-
     font-weight: 500;
   }
 
   .font-lg-regular {
     @apply text-[1rem] leading-[1.625rem];
-
     font-weight: 400;
   }
 
@@ -121,25 +103,21 @@
 
   .font-md-bold {
     @apply text-[0.875rem] leading-[1.5rem];
-
     font-weight: 700;
   }
 
   .font-md-semibold {
     @apply text-[0.875rem] leading-[1.5rem];
-
     font-weight: 600;
   }
 
   .font-md-medium {
     @apply text-[0.875rem] leading-[1.5rem];
-
     font-weight: 500;
   }
 
   .font-md-regular {
     @apply text-[0.875rem] leading-[1.5rem];
-
     font-weight: 400;
   }
 
@@ -147,13 +125,11 @@
 
   .font-sm-semibold {
     @apply text-[0.8125rem] leading-[1.375rem];
-
     font-weight: 600;
   }
 
   .font-sm-medium {
     @apply text-[0.8125rem] leading-[1.375rem];
-
     font-weight: 500;
   }
 
@@ -161,19 +137,16 @@
 
   .font-xs-semibold {
     @apply text-[0.75rem] leading-[1.25rem];
-
     font-weight: 600;
   }
 
   .font-xs-medium {
     @apply text-[0.75rem] leading-[1.125rem];
-
     font-weight: 500;
   }
 
   .font-xs-regular {
     @apply text-[0.75rem] leading-[1.125rem];
-
     font-weight: 400;
   }
 }
