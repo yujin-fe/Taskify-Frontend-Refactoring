@@ -9,31 +9,6 @@ interface TitleProps {
   weight?: 'bold' | 'semibold' | 'medium' | 'regular';
 }
 
-/**
- * Title 컴포넌트
- *
- * Tailwind 기반의 공통 타이틀 컴포넌트입니다.
- * h2~h6 태그 선택 가능하며, size와 weight로 스타일링 가능합니다.
- * 기본 컬러는 text-gray-700이며, 예외는 className으로 적용합니다.
- *
- * @example
- * <Title as="h3" size="2xl" weight="medium" className="text-violet-500">
- *   보라색 타이틀
- * </Title>
- */
-
-export default function Title({
-  as: Component = 'h2',
-  children,
-  className,
-  size,
-  weight,
-}: TitleProps) {
-  return (
-    <Component className={cn(titleVariants({ size, weight }), className)}>{children}</Component>
-  );
-}
-
 const titleVariants = cva('text-gray-700', {
   variants: {
     size: {
@@ -58,3 +33,28 @@ const titleVariants = cva('text-gray-700', {
     weight: 'regular',
   },
 });
+
+/**
+ * Title 컴포넌트
+ *
+ * Tailwind 기반의 공통 타이틀 컴포넌트입니다.
+ * h2~h6 태그 선택 가능하며, size와 weight로 스타일링 가능합니다.
+ * 기본 컬러는 text-gray-700이며, 예외는 className으로 적용합니다.
+ *
+ * @example
+ * <Title as="h3" size="2xl" weight="medium" className="text-violet-500">
+ *   보라색 타이틀
+ * </Title>
+ */
+
+export default function Title({
+  as: Component = 'h2',
+  children,
+  className,
+  size,
+  weight,
+}: TitleProps) {
+  return (
+    <Component className={cn(titleVariants({ size, weight }), className)}>{children}</Component>
+  );
+}
