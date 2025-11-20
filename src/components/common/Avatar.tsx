@@ -4,9 +4,10 @@ interface AvatarProps {
   profileImgUrl: string | null;
   userName: string;
   size: 's' | 'm';
+  userId: number;
 }
 
-export default function Avatar({ profileImgUrl, userName, size }: AvatarProps) {
+export default function Avatar({ profileImgUrl, userName, userId, size }: AvatarProps) {
   const AvatarStyle = clsx('rounded-full overflow-hidden', {
     'w-[24px] h-[24px] ': size === 's',
     'w-[38px] h-[38px] border-2 border-gray-0': size === 'm',
@@ -20,7 +21,7 @@ export default function Avatar({ profileImgUrl, userName, size }: AvatarProps) {
           alt={`${userName}님의 프로필`}
         />
       ) : (
-        <div>AvatarFallback</div>
+        <div>AvatarFallback{userId}</div>
       )}
     </div>
   );
