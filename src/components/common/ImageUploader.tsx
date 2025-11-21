@@ -1,6 +1,5 @@
 import { useRef, useState } from 'react';
-import CloseIcon from '@/assets/icons/dashboard/ic-close.svg';
-import PlusIcon from '@/assets/icons/dashboard/ic-plus.svg';
+import Icons from '@/assets/icons';
 import { cn } from '@/utils/cn';
 
 type ImageUploadProps = {
@@ -33,6 +32,7 @@ export function ImageUpload({ size = 'Small' }: ImageUploadProps) {
     const url = URL.createObjectURL(file);
     setPreview(url);
   };
+
   // X 버튼 누르면 사진 제거
   const handleRemoveImage = (e: React.MouseEvent) => {
     e.stopPropagation(); // 버튼 눌러도 다른 버튼에 영향을 안 줌
@@ -67,7 +67,7 @@ export function ImageUpload({ size = 'Small' }: ImageUploadProps) {
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}>
-        {!preview && <PlusIcon className={'h-7 w-7 text-violet-500'} />}
+        {!preview && <Icons.Plus className='h-7 w-7 text-violet-500' />}
       </button>
 
       {/* 이미지가 있으면 닫기 버튼 표시 */}
@@ -76,9 +76,9 @@ export function ImageUpload({ size = 'Small' }: ImageUploadProps) {
           onClick={handleRemoveImage}
           type='button'
           className={cn(
-            'absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-gray-600'
+            'absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-gray-600'
           )}>
-          <CloseIcon className={'text-white h-4 w-4 text-gray-0'} />
+          <Icons.Close className='text-white h-4 w-4 text-gray-0' />
         </button>
       )}
 
