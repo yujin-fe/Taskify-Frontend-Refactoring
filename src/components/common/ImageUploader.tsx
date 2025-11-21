@@ -58,22 +58,24 @@ export function ImageUpload({ size = 'Small' }: ImageUploadProps) {
           buttonSizes[size]
         )}
         onClick={handleButtonClick}
+        type='button'
         style={{
           backgroundImage: preview ? `url(${preview})` : undefined,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}>
-        {!preview && <PlusIcon className={cn('h-7 w-7 text-violet-500')} />}
+        {!preview && <PlusIcon className={'h-7 w-7 text-violet-500'} />}
       </button>
 
       {/* 이미지가 있으면 닫기 버튼 표시 */}
       {preview && (
         <button
           onClick={handleRemoveImage}
+          type='button'
           className={cn(
             'absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-gray-600'
           )}>
-          <CloseIcon className={cn('text-white h-4 w-4 text-gray-0')} />
+          <CloseIcon className={'text-white h-4 w-4 text-gray-0'} />
         </button>
       )}
 
