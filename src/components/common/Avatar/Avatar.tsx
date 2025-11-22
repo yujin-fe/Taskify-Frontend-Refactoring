@@ -14,8 +14,8 @@ interface AvatarProps {
 /**
  * @example
  * <Avatar size="s" user={user}>
- *  <AvatarImg />
- *  <AvatarFallback />
+ *  <Avatar.Img />
+ *  <Avatar.Fallback />
  * </Avatar>
  */
 
