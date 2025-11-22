@@ -10,7 +10,7 @@ interface DropdownMenuCheckItemProps {
 export default function DropdownMenuCheckItem({ children, value }: DropdownMenuCheckItemProps) {
   const { value: selectedValue, onValueChange, handleToggleOpen } = useContext(DropdownMenuContext);
 
-  const handleListClick = (value: string) => {
+  const handleListClick = () => {
     onValueChange?.(value);
     handleToggleOpen();
   };
@@ -18,7 +18,7 @@ export default function DropdownMenuCheckItem({ children, value }: DropdownMenuC
   return (
     <li
       className='relative flex h-12 dropdown-menu-item-base items-center gap-2 pl-[46px] hover:bg-gray-200'
-      onClick={() => handleListClick(value)}>
+      onClick={handleListClick}>
       {selectedValue === value && (
         <Icons.Check width={22} height={22} className='absolute left-4 text-gray-500' />
       )}
