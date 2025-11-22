@@ -1,9 +1,7 @@
 import type { ComponentPropsWithoutRef } from 'react';
 
-interface LabelProps extends ComponentPropsWithoutRef<'label'> {
-  htmlFor?: string;
-  children: React.ReactNode;
-}
+type LabelProps = ComponentPropsWithoutRef<'label'>;
+
 /**
  * Label 컴포넌트 (공통 라벨)
  *
