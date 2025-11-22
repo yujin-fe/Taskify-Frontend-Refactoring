@@ -31,6 +31,10 @@ export default function DropdownMenuSearchTrigger({
 
   return (
     <div
+      role='combobox'
+      aria-expanded={isOpen}
+      aria-haspopup='listbox'
+      aria-label='검색 및 선택'
       tabIndex={0}
       className='flex h-[48px] w-full cursor-pointer justify-between rounded-md border border-gray-300 bg-gray-0 px-[16px] py-[11px] focus-within:border-primary'
       onClick={handleTriggerClick}>
