@@ -3,10 +3,10 @@ type PageIndicatorProps = {
   totalPages: number;
 };
 
-export function PageIndicator({ currentPage, totalPages }: PageIndicatorProps) {
+export default function PageIndicator({ currentPage, totalPages }: PageIndicatorProps) {
   return (
-    <p className='text-sm text-gray-700' aria-live='polite'>
+    <span className='text-sm text-gray-700' aria-live='polite'>
       {currentPage}페이지 중 {totalPages}페이지
-    </p>
+    </span>
   );
 }
