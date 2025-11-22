@@ -1,8 +1,8 @@
-import React from 'react';
-import AvatarFallback from '@/components/common/Avatar/AvatarFallback';
-import AvatarImg from '@/components/common/Avatar/AvatarImg';
+import React, { useState } from 'react';
+import AvatarFallback from '@/components/common/avatar/AvatarFallback';
+import AvatarImg from '@/components/common/avatar/AvatarImg';
 import { AvatarContext } from '@/context/avatarContext';
-import type { UserMe } from '@/types/user-me';
+import type { UserMe } from '@/types/userMe';
 import { cn } from '@/utils/cn';
 
 interface AvatarProps {
@@ -20,6 +20,7 @@ interface AvatarProps {
  */
 
 export default function Avatar({ children, size, user }: AvatarProps) {
+  const [imageError, setImageError] = useState(false);
   const AvatarStyle = cn('rounded-full overflow-hidden', {
     'w-[24px] h-[24px] ': size === 's',
     'w-[38px] h-[38px] border-2 border-gray-0': size === 'm',
@@ -33,14 +34,14 @@ export default function Avatar({ children, size, user }: AvatarProps) {
     (child) => React.isValidElement(child) && child.type === AvatarFallback
   );
   return (
-    <AvatarContext value={user}>
-      <div className={AvatarStyle}>{user.profileImageUrl ? img : fallback}</div>
+    <AvatarContext value={{ ...user, setImageError }}>
+      <div className={AvatarStyle}>{user.profileImageUrl && !imageError ? img : fallback}</div>
     </AvatarContext>
   );
 }
 
-Avatar.AvatarImg = AvatarImg;
+Avatar.Img = AvatarImg;
 
-Avatar.AvatarFallback = AvatarFallback;
+Avatar.Fallback = AvatarFallback;
 
 //TODO: 이미지에 오류가 생겼을 때 AvatarFallback 노출하기
