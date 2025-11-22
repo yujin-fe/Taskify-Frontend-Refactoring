@@ -43,5 +43,3 @@ export default function Avatar({ children, size, user }: AvatarProps) {
 Avatar.Img = AvatarImg;
 
 Avatar.Fallback = AvatarFallback;
-
-//TODO: 이미지에 오류가 생겼을 때 AvatarFallback 노출하기
