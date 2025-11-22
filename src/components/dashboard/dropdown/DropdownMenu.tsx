@@ -48,15 +48,30 @@ export default function DropdownMenu({
   onChangeValue,
   className,
 }: DropdownMenuProps) {
-  const dropdownState = useDropdownMenuState();
+  const { isOpen, setIsOpen, searchQuery, setSearchQuery, selectedNode, setSelectedNode } =
+    useDropdownMenuState();
 
   const contextValue = useMemo(
     () => ({
       selectedValue: value,
       setSelectedValue: onChangeValue,
-      ...dropdownState,
+      isOpen,
+      setIsOpen,
+      searchQuery,
+      setSearchQuery,
+      selectedNode,
+      setSelectedNode,
     }),
-    [value, onChangeValue, dropdownState]
+    [
+      value,
+      onChangeValue,
+      isOpen,
+      setIsOpen,
+      searchQuery,
+      setSearchQuery,
+      selectedNode,
+      setSelectedNode,
+    ]
   );
 
   return (
