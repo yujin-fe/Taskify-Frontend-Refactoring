@@ -8,5 +8,5 @@ export const matchSearch = (value: string, query: string) => {
   if (!query) {
     return true;
   }
-  return value.includes(query.toLowerCase());
+  return value.toLowerCase().includes(query.toLowerCase());
 };
