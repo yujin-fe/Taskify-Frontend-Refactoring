@@ -65,7 +65,7 @@ DropdownMenu.Item = DropdownMenuItem;
  *
  * @example
  *  <DropdownMenu.CheckList>
- *    <DropdownMenu.CheckItem>...</DropdownMenu.CheckItem>
+ *    <DropdownMenu.CheckItem value="홍길동">...</DropdownMenu.CheckItem>
  *  </DropdownMenu.CheckList>
  */
 DropdownMenu.CheckList = DropdownMenuCheckList;
@@ -76,12 +76,6 @@ DropdownMenu.CheckList = DropdownMenuCheckList;
  *
  * @example
  *  <DropdownMenu.CheckItem value="홍길동">
- *    <Avatar
- *      profileImgUrl={null}
- *      userId={1234}
- *      userName="홍"
- *      size="s"
- *    />
  *    홍길동
  *  </DropdownMenu.CheckItem>
  */
