@@ -72,7 +72,7 @@ DropdownMenu.CheckList = DropdownMenuCheckList;
 
 /**
  * 드롭다운 메뉴에서 선택 가능한 체크 아이템 컴포넌트입니다.
- * 선택 시 부모 `DropdownMenu.CheckList`에 해당 value가 전달됩니다.
+ * 선택 시 부모 `DropdownMenu`에 설정된 value/onValueChange를 통해 선택 값이 반영됩니다.
  *
  * @example
  *  <DropdownMenu.CheckItem value="홍길동">
