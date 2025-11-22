@@ -81,4 +81,3 @@ export default function Button<T extends React.ElementType = 'button'>({
   };
   return <Component {...componentProps}>{children}</Component>;
 }
-//TODO: hover 디자인 반영
