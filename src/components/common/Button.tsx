@@ -10,7 +10,7 @@ const ButtonStyle = cva(
     variants: {
       theme: {
         primary: 'bg-primary text-gray-0 border-none hover:bg-purple-500',
-        secondary: 'text-primary ',
+        secondary: 'text-primary',
         outlined: 'text-gray-500',
         icon: 'text-gray-500',
       },
