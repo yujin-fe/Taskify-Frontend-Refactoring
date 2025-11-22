@@ -64,23 +64,30 @@ export default function Button<T extends React.ElementType = 'button'>({
   theme,
   size,
   type = 'submit',
-  disabled,
+  disabled = false,
   className,
   onClick,
   ...props
 }: AsProps<T>) {
   const Component = as || 'button';
+
+  const componentProps = {
+    className: cn(ButtonStyle({ theme, size }), className),
+    ...(Component === 'button' ? { type } : {}),
+    ...(Component === 'button' ? { disabled } : {}),
+    onClick,
+    ...props,
+  };
   return (
-    <>
-      <Component
-        className={cn(ButtonStyle({ theme, size }), className)}
-        disabled={disabled}
-        onClick={onClick}
-        type={type}
-        {...props}>
-        {children}
-      </Component>
-    </>
+    <Component
+      // className={cn(ButtonStyle({ theme, size }), className)}
+      // disabled={disabled}
+      // onClick={onClick}
+      // type={type}
+      // {...props}
+      {...componentProps}>
+      {children}
+    </Component>
   );
 }
 //TODO: hover 디자인 반영
