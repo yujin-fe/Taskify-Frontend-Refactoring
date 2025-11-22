@@ -16,13 +16,12 @@ export default function DropdownMenuTrigger({
   const { handleToggleOpen } = useContext(DropdownMenuContext);
 
   return (
-    <div
-      role='button'
-      tabIndex={0}
+    <button
       className={cn('flex cursor-pointer', className)}
+      type='button'
       onClick={handleToggleOpen}
       aria-label={ariaLabel}>
       {children}
-    </div>
+    </button>
   );
 }
