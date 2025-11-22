@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import AvatarFallback from '@/components/common/hhkalnvl/AvatarFallback';
-import AvatarImg from '@/components/common/hhkalnvl/AvatarImg';
+import AvatarFallback from '@/components/common/avatar/AvatarFallback';
+import AvatarImg from '@/components/common/avatar/AvatarImg';
 import { AvatarContext } from '@/context/avatarContext';
 import type { UserMe } from '@/types/userMe';
 import { cn } from '@/utils/cn';
