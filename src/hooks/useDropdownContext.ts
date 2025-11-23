@@ -5,7 +5,7 @@ export const useBasicDropdownContext = () => {
   const context = useContext(BasicDropdownContext);
 
   if (!context) {
-    throw new Error('BaseDropdownContext 안에서 사용하세요.');
+    throw new Error('BasicDropdownContext 안에서 사용하세요.');
   }
 
   return context;
