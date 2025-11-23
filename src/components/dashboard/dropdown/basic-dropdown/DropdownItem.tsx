@@ -6,10 +6,10 @@ interface DropdownItemProps {
 }
 
 export default function DropdownItem({ children, onClick }: DropdownItemProps) {
-  const { isOpen, setIsOpen } = useBasicDropdownContext();
+  const { setIsOpen } = useBasicDropdownContext();
 
   const handleClickMenuItem = () => {
-    setIsOpen(!isOpen);
+    setIsOpen(false);
     onClick();
   };
 
