@@ -1,5 +1,5 @@
 import type { ComponentPropsWithoutRef } from 'react';
-import useInputFieldContext from '@/hooks/useInputContext';
+import useInputContext from '@/hooks/useInputContext';
 import { cn } from '@/utils/cn';
 
 interface InputLabelProps extends ComponentPropsWithoutRef<'label'> {
@@ -23,7 +23,7 @@ export default function InputLabel({
   required = false,
   ...props
 }: InputLabelProps) {
-  const { id } = useInputFieldContext();
+  const { id } = useInputContext();
 
   return (
     <label htmlFor={id} className={cn('text-gray-700', className)} {...props}>
