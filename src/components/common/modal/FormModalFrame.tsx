@@ -50,7 +50,7 @@ export default function FormModalFrame({
 }: FormModalFrameProps) {
   return (
     <ModalPortal>
-      <div className='fixed inset-0 flex items-center justify-center bg-gray-900/70'>
+      <div className='modal-dimmed'>
         <div className={cn(FormModalFrameStyle({ size, gap }), className)}>
           {size === 'sm' ? (
             <Title as='h2' size='lg' weight={'bold'}>
