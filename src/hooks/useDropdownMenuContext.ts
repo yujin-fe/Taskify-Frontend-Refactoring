@@ -1,7 +1,7 @@
 import { useContext } from 'react';
-import { DropdownMenuContext, type DropdownMenuContextType } from '@/context/dropdownMenuContext';
+import { DropdownMenuContext } from '@/context/dropdownMenuContext';
 
-const useDropdownMenuContext = (): DropdownMenuContextType => {
+const useDropdownMenuContext = () => {
   const context = useContext(DropdownMenuContext);
 
   if (!context) {

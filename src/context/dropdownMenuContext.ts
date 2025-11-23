@@ -1,6 +1,6 @@
 import { createContext } from 'react';
 
-export interface DropdownMenuContextType {
+interface DropdownMenuContextType {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
   selectedValue?: string;
