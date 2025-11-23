@@ -3,8 +3,7 @@
 @import './base/fonts.css';
 @import './base/colors.css';
 @import './base/font-utilities.css';
-@import './base/modal-utilities.css';
-
+@import './components/modalUtilities.css';
 @import './components/dropdownUtilites.css';
 
 li {
