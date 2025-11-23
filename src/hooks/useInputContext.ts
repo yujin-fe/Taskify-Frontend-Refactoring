@@ -5,7 +5,7 @@ const useInputContext = () => {
   const context = useContext(InputContext);
 
   if (!context) {
-    throw new Error('InputFieldContext 안에서 사용하세요.');
+    throw new Error('InputContext 안에서 사용하세요.');
   }
 
   return context;
