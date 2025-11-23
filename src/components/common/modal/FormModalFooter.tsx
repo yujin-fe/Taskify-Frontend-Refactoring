@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import Button from '@/components/common/Button';
-import { FormModalContext } from '@/context/test';
+import { FormModalContext } from '@/context/FormModalContext';
 export default function FormModalFooter({
   cancleButton,
   submitButton,
