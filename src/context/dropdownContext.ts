@@ -3,7 +3,7 @@ import { createContext } from 'react';
 /**
  * 기본 드롭다운 메뉴(드롭다운 1) 컨텍스트 타입
  */
-interface BaseDropdownMenuContextType {
+interface BaseDropdownContextType {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
 }
@@ -11,7 +11,7 @@ interface BaseDropdownMenuContextType {
 /**
  * 검색 가능한 드롭다운 메뉴(드롭다운 2) 컨텍스트 타입
  */
-interface SearchableDropdownMenuContextType extends BaseDropdownMenuContextType {
+interface SearchableDropdownContextType extends BaseDropdownContextType {
   selectedValue: string;
   setSelectedValue: (value: string) => void;
   searchQuery: string;
@@ -20,7 +20,6 @@ interface SearchableDropdownMenuContextType extends BaseDropdownMenuContextType 
   setSelectedNode: (node: null | React.ReactNode) => void;
 }
 
-export const BaseDropdownMenuContext = createContext<BaseDropdownMenuContextType | null>(null);
+export const BaseDropdownContext = createContext<BaseDropdownContextType | null>(null);
 
-export const SearchableDropdownMenuContext =
-  createContext<SearchableDropdownMenuContextType | null>(null);
+export const SearchableDropdownContext = createContext<SearchableDropdownContextType | null>(null);
