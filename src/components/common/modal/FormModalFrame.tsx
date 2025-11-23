@@ -28,6 +28,7 @@ interface FormModalFrameProps extends VariantProps<typeof FormModalFrameStyle> {
   rightButton: string;
   children: React.ReactNode;
   className?: string;
+  setOnModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 /**
  *
@@ -45,6 +46,7 @@ export default function FormModalFrame({
   rightButton,
   children,
   className,
+  setOnModal,
 }: FormModalFrameProps) {
   return (
     <ModalPortal>
@@ -65,8 +67,12 @@ export default function FormModalFrame({
               'flex w-[520px] gap-2': size === 'lg' || size === 'md',
               'flex w-[295px] gap-[7px]': size === 'sm',
             })}>
-            <Button theme={'outlined'}>{leftButton}</Button>
-            <Button theme={'primary'}>{rightButton}</Button>
+            <Button size='lg' theme={'outlined'} onClick={() => setOnModal(false)}>
+              {leftButton}
+            </Button>
+            <Button size='lg' theme={'primary'} type='submit'>
+              {rightButton}
+            </Button>
           </div>
         </div>
       </div>
