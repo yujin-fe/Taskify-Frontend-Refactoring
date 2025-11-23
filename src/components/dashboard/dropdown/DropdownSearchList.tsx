@@ -1,16 +1,16 @@
 import React from 'react';
-import type { DropdownMenuCheckItemProps } from '@/components/dashboard/dropdown/DropdownMenuCheckItem';
-import useDropdownMenuContext from '@/hooks/useDropdownMenuContext';
+import type { DropdownSearchItemProps } from '@/components/dashboard/dropdown/DropdownSearchItem';
+import { useSearchableDropdownContext } from '@/hooks/useDropdownContext';
 import { matchSearch } from '@/utils/dropdownMenuSearch';
 
-export default function DropdownMenuCheckList({ children }: { children: React.ReactNode }) {
-  const { isOpen, searchQuery } = useDropdownMenuContext();
+export default function DropdownSearchList({ children }: { children: React.ReactNode }) {
+  const { isOpen, searchQuery } = useSearchableDropdownContext();
 
   const filteredChildren = React.Children.toArray(children).filter((child) => {
     if (!React.isValidElement(child)) {
       return true;
     }
-    const itemValue = (child.props as DropdownMenuCheckItemProps).value || '';
+    const itemValue = (child.props as DropdownSearchItemProps).value || '';
     return matchSearch(itemValue, searchQuery);
   });
 
