@@ -7,9 +7,8 @@ import { cn } from '@/utils/cn';
 const FormModalFrameStyle = cva(`flex flex-col bg-gray-0 rounded-2xl`, {
   variants: {
     size: {
-      lg: 'p-[32px]',
-      md: 'p-[24px]',
-      sm: 'py-[24px] px-[16px] rounded-lg w-[327px]',
+      lg: 'p-[32px] md:p-[24px]',
+      md: 'p-[24px] md:py-[24px] md:px-[16px] md:rounded-lg md:w-[327px]',
     },
     gap: {
       32: 'gap-[32px]',
@@ -33,11 +32,9 @@ interface FormModalFrameProps extends VariantProps<typeof FormModalFrameStyle> {
 /**
  * padding 값에 따라서 크기를 지정해주세요
  *
- * lg-패딩 32px
+ * lg-패딩 32px 모바일은 패딩 24px로 적용해둠
  *
- * md-패딩 24px
- *
- * sm-패딩 24px 16px
+ * md-패딩 24px 모바일은 패딩 24px 16px로 적용해둠
  *
  * gap은 타이틀과 폼(children) 폼과 버튼 사이의 픽셀을 골라주세요
  *
@@ -69,8 +66,8 @@ export default function FormModalFrame({
     <ModalPortal>
       <div className='modal-dimmed'>
         <div className={cn(FormModalFrameStyle({ size, gap }), className)}>
-          {size === 'sm' ? (
-            <Title as='h2' size='lg' weight={'bold'}>
+          {size === 'md' ? (
+            <Title as='h2' size='2xl' weight={'bold'} className='md:text-lg'>
               {title}
             </Title>
           ) : (
@@ -79,11 +76,7 @@ export default function FormModalFrame({
             </Title>
           )}
           {children}
-          <div
-            className={cn({
-              'flex w-[520px] gap-2': size === 'lg' || size === 'md',
-              'flex w-[295px] gap-[7px]': size === 'sm',
-            })}>
+          <div className={'flex w-[520px] gap-2 md:flex md:w-[295px] md:gap-[7px]'}>
             <Button size='lg' theme={'outlined'} onClick={() => setOnModal(false)}>
               {leftButton}
             </Button>
