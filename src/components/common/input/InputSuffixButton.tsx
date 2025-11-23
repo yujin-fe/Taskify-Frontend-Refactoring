@@ -19,7 +19,7 @@ export default function InputSuffixButton({
       disabled={disabled}
       type='button'
       onClick={onClick}
-      className='absolute top-[50%] right-[12px] translate-y-[-50%] cursor-pointer text-gray-400'>
+      className='absolute top-[50%] right-[12px] translate-y-[-50%] cursor-pointer text-gray-400 disabled:cursor-not-allowed'>
       {children}
     </button>
   );
