@@ -5,16 +5,16 @@ import useInputContext from '@/hooks/useInputContext';
 import { cn } from '@/utils/cn';
 
 function autoAddSuffixToFields(children: React.ReactNode) {
+  const hasSuffix = Children.toArray(children).some(
+    (c) => isValidElement(c) && c.type === InputSuffixButton
+  );
+
   return Children.map(children, (child) => {
     if (!isValidElement(child)) {
       return child;
     }
 
     if (child.type === InputField) {
-      const hasSuffix = Children.toArray(children).some(
-        (c) => isValidElement(c) && c.type === InputSuffixButton
-      );
-
       return cloneElement(child as React.ReactElement<InputFieldProps>, { _hasSuffix: hasSuffix });
     }
 
