@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import Title from '@/components/common/Title';
-import { FormModalContext } from '@/context/ModalContext';
+import { FormModalContext } from '@/context/test';
 export default function FormModalTitle({ title }: { title: string }) {
   const { finalSize } = useContext(FormModalContext);
   return finalSize === 'md' ? (
