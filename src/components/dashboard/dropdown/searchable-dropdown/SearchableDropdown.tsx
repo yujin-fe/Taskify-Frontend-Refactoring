@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
-import DropdownSearchItem from '@/components/dashboard/dropdown/DropdownSearchItem';
-import DropdownSearchList from '@/components/dashboard/dropdown/DropdownSearchList';
-import DropdownSearchTrigger from '@/components/dashboard/dropdown/DropdownSearchTrigger';
+import DropdownSearchItem from '@/components/dashboard/dropdown/searchable-dropdown/DropdownSearchItem';
+import DropdownSearchList from '@/components/dashboard/dropdown/searchable-dropdown/DropdownSearchList';
+import DropdownSearchTrigger from '@/components/dashboard/dropdown/searchable-dropdown/DropdownSearchTrigger';
 import { SearchableDropdownContext } from '@/context/dropdownContext';
 import useDropdownMenuState from '@/hooks/useDropdownState';
 
