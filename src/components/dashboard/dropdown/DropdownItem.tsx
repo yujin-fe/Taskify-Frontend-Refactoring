@@ -1,4 +1,4 @@
-import useDropdownMenuContext from '@/hooks/useDropdownMenuContext';
+import { useBaseDropdownContext } from '@/hooks/useDropdownContext';
 
 interface DropdownMenuItemProps {
   children: React.ReactNode;
@@ -6,7 +6,7 @@ interface DropdownMenuItemProps {
 }
 
 export default function DropdownMenuItem({ children, onClick }: DropdownMenuItemProps) {
-  const { isOpen, setIsOpen } = useDropdownMenuContext();
+  const { isOpen, setIsOpen } = useBaseDropdownContext();
 
   const handleClickMenuItem = () => {
     setIsOpen(!isOpen);

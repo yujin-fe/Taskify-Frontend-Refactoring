@@ -1,7 +1,7 @@
-import useDropdownMenuContext from '@/hooks/useDropdownMenuContext';
+import { useBaseDropdownContext } from '@/hooks/useDropdownContext';
 
 export default function DropdownMenuList({ children }: { children: React.ReactNode }) {
-  const { isOpen } = useDropdownMenuContext();
+  const { isOpen } = useBaseDropdownContext();
 
   if (!isOpen) {
     return null;
