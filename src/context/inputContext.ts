@@ -6,7 +6,6 @@ interface InputContextType {
   onChange: (value: string) => void;
   disabled?: boolean;
   hasError?: boolean;
-  hasSuffix?: boolean;
 }
 
 export const InputContext = createContext<InputContextType | null>(null);
