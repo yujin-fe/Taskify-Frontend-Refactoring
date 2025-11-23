@@ -37,10 +37,10 @@ export default function BaseModalFrame({
       <div className='fixed inset-0 flex items-center justify-center'>
         <div
           className={cn(
-            'flex flex-col items-center justify-between justify-center bg-gray-0 text-center font-lg-medium text-gray-700 sm:w-[368px] sm:gap-8 sm:pt-[40px] sm:pb-[40px] sm:font-xl-medium',
+            'flex flex-col items-center justify-center bg-gray-0 text-center font-lg-medium text-gray-700 sm:w-[368px] sm:gap-8 sm:pt-[40px] sm:pb-[40px] sm:font-xl-medium',
             size === 'Login'
-              && 'sm: h-[220px] w-[327px] gap-[50px] rounded-lg pt-[80px] pb-[28px] sm:rounded-2xl',
-            size === 'Account' && 'sm: h-[164px] w-[272px] rounded-2xl'
+              && 'w-[327px] gap-[50px] rounded-lg pt-[80px] pb-[28px] sm:h-[220px] sm:rounded-2xl',
+            size === 'Account' && 'w-[272px] rounded-2xl sm:h-[164px]'
           )}>
           {children}
           <Button
