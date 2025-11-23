@@ -7,7 +7,7 @@ import InputLabel from '@/components/common/input/InputLabel';
 import InputSuffixButton from '@/components/common/input/InputSuffixButton';
 import { InputContext } from '@/context/inputContext';
 
-interface InputFieldProps {
+interface InputProps {
   children: React.ReactNode;
   disabled?: boolean;
   error?: boolean;
@@ -39,7 +39,7 @@ export default function Input({
   value,
   onChange,
   onBlur,
-}: InputFieldProps) {
+}: InputProps) {
   const id = useId();
 
   return (
