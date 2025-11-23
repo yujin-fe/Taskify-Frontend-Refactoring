@@ -3,7 +3,7 @@ import useInputContext from '@/hooks/useInputContext';
 import { cn } from '@/utils/cn';
 
 export default function InputFieldDate({ placeholder }: { placeholder: string }) {
-  const { id, value, onChange } = useInputContext();
+  const { id, value, onChange, disabled, onBlur } = useInputContext();
 
   return (
     <>
@@ -16,8 +16,10 @@ export default function InputFieldDate({ placeholder }: { placeholder: string })
         id={id}
         type='datetime-local'
         className='absolute inset-0 opacity-0'
+        disabled={disabled}
         value={value}
-        onChange={(e) => onChange?.(e.target.value)}
+        onChange={(e) => disabled && onChange?.(e.target.value)}
+        onBlur={(e) => disabled && onBlur?.(e.target.value)}
       />
     </>
   );
