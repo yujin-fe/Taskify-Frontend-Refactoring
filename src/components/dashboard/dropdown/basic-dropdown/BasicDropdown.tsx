@@ -1,6 +1,6 @@
-import DropdownItem from '@/components/dashboard/dropdown/DropdownItem';
-import DropdownList from '@/components/dashboard/dropdown/DropdownList';
-import DropdownTrigger from '@/components/dashboard/dropdown/DropdownTrigger';
+import DropdownItem from '@/components/dashboard/dropdown/basic-dropdown/DropdownItem';
+import DropdownList from '@/components/dashboard/dropdown/basic-dropdown/DropdownList';
+import DropdownTrigger from '@/components/dashboard/dropdown/basic-dropdown/DropdownTrigger';
 import { BasicDropdownContext } from '@/context/dropdownContext';
 import useDropdownMenuState from '@/hooks/useDropdownState';
 
