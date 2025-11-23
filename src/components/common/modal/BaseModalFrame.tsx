@@ -1,11 +1,10 @@
-import ModalPortal from '@/components/common/BaseModal/ModalPortal';
 import Button from '@/components/common/Button';
+import ModalPortal from '@/components/common/modal/ModalPortal';
 import { cn } from '@/utils/cn';
 
 type BaseModalFrameProps = {
   size?: 'Login' | 'Account'; // Login: 로그인 페이지 Account: 계정 관리 페이지
   children: string;
-  className?: string;
 
   setOnModal: (state: boolean) => void;
 };
@@ -17,15 +16,15 @@ type BaseModalFrameProps = {
  * - setOnModal Prop으로 부모에서 모달 열림/닫힘 상태를 제어합니다.
  *
  * 사용 예시:
- *   const [onModal, setOnModal] = useState(false);
+ *   const [isModalOpen, setIsModalOpen] = useState(false);
  *
  *   {isModalOpen && (
- *     <BaseModalFrame size="Login" setOnModal={setOnModal}>
+ *     <BaseModalFrame size="Login" setOnModal={setIsModalOpen}>
  *       로그인 하시겠습니까?
  *     </BaseModalFrame>
  *   )}
  *
- *   <Button onClick={() => setOnModal(true)}>모달 열기</Button>
+ *   <Button onClick={() => setIsModalOpen(true)}>모달 열기</Button>
  */
 export default function BaseModalFrame({
   size = 'Login',
@@ -37,22 +36,18 @@ export default function BaseModalFrame({
       <div className='fixed inset-0 flex items-center justify-center bg-gray-900/70'>
         <div
           className={cn(
-            'flex flex-col items-center justify-center gap-8 bg-gray-200 text-center text-gray-700',
-            size === 'Login'
-              && 'h-[220px] w-[327px] rounded-lg font-lg-medium sm:h-[192px] sm:w-[368px] sm:rounded-2xl sm:font-xl-medium',
-            size === 'Account'
-              && 'h-[164px] w-[272px] rounded-2xl font-lg-medium sm:h-[192px] sm:w-[368px] sm:font-xl-medium'
+            'flex flex-col items-center justify-center bg-gray-0 text-center font-lg-medium text-gray-700 sm:w-[368px] sm:gap-8 sm:font-xl-medium',
+            size === 'Login' && 'sm: h-[220px] w-[327px] gap-[50px] rounded-lg sm:rounded-2xl',
+            size === 'Account' && 'h-[164px] w-[272px] rounded-2xl'
           )}>
           {children}
           <Button
             theme='primary'
             disabled={false}
             className={cn(
-              'flex-none',
-              size === 'Login'
-                && 'h-[42px] w-[138px] font-md-semibold sm:h-[48px] sm:w-[240px] sm:font-lg-semibold',
-              size === 'Account'
-                && 'h-[42px] w-[192px] font-md-semibold sm:h-[48px] sm:w-[240px] sm:font-lg-semibold'
+              'h-[42px] flex-none font-md-semibold sm:h-[48px] sm:w-[240px] sm:font-lg-semibold',
+              size === 'Login' && 'w-[138px]',
+              size === 'Account' && 'w-[192px]'
             )}
             onClick={() => setOnModal(false)}>
             확인
