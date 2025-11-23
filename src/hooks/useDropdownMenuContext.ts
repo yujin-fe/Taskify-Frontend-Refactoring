@@ -1,14 +1,25 @@
 import { useContext } from 'react';
-import { DropdownMenuContext } from '@/context/dropdownMenuContext';
+import {
+  BaseDropdownMenuContext,
+  SearchableDropdownMenuContext,
+} from '@/context/dropdownMenuContext';
 
-const useDropdownMenuContext = () => {
-  const context = useContext(DropdownMenuContext);
+export const useBaseDropdownMenuContext = () => {
+  const context = useContext(BaseDropdownMenuContext);
 
   if (!context) {
-    throw new Error('DropdownMenuContext 안에서 사용하세요.');
+    throw new Error('BaseDropdownMenuContext 안에서 사용하세요.');
   }
 
   return context;
 };
 
-export default useDropdownMenuContext;
+export const useSearchableDropdownMenuContext = () => {
+  const context = useContext(SearchableDropdownMenuContext);
+
+  if (!context) {
+    throw new Error('SearchableDropdownMenuContext 안에서 사용하세요.');
+  }
+
+  return context;
+};
