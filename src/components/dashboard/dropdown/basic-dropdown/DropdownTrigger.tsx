@@ -1,17 +1,13 @@
 import { useBasicDropdownContext } from '@/hooks/useDropdownContext';
 import { cn } from '@/utils/cn';
 
-interface DropdownMenuTriggerProps {
+interface DropdownTriggerProps {
   children: React.ReactNode;
   ariaLabel?: string;
   className?: string;
 }
 
-export default function DropdownMenuTrigger({
-  children,
-  ariaLabel,
-  className,
-}: DropdownMenuTriggerProps) {
+export default function DropdownTrigger({ children, ariaLabel, className }: DropdownTriggerProps) {
   const { setIsOpen, isOpen } = useBasicDropdownContext();
 
   return (
