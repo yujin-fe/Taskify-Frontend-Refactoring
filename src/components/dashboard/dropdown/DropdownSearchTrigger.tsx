@@ -1,18 +1,16 @@
 import { useEffect, useRef } from 'react';
 import Icons from '@/assets/icons';
-import useDropdownMenuContext from '@/hooks/useDropdownMenuContext';
+import { useSearchableDropdownContext } from '@/hooks/useDropdownContext';
 import { cn } from '@/utils/cn';
 
-interface DropdownMenuSearchTriggerProps {
+interface DropdownSearchTriggerProps {
   placeholder: string;
   name: string;
 }
 
-export default function DropdownMenuSearchTrigger({
-  placeholder,
-  name,
-}: DropdownMenuSearchTriggerProps) {
-  const { isOpen, setIsOpen, searchQuery, setSearchQuery, selectedNode } = useDropdownMenuContext();
+export default function DropdownSearchTrigger({ placeholder, name }: DropdownSearchTriggerProps) {
+  const { isOpen, setIsOpen, searchQuery, setSearchQuery, selectedNode } =
+    useSearchableDropdownContext();
 
   const inputRef = useRef<HTMLInputElement>(null);
 
