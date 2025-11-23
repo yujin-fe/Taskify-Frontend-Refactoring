@@ -1,23 +1,23 @@
 import Icons from '@/assets/icons';
-import useDropdownMenuContext from '@/hooks/useDropdownMenuContext';
+import { useSearchableDropdownContext } from '@/hooks/useDropdownContext';
 
-export interface DropdownMenuCheckItemProps {
+export interface DropdownSearchItemProps {
   children: React.ReactNode;
   value: string;
 }
 
-export default function DropdownMenuCheckItem({ children, value }: DropdownMenuCheckItemProps) {
+export default function DropdownSearchItem({ children, value }: DropdownSearchItemProps) {
   const { selectedValue, setSelectedValue, setIsOpen, setSearchQuery, setSelectedNode } =
-    useDropdownMenuContext();
+    useSearchableDropdownContext();
 
   const isSelected = selectedValue === value;
 
   const handleListClick = () => {
     if (isSelected) {
-      setSelectedValue?.('');
+      setSelectedValue('');
       setSelectedNode(null);
     } else {
-      setSelectedValue?.(value);
+      setSelectedValue(value);
       setSelectedNode(children);
     }
     setIsOpen(false);
