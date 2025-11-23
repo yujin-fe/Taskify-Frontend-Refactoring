@@ -54,7 +54,7 @@ type AsProps<T extends React.ElementType> = ButtonProps<T>
  *  as={Link}는 to={'경로'}와 같이 사용해주세요
  *  폼 제출하는 타입의 버튼은 type="submit"을 명시해주세요
  * @example
- * <Button theme ="primay" size="lg" type="submit" disabled={false} className="h-[62px]">
+ * <Button theme ="primary" size="lg" type="submit" disabled={false} className="h-[62px]">
  *   버튼
  * </Button>
  *
