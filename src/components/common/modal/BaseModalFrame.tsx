@@ -33,7 +33,8 @@ export default function BaseModalFrame({
 }: BaseModalFrameProps) {
   return (
     <ModalPortal>
-      <div className='fixed inset-0 flex items-center justify-center bg-gray-900/70'>
+      <div className='modal-dimmed' />
+      <div className='fixed inset-0 flex items-center justify-center'>
         <div
           className={cn(
             'flex flex-col items-center justify-between justify-center bg-gray-0 text-center font-lg-medium text-gray-700 sm:w-[368px] sm:gap-8 sm:pt-[40px] sm:pb-[40px] sm:font-xl-medium',
