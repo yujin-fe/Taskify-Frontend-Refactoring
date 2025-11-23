@@ -26,6 +26,8 @@ export default function DropdownSearchItem({ children, value }: DropdownSearchIt
 
   return (
     <li
+      role='menuitem'
+      tabIndex={0}
       className='relative flex h-12 dropdown-menu-item-base items-center gap-2 pl-[46px] hover:bg-gray-100'
       onClick={handleListClick}>
       {isSelected && (
