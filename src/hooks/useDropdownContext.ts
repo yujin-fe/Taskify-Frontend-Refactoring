@@ -1,8 +1,8 @@
 import { useContext } from 'react';
-import { BaseDropdownContext, SearchableDropdownContext } from '@/context/dropdownContext';
+import { BasicDropdownContext, SearchableDropdownContext } from '@/context/dropdownContext';
 
-export const useBaseDropdownContext = () => {
-  const context = useContext(BaseDropdownContext);
+export const useBasicDropdownContext = () => {
+  const context = useContext(BasicDropdownContext);
 
   if (!context) {
     throw new Error('BaseDropdownContext 안에서 사용하세요.');

@@ -1,4 +1,4 @@
-import { useBaseDropdownContext } from '@/hooks/useDropdownContext';
+import { useBasicDropdownContext } from '@/hooks/useDropdownContext';
 import { cn } from '@/utils/cn';
 
 interface DropdownMenuTriggerProps {
@@ -12,7 +12,7 @@ export default function DropdownMenuTrigger({
   ariaLabel,
   className,
 }: DropdownMenuTriggerProps) {
-  const { setIsOpen, isOpen } = useBaseDropdownContext();
+  const { setIsOpen, isOpen } = useBasicDropdownContext();
 
   return (
     <button
