@@ -1,15 +1,15 @@
 import images from '@/assets/images';
 import Title from '@/components/common/Title';
 
-interface HomeBottomCardProps {
+interface HomeServiceDetailCardProps {
   img: string;
   imgAlt: string;
   title: string;
   desc: string;
 }
 
-/** @internal HomeBottomCardArea 전용 카드 컴포넌트입니다. 외부에서 사용하지 마세요. */
-function HomeBottomCard({ img, imgAlt, title, desc }: HomeBottomCardProps) {
+/** @internal HomeServiceDetailsSection 전용 카드 컴포넌트입니다. 외부에서 사용하지 마세요. */
+function HomeServiceDetailCard({ img, imgAlt, title, desc }: HomeServiceDetailCardProps) {
   return (
     <li className='flex w-full max-w-[378px] flex-col'>
       <div className='flex h-[260px] items-center justify-center rounded-t-[8px] bg-gray-600 p-2'>
@@ -25,7 +25,7 @@ function HomeBottomCard({ img, imgAlt, title, desc }: HomeBottomCardProps) {
   );
 }
 
-const HOME_BOTTOM_CARD_DATA = [
+const HOME_SERVICE_DETAILS_CARD_DATA = [
   {
     img: images.serviceCard1,
 
@@ -49,7 +49,7 @@ const HOME_BOTTOM_CARD_DATA = [
   },
 ];
 
-export default function HomeBottomCardArea() {
+export default function HomeServiceDetailsSection() {
   return (
     <section className='mt-[90px] mb-[160px]'>
       <Title
@@ -59,8 +59,8 @@ export default function HomeBottomCardArea() {
         생산성을 높이는 다양한 설정 ⚡
       </Title>
       <ul className='flex flex-col items-center gap-[32px] lg:flex-row lg:items-start'>
-        {HOME_BOTTOM_CARD_DATA.map((item) => (
-          <HomeBottomCard
+        {HOME_SERVICE_DETAILS_CARD_DATA.map((item) => (
+          <HomeServiceDetailCard
             key={item.title}
             img={item.img}
             imgAlt={item.imgAlt}
