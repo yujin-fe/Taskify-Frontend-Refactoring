@@ -58,7 +58,7 @@ interface FormModalProps extends VariantProps<typeof FormModalFrameStyle> {
  *       <FormModal.Body>
  *         <NewTaskForm />
  *       </FormModal.Body>
- *       <FormModal.Footer cancleButton="취소" submitButton="생성" />
+ *       <FormModal.Footer cancelButton="취소" submitButton="생성" />
  *     </form>
  *   </FormModal>
  * )}

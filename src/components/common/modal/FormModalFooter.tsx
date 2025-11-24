@@ -2,10 +2,10 @@ import { useContext } from 'react';
 import Button from '@/components/common/Button';
 import { FormModalContext } from '@/context/formModalContext';
 export default function FormModalFooter({
-  cancleButton,
+  cancelButton,
   submitButton,
 }: {
-  cancleButton: string;
+  cancelButton: string;
   submitButton: string;
 }) {
   const { handleModalClose } = useContext(FormModalContext);
@@ -17,7 +17,7 @@ export default function FormModalFooter({
         onClick={() => {
           handleModalClose();
         }}>
-        {cancleButton}
+        {cancelButton}
       </Button>
       <Button size='lg' theme={'primary'} type='submit'>
         {submitButton}
