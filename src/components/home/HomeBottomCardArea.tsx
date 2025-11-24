@@ -19,7 +19,7 @@ function HomeBottomCard({ img, imgAlt, title, desc }: HomeBottomCardProps) {
         <Title weight={'bold'} size={'2lg'} className='mb-[18px] text-gray-0'>
           {title}
         </Title>
-        <span>{desc}</span>
+        <p>{desc}</p>
       </div>
     </li>
   );
