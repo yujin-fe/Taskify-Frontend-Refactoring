@@ -18,8 +18,8 @@ export default function InputFieldDate({ placeholder }: { placeholder: string })
         className='absolute inset-0 opacity-0'
         disabled={disabled}
         value={value}
-        onChange={(e) => disabled && onChange?.(e.target.value)}
-        onBlur={(e) => disabled && onBlur?.(e.target.value)}
+        onChange={(e) => !disabled && onChange?.(e.target.value)}
+        onBlur={(e) => !disabled && onBlur?.(e.target.value)}
       />
     </>
   );
