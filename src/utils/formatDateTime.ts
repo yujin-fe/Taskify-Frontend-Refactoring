@@ -4,7 +4,7 @@ export const formatDateTime = (datetime: string) => {
   const date = new Date(datetime);
 
   if (isNaN(date.getTime())) {
-    throw new Error('유효하지 않은 날짜 형식입니다.');
+    return '';
   }
 
   const year = date.getFullYear();
