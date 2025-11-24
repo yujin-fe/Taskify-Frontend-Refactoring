@@ -1,16 +1,15 @@
 import { useEffect, useRef } from 'react';
 import Icons from '@/assets/icons';
-import { useSearchableDropdownContext } from '@/hooks/useDropdownContext';
+import useComboboxContext from '@/hooks/useComboboxContext';
 import { cn } from '@/utils/cn';
 
-interface DropdownSearchTriggerProps {
+interface ComboboxTriggerProps {
   placeholder: string;
   name: string;
 }
 
-export default function DropdownSearchTrigger({ placeholder, name }: DropdownSearchTriggerProps) {
-  const { isOpen, setIsOpen, searchQuery, setSearchQuery, selectedNode } =
-    useSearchableDropdownContext();
+export default function ComboboxTrigger({ placeholder, name }: ComboboxTriggerProps) {
+  const { isOpen, setIsOpen, searchQuery, setSearchQuery, selectedNode } = useComboboxContext();
 
   const inputRef = useRef<HTMLInputElement>(null);
 

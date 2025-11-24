@@ -1,14 +1,14 @@
 import Icons from '@/assets/icons';
-import { useSearchableDropdownContext } from '@/hooks/useDropdownContext';
+import useComboboxContext from '@/hooks/useComboboxContext';
 
-export interface DropdownSearchItemProps {
+export interface ComboboxItemProps {
   children: React.ReactNode;
   value: string;
 }
 
-export default function DropdownSearchItem({ children, value }: DropdownSearchItemProps) {
+export default function ComboboxItem({ children, value }: ComboboxItemProps) {
   const { selectedValue, setSelectedValue, setIsOpen, setSearchQuery, setSelectedNode } =
-    useSearchableDropdownContext();
+    useComboboxContext();
 
   const isSelected = selectedValue === value;
 

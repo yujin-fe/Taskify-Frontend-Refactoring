@@ -1,16 +1,16 @@
 import React from 'react';
-import type { DropdownSearchItemProps } from '@/components/dashboard/combobox/DropdownSearchItem';
-import { useSearchableDropdownContext } from '@/hooks/useDropdownContext';
-import { matchSearch } from '@/utils/dropdownMenuSearch';
+import type { ComboboxItemProps } from '@/components/dashboard/combobox/ComboboxItem';
+import useComboboxContext from '@/hooks/useComboboxContext';
+import { matchSearch } from '@/utils/combobox';
 
-export default function DropdownSearchList({ children }: { children: React.ReactNode }) {
-  const { isOpen, searchQuery } = useSearchableDropdownContext();
+export default function ComboboxList({ children }: { children: React.ReactNode }) {
+  const { isOpen, searchQuery } = useComboboxContext();
 
   const filteredChildren = React.Children.toArray(children).filter((child) => {
     if (!React.isValidElement(child)) {
       return true;
     }
-    const itemValue = (child.props as DropdownSearchItemProps).value || '';
+    const itemValue = (child.props as ComboboxItemProps).value || '';
     return matchSearch(itemValue, searchQuery);
   });
 
