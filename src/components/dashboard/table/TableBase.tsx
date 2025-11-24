@@ -2,7 +2,7 @@ import { cn } from '@/utils/cn';
 
 type TableBaseProps = {
   type?: 'Members' | 'Invites'; // Members: 구성원 Invites: 초대내역
-  children?: string;
+  children: React.ReactNode;
 };
 
 /**
