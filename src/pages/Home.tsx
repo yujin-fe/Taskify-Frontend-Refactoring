@@ -1,5 +1,5 @@
-import HomeBottomCardArea from '@/components/home/HomeBottomCardArea';
 import HomeFooter from '@/components/home/HomeFooter';
+import HomeServiceDetailsSection from '@/components/home/HomeServiceDetailsSection';
 import HomeTopArea from '@/components/home/HomeTopArea';
 
 export default function Home() {
@@ -7,7 +7,7 @@ export default function Home() {
     <div className='bg-gray-900 px-4'>
       <main className='mx-auto max-w-[1200px] pt-[94px]'>
         <HomeTopArea />
-        <HomeBottomCardArea />
+        <HomeServiceDetailsSection />
       </main>
       <HomeFooter />
     </div>
