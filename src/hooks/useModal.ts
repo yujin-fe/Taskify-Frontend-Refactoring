@@ -8,12 +8,18 @@ export const useModal = (modalName: string) => {
 
   const handleModalOpen = () => {
     setIsOpen(true);
-    setSearchParams({ [modalName]: 'true' });
+    setSearchParams((prev) => {
+      prev.set(modalName, 'true');
+      return prev;
+    });
   };
 
   const handleModalClose = () => {
     setIsOpen(false);
-    setSearchParams({});
+    setSearchParams((prev) => {
+      prev.delete(modalName);
+      return prev;
+    });
   };
 
   return { isOpen, handleModalOpen, handleModalClose };
