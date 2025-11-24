@@ -16,7 +16,7 @@ function HomeServiceDetailCard({ img, imgAlt, title, desc }: HomeServiceDetailCa
         <img className='w-full max-w-[300px]' src={img} alt={imgAlt} loading='lazy' />
       </div>
       <div className='rounded-b-[8px] bg-gray-800 px-[32px] py-[33px] text-gray-0'>
-        <Title weight={'bold'} size={'2lg'} className='mb-[18px] text-gray-0'>
+        <Title as='h4' weight={'bold'} size={'2lg'} className='mb-[18px] text-gray-0'>
           {title}
         </Title>
         <p>{desc}</p>
