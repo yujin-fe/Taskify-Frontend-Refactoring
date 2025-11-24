@@ -21,8 +21,9 @@ export default function HomeIntroSection() {
             </Title>
           </div>
           <img
+            loading='lazy'
             src={images.serviceOverview1}
-            className='ml-auto w-[520px] pl-[47px] lg:ml-0 lg:w-[594px]'
+            className='ml-auto w-[520px] pl-[47px] lg:ml-0 lg:h-[497px] lg:w-[594px]'
             alt='Taskify 대시보드 이미지'
           />
         </li>
@@ -37,6 +38,7 @@ export default function HomeIntroSection() {
             </Title>
           </div>
           <img
+            loading='lazy'
             src={images.serviceOverview2}
             className='w-[360px] px-[60px] md:mx-auto md:px-0 lg:mx-0 lg:w-[436px]'
             alt='할일 생성 모달 이미지'
