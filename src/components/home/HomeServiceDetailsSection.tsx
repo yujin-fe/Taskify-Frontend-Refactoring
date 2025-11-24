@@ -13,7 +13,7 @@ function HomeServiceDetailCard({ img, imgAlt, title, desc }: HomeServiceDetailCa
   return (
     <li className='flex w-full max-w-[378px] flex-col'>
       <div className='flex h-[260px] items-center justify-center rounded-t-[8px] bg-gray-600 p-2'>
-        <img className='w-full max-w-[300px]' src={img} alt={imgAlt} />
+        <img className='w-full max-w-[300px]' src={img} alt={imgAlt} loading='lazy' />
       </div>
       <div className='rounded-b-[8px] bg-gray-800 px-[32px] py-[33px] text-gray-0'>
         <Title weight={'bold'} size={'2lg'} className='mb-[18px] text-gray-0'>
@@ -25,7 +25,7 @@ function HomeServiceDetailCard({ img, imgAlt, title, desc }: HomeServiceDetailCa
   );
 }
 
-const HOME_SERVICE_DETAILS_CARD_DATA = [
+const HOME_SERVICE_DETAILS_CARD_DATA: HomeServiceDetailCardProps[] = [
   {
     img: images.serviceCard1,
 
