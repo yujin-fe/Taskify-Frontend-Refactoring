@@ -1,8 +1,8 @@
+import { useState } from 'react';
 import DropdownItem from '@/components/dashboard/dropdown/DropdownItem';
 import DropdownList from '@/components/dashboard/dropdown/DropdownList';
 import DropdownTrigger from '@/components/dashboard/dropdown/DropdownTrigger';
 import DropdownContext from '@/context/dropdownContext';
-import useDropdownState from '@/hooks/useDropdownState';
 
 /**
  * Dropdown 컴포넌트는 Dropdown UI의 루트 컨테이너입니다.
@@ -21,7 +21,7 @@ import useDropdownState from '@/hooks/useDropdownState';
  * </Dropdown>
  */
 export default function Dropdown({ children }: { children: React.ReactNode }) {
-  const { isOpen, setIsOpen } = useDropdownState();
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <DropdownContext value={{ isOpen, setIsOpen }}>
