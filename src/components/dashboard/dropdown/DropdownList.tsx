@@ -1,10 +1,10 @@
-import { useBasicDropdownContext } from '@/hooks/useDropdownContext';
+import useDropdownContext from '@/hooks/useDropdownContext';
 
 // Dropdown 메뉴와 트리거 사이의 간격을 정의 (트리거 아래 8px)
 const DROPDOWN_MARGIN_TOP = 'top-[calc(100%+8px)]';
 
 export default function DropdownList({ children }: { children: React.ReactNode }) {
-  const { isOpen } = useBasicDropdownContext();
+  const { isOpen } = useDropdownContext();
 
   if (!isOpen) {
     return null;
