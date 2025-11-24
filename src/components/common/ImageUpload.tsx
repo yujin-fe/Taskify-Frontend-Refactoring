@@ -81,6 +81,7 @@ export default function ImageUpload({
     <div className='relative inline-block h-fit w-fit'>
       <button
         className={cn(
+          'relative',
           'flex cursor-pointer items-center justify-center overflow-hidden rounded-md bg-gray-200',
           size === 'Small' && 'h-[58px] w-[58px] sm:h-[76px] sm:w-[76px]',
           size === 'Large' && 'h-[100px] w-[100px] sm:h-[182px] sm:w-[182px]'
