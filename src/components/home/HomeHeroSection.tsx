@@ -3,7 +3,7 @@ import images from '@/assets/images';
 import Button from '@/components/common/Button';
 import Title from '@/components/common/Title';
 
-export default function HomeTopArea() {
+export default function HomeHeroSection() {
   return (
     <section className='flex flex-col items-center gap-12 px-[40px]'>
       <img src={images.mainVisual} className='w-full lg:w-[722px]' alt='' />
@@ -15,11 +15,7 @@ export default function HomeTopArea() {
           Taskify
         </span>
       </Title>
-      <Button
-        as={Link}
-        to={'/login'}
-        size={'lg'}
-        className='w-[235px] md:mt-3 md:w-[280px]'>
+      <Button as={Link} to={'/login'} size={'lg'} className='w-[235px] md:mt-3 md:w-[280px]'>
         로그인하기
       </Button>
     </section>
