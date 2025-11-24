@@ -5,13 +5,13 @@ const pointStyle = 'text-[22px] font-medium text-gray-400';
 const titleStyle =
   'mt-[60px] text-[36px] leading-[50px] text-gray-0 md:mt-[100px] md:text-[48px] md:leading-[64px]';
 const listBaseStyle =
-  'h-[686px] md:h-[972px] lg:h-[600px] flex flex-col justify-between items-center bg-gray-800 rounded-[8px] pt-[60px] md:pt-[63px] md:items-start md:pl-[60px] lg:flex-row';
+  'h-[686px] md:h-[972px] lg:h-[600px] flex flex-col justify-between items-center bg-gray-800 rounded-[8px] pt-[60px] md:pt-[63px] md:items-start lg:flex-row';
 
 export default function HomeIntroSection() {
   return (
     <section className='mt-[80px] md:mt-[120px] lg:mt-[160px]'>
       <ul className='flex flex-col gap-[90px] text-center md:text-left'>
-        <li className={`${listBaseStyle} lg:pt-[103px]`}>
+        <li className={`${listBaseStyle} md:pl-[60px] lg:pt-[103px]`}>
           <div className='shrink-0 lg:pt-[20px]'>
             <span className={pointStyle}>Point 1</span>
             <Title as='h3' weight={'bold'} className={titleStyle}>
@@ -28,7 +28,7 @@ export default function HomeIntroSection() {
         </li>
         <li
           className={`${listBaseStyle} lg:justify-start lg:gap-[100px] lg:pt-[98px] lg:pl-[108px]`}>
-          <div className='shrink-0 lg:order-1 lg:pt-[25px]'>
+          <div className='shrink-0 md:pl-[60px] lg:order-1 lg:pt-[25px] lg:pl-0'>
             <span className={pointStyle}>Point 2</span>
             <Title as='h3' weight={'bold'} className={titleStyle}>
               해야 <span className='text-gray-300'>할 일</span>을
@@ -38,7 +38,7 @@ export default function HomeIntroSection() {
           </div>
           <img
             src={images.serviceOverview2}
-            className='w-[360px] px-[60px] md:mx-auto lg:mx-0 lg:w-[436px]'
+            className='w-[360px] px-[60px] md:mx-auto md:px-0 lg:mx-0 lg:w-[436px]'
             alt='할일 생성 모달 이미지'
           />
         </li>
