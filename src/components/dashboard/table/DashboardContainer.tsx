@@ -13,15 +13,15 @@ type DashboardContainerProps = {
 };
 
 /**
- * TableBase 컴포넌트
+ * DashboardContainer 컴포넌트
  *
  * 이 컴포넌트는 대시보드 테이블의 공통 레이아웃 뼈대를 제공합니다.
  * Top/Body 영역 컴포넌트를 넣어 사용합니다.
  *
  * @example
- * <TableBase type="Members">
+ * <DashboardContainer type="Members">
  *   <TableBody/>
- * </TableBase>
+ * </DashboardContainer>
  */
 
 export default function DashboardContainer({
