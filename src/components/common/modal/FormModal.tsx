@@ -72,7 +72,13 @@ export default function FormModal({ size, gap, children, className, modal }: For
     <FormModalContext value={{ finalSize, ...modal }}>
       <ModalPortal>
         <div className='modal-dimmed'>
-          <div className={cn(FormModalFrameStyle({ size, gap }), className)}>{children}</div>
+          <div
+            role='dialog'
+            aria-modal='true'
+            tabIndex={0}
+            className={cn(FormModalFrameStyle({ size, gap }), className)}>
+            {children}
+          </div>
         </div>
       </ModalPortal>
     </FormModalContext>
