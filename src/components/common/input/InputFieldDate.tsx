@@ -1,6 +1,7 @@
 import Icons from '@/assets/icons';
 import useInputContext from '@/hooks/useInputContext';
 import { cn } from '@/utils/cn';
+import formatDateTime from '@/utils/formatDateTime';
 
 export default function InputFieldDate({ placeholder }: { placeholder: string }) {
   const { id, value, onChange, disabled, onBlur } = useInputContext();
@@ -9,8 +10,7 @@ export default function InputFieldDate({ placeholder }: { placeholder: string })
     <>
       <Icons.Calendar className='absolute text-gray-400' />
       <div className={cn('h-full w-full pl-[30px] text-gray-400', value && 'text-black')}>
-        {/* TODO: value format 유틸 함수 구현 후 적용 */}
-        {value ? value : placeholder}
+        {value ? formatDateTime(value) : placeholder}
       </div>
       <input
         id={id}
