@@ -8,5 +8,3 @@ interface FormModalContextType {
 }
 
 export const FormModalContext = createContext({} as FormModalContextType);
-
-//임시 주석
