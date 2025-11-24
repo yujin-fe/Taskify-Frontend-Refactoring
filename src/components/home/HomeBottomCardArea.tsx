@@ -25,7 +25,7 @@ function HomeBottomCard({ img, imgAlt, title, desc }: HomeBottomCardProps) {
   );
 }
 
-const HOME_BUTTON_CARD_DATA = [
+const HOME_BOTTOM_CARD_DATA = [
   {
     img: images.serviceCard1,
 
@@ -59,7 +59,7 @@ export default function HomeBottomCardArea() {
         생산성을 높이는 다양한 설정 ⚡
       </Title>
       <ul className='flex flex-col items-center gap-[32px] lg:flex-row lg:items-start'>
-        {HOME_BUTTON_CARD_DATA.map((item) => (
+        {HOME_BOTTOM_CARD_DATA.map((item) => (
           <HomeBottomCard
             key={item.title}
             img={item.img}
