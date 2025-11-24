@@ -9,7 +9,7 @@ export default function InputFieldDate({ placeholder }: { placeholder: string })
   return (
     <>
       <Icons.Calendar className='absolute text-gray-400' />
-      <div className={cn('h-full w-full pl-[30px] text-gray-400', value && 'text-black')}>
+      <div className={cn('h-full w-full pl-[30px] text-gray-400', value && 'text-gray-700')}>
         {value ? formatDateTime(value) : placeholder}
       </div>
       <input
