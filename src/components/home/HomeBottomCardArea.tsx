@@ -21,7 +21,6 @@ function HomeBottomCard({ img, imgAlt, title, desc }: HomeBottomCardProps) {
         </Title>
         <span>{desc}</span>
       </div>
-      <div />
     </li>
   );
 }
