@@ -3,6 +3,10 @@ const to2Digit = (n: number) => String(n).padStart(2, '0');
 export const formatDateTime = (datetime: string) => {
   const date = new Date(datetime);
 
+  if (isNaN(date.getTime())) {
+    throw new Error('유효하지 않은 날짜 형식입니다.');
+  }
+
   const year = date.getFullYear();
   const month = to2Digit(date.getMonth() + 1);
   const day = to2Digit(date.getDate());
