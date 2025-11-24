@@ -1,5 +1,5 @@
 import React from 'react';
-import type { DropdownSearchItemProps } from '@/components/dashboard/dropdown/searchable-dropdown/DropdownSearchItem';
+import type { DropdownSearchItemProps } from '@/components/dashboard/combobox/DropdownSearchItem';
 import { useSearchableDropdownContext } from '@/hooks/useDropdownContext';
 import { matchSearch } from '@/utils/dropdownMenuSearch';
 

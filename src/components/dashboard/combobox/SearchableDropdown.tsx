@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
-import DropdownSearchItem from '@/components/dashboard/dropdown/searchable-dropdown/DropdownSearchItem';
-import DropdownSearchList from '@/components/dashboard/dropdown/searchable-dropdown/DropdownSearchList';
-import DropdownSearchTrigger from '@/components/dashboard/dropdown/searchable-dropdown/DropdownSearchTrigger';
+import DropdownSearchItem from '@/components/dashboard/combobox/DropdownSearchItem';
+import DropdownSearchList from '@/components/dashboard/combobox/DropdownSearchList';
+import DropdownSearchTrigger from '@/components/dashboard/combobox/DropdownSearchTrigger';
 import { SearchableDropdownContext } from '@/context/dropdownContext';
-import useDropdownMenuState from '@/hooks/useDropdownState';
+import useDropdownState from '@/hooks/useDropdownState';
 
 interface SearchableDropdownProps {
   children: React.ReactNode;
@@ -15,7 +15,7 @@ interface SearchableDropdownProps {
  * SearchableDropdown 컴포넌트는 SearchableDropdown UI의 루트 컨테이너입니다.
  *
  * 내부에서 드롭다운의 열림/닫힘, 검색어, 선택된 자식 요소를 관리하고,
- * 외부 상태값인 `DropdownMenu`에 설정된 value/setValue를
+ * 외부 상태값인 `Dropdown`에 설정된 value/setValue를
  * 하위 컴포넌트에 Context 형태로 전달합니다.
  *
  * @example
@@ -32,7 +32,7 @@ interface SearchableDropdownProps {
  */
 export default function SearchableDropdown({ children, value, setValue }: SearchableDropdownProps) {
   const { isOpen, setIsOpen, searchQuery, setSearchQuery, selectedNode, setSelectedNode } =
-    useDropdownMenuState();
+    useDropdownState();
 
   const contextValue = useMemo(
     () => ({
@@ -79,7 +79,7 @@ SearchableDropdown.List = DropdownSearchList;
 /**
  * 드롭다운 메뉴에서 선택 가능한 체크 아이템 컴포넌트입니다.
  *
- * 선택 시 부모 `DropdownMenu`에 설정된 value/setValue 통해 선택 값이 반영됩니다.
+ * 선택 시 부모 `Dropdown`에 설정된 value/setValue 통해 선택 값이 반영됩니다.
  *
  * @example
  *  <SearchableDropdown.Item value="홍길동">
