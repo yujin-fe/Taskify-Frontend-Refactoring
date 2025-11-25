@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useId } from 'react';
+import React, { createContext, useContext, useId, useMemo } from 'react';
 import InputLabel from '@/components/common/input/InputLabel';
 import { cn } from '@/utils/cn';
 import Button from './Button';
@@ -48,16 +48,20 @@ function Root({
     onSubmit();
   };
 
+  const contextValue = useMemo(
+    () => ({
+      value,
+      onChange,
+      onSubmit,
+      placeholder,
+      disabled: disabled ?? !value,
+      textAreaId,
+    }),
+    [value, onChange, onSubmit, placeholder, disabled, textAreaId]
+  );
+
   return (
-    <CommentContext
-      value={{
-        value,
-        onChange,
-        onSubmit,
-        placeholder,
-        disabled: disabled ?? !value,
-        textAreaId,
-      }}>
+    <CommentContext value={contextValue}>
       <form onSubmit={handleSubmit} className={cn('flex max-w-[520px] flex-col gap-4', className)}>
         {children}
       </form>
