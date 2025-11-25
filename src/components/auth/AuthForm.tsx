@@ -10,7 +10,10 @@ export default function AuthForm({ onSubmit, children }: AuthFormProps) {
   };
 
   return (
-    <form className='mb-[24px] flex w-full flex-col gap-[16px]' onSubmit={handleSubmit} noValidate>
+    <form
+      className='mb-[24px] flex w-full flex-col gap-[8px] sm:gap-[16px]'
+      onSubmit={handleSubmit}
+      noValidate>
       {children}
     </form>
   );
