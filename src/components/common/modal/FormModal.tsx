@@ -1,6 +1,7 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 import FormModalBody from '@/components/common/modal/FormModalBody';
 import FormModalFooter from '@/components/common/modal/FormModalFooter';
+import FormModalForm from '@/components/common/modal/FormModalForm';
 import FormModalTitle from '@/components/common/modal/FormModalTitle';
 import ModalPortal from '@/components/common/modal/ModalPortal';
 import { FormModalContext } from '@/context/formModalContext';
@@ -10,8 +11,8 @@ import { cn } from '@/utils/cn';
 const FormModalFrameStyle = cva(`flex flex-col bg-gray-0 rounded-2xl`, {
   variants: {
     size: {
-      lg: 'sm:p-[32px] p-[24px]',
-      md: 'sm:p-[24px] py-[24px] px-[16px] rounded-lg w-[327px] mx-[24px]',
+      lg: 'sm:p-[32px] sm:w-fit p-[24px] mx-[24px] w-full',
+      md: 'sm:p-[24px] sm:w-fit w-full py-[24px] px-[16px] rounded-lg mx-[24px]',
     },
     gap: {
       32: 'gap-[32px]',
@@ -31,38 +32,38 @@ interface FormModalProps extends VariantProps<typeof FormModalFrameStyle> {
 }
 
 /**
- * 예시의 <form> 태그의 위치에 따라 FormModal.Body와 FormModal.Footer를 사용해주세요.
- *
  * - size="lg": 기본 패딩 32px (모바일 24px)
- * - size="md": 기본 패딩 24px (모바일 24px 16px)
+ * - size="md": 기본 패딩 24px (모바일 16px)
  *
- * gap은 Title ↔ Body 사이 간격을 의미합니다.
+ * gap은 Title ↔ Form 사이 간격을 의미합니다.
  *
- * cancelButton을 클릭하면 isOpen이 false가 됩니다.
- * submitButton을 클릭하면 form이 제출됩니다.
+ * ⚠️ 아래 예시처럼 useModal의 인수와 FormModal의 modalName은 일치해야 합니다!!
  *
- * ⚠️ 아래 예시처럼 useModal의 반환 객체를 반드시 prop으로 전달해주세요.
- * 인수로는 모달의 이름을 string형식으로 전달하시면 됩니다.
- * 각각의 모달마다 고유한 이름을 부여하기 위함이니 모달마다 다른 이름을 사용해주세요.
- * - ex)newTaskModal, addColumnModal
- *
+ * 각각의 모달마다 고유한 이름을 부여해주세요.
+ * - 예시: "newTaskModal", "addColumnModal"
  *
  * @example
- * const newTaskModal = useModal("newTaskModal");
+ * const { handleModalOpen, handleModalClose } = useModal("newTaskModal");
  *
- * {newTaskModal.isOpen && (
- *   <FormModal size="lg" gap={32} modal={newTaskModal}>
- *     <FormModal.Title title="할일 생성" />
- *     <form>
- *       <FormModal.Body>
- *         <NewTaskForm />
- *       </FormModal.Body>
- *       <FormModal.Footer cancelButton="취소" submitButton="생성" />
- *     </form>
- *   </FormModal>
- * )}
+ * <FormModal size="lg" gap={32} modalName="newTaskModal">
+ *   <FormModal.Title title="할일 생성" />
+ *   <FormModal.Form onSubmit={(e) => {
+ *     const formData = new FormData(e.currentTarget);
+ *     console.log(formData.get('input'));
+ *   }}>
+ *     <FormModal.Body>
+ *       <input name="input" />
+ *     </FormModal.Body>
+ *     <FormModal.Footer>
+ *       <Button theme="outlined" onClick={handleModalClose}>
+ *         취소
+ *       </Button>
+ *       <Button type="submit">생성</Button>
+ *     </FormModal.Footer>
+ *   </FormModal.Form>
+ * </FormModal>
  *
- * <button onClick={newTaskModal.handleModalOpen}>열기</button>
+ * <button onClick={handleModalOpen}>열기</button>
  */
 
 export default function FormModal({ size, gap, children, className, modalName }: FormModalProps) {
@@ -91,8 +92,11 @@ export default function FormModal({ size, gap, children, className, modalName }:
 //title 프롭스로 모달의 타이틀 작성
 FormModal.Title = FormModalTitle;
 
-//자식으로 폼 전달
+//자식으로는 FormModal.Body FormModal.Footer를 받습니다.
+FormModal.Form = FormModalForm;
+
+//자식으로는 폼태그 내부의 내용을 입력받습니다.
 FormModal.Body = FormModalBody;
 
-//자식으로 왼쪽 버튼과 오른쪽 버튼에 들어갈 텍스트 입력
+//자식는 폼태그에 들어갈 버튼들을 받습니다.
 FormModal.Footer = FormModalFooter;
