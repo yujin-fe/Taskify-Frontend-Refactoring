@@ -1,6 +1,6 @@
 /**
  * Large, Medium, Small -> SVG 컴포넌트
- * mediumUrl, smallUrl -> svg url로 활용 (이미지 태그로 사용할 때)
+ * mediumUrl, smallUrl -> url로 활용 (이미지 태그로 사용할 때)
  */
 import Large from '@/assets/logos/logo-lg.svg';
 import mediumUrl from '@/assets/logos/logo-m.png';
