@@ -43,10 +43,6 @@ function Root({
   children,
 }: RootProps) {
   const textAreaId = useId();
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    onSubmit();
-  };
 
   const contextValue = useMemo(
     () => ({
@@ -54,11 +50,18 @@ function Root({
       onChange,
       onSubmit,
       placeholder,
-      disabled: disabled ?? !value,
+      disabled: disabled ?? !value.trim(),
       textAreaId,
     }),
     [value, onChange, onSubmit, placeholder, disabled, textAreaId]
   );
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!contextValue.disabled) {
+      onSubmit();
+    }
+  };
 
   return (
     <CommentContext value={contextValue}>
@@ -90,10 +93,9 @@ function Title({ children = '댓글', className, required }: TitleProps) {
 type FieldProps = {
   className?: string;
   textareaClassName?: string;
-  children?: React.ReactNode;
 };
 
-function Field({ className, textareaClassName, children }: FieldProps) {
+function Field({ className, textareaClassName }: FieldProps) {
   const { value, onChange, placeholder, textAreaId } = useCommentContext();
 
   return (
@@ -104,10 +106,8 @@ function Field({ className, textareaClassName, children }: FieldProps) {
         value={value}
         onChange={onChange}
         placeholder={placeholder}
-        hideLabel // ✅ label 겹침 원천 방지
         className={cn('pr-20 pb-12', textareaClassName)}
       />
-      {children}
     </fieldset>
   );
 }
