@@ -14,5 +14,5 @@ interface DashboardBodyProps {
 export default function DashboardBody({ children, className }: DashboardBodyProps) {
   const baseClasses = 'flex flex-col';
 
-  return <div className={`${baseClasses} ${className || ''}`}>{children}</div>;
+  return <div className={`${baseClasses} ${className}`}>{children}</div>;
 }
