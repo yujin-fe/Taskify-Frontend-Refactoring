@@ -1,13 +1,10 @@
-import { useState } from 'react';
 import { useSearchParams } from 'react-router';
 
 export const useModal = (modalName: string) => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const initialOpen = searchParams.get(modalName) === 'true';
-  const [isOpen, setIsOpen] = useState(initialOpen);
+  const isOpen = searchParams.get(modalName) === 'true';
 
   const handleModalOpen = () => {
-    setIsOpen(true);
     setSearchParams((prev) => {
       prev.set(modalName, 'true');
       return prev;
@@ -15,7 +12,6 @@ export const useModal = (modalName: string) => {
   };
 
   const handleModalClose = () => {
-    setIsOpen(false);
     setSearchParams((prev) => {
       prev.delete(modalName);
       return prev;
