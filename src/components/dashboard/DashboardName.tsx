@@ -19,22 +19,22 @@ const DashboardColor = cva('w-2 h-2 rounded-full', {
 
 interface DashboardNameProps extends VariantProps<typeof DashboardColor> {
   children: string;
-  createdByMe: boolean;
-  dashboardid: string;
+  createdByMe?: boolean;
+  dashboardId: string;
 }
 
 export default function DashboardName({
   color,
   children,
   createdByMe = false,
-  dashboardid,
+  dashboardId,
 }: DashboardNameProps) {
   const params = useParams();
-  const isCurrent = params.id === dashboardid;
+  const isCurrent = params.id === dashboardId;
   return (
     <li>
       <Link
-        to={`/dashboard/${dashboardid}`}
+        to={`/dashboard/${dashboardId}`}
         className={cn(
           'flex items-center justify-start gap-4 bg-gray-0 px-3 py-2 max-md:px-2.5 max-md:py-[7px]',
           isCurrent && 'rounded-sm bg-purple-500/8 p-3 max-md:px-2.5 max-md:py-2'
