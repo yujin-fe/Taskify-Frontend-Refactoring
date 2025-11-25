@@ -65,7 +65,9 @@ function Root({
 
   return (
     <CommentContext value={contextValue}>
-      <form onSubmit={handleSubmit} className={cn('flex max-w-[520px] flex-col gap-4', className)}>
+      <form
+        onSubmit={handleSubmit}
+        className={cn('relative flex max-w-[520px] flex-col gap-4', className)}>
         {children}
       </form>
     </CommentContext>
@@ -106,7 +108,7 @@ function Field({ className, textareaClassName }: FieldProps) {
         value={value}
         onChange={onChange}
         placeholder={placeholder}
-        className={cn('pr-20 pb-12', textareaClassName)}
+        className={cn('pr-14 pb-12', textareaClassName)}
       />
     </fieldset>
   );
