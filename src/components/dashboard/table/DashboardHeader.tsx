@@ -12,14 +12,17 @@ export default function DashboardHeader({ children }: { children: ReactNode }) {
   const childrenArray = React.Children.toArray(children);
   const titleElement = childrenArray[0];
   const controlElements = childrenArray.slice(1);
+  const shouldRenderControls = controlElements.length > 0;
 
   return (
     <div className={'flex items-center justify-between'}>
       {titleElement}
 
-      <div className='flex flex-wrap items-center justify-end gap-[12px] sm:gap-[16px]'>
-        {controlElements}
-      </div>
+      {shouldRenderControls && (
+        <div className='flex flex-wrap items-center justify-end gap-[12px] sm:gap-[16px]'>
+          {controlElements}
+        </div>
+      )}
     </div>
   );
 }
