@@ -32,16 +32,19 @@ export default function DashboardName({
   const params = useParams();
   const isCurrent = params.id === dashboardid;
   return (
-    <li
-      className={cn(
-        'flex items-center justify-items-start gap-4 bg-base p-3',
-        isCurrent && 'rounded-sm bg-purple-500/8'
-      )}>
-      <div className={cn(DashboardColor({ color }))} />
-      <div className='flex items-center gap-1.5'>
-        <Link to={`/dashboard/${dashboardid}`}>{children}</Link>
-        {createdByMe && <Icons.Crown className='text-crown' />}
-      </div>
+    <li>
+      <Link
+        to={`/dashboard/${dashboardid}`}
+        className={cn(
+          'flex items-center justify-start gap-4 bg-gray-0 px-3 py-2 max-md:px-2.5 max-md:py-[7px]',
+          isCurrent && 'rounded-sm bg-purple-500/8 p-3 max-md:px-2.5 max-md:py-2'
+        )}>
+        <div className={cn(DashboardColor({ color }))} />
+        <div className='flex items-center gap-1.5'>
+          <span className='font-2lg-medium text-gray-500'>{children}</span>
+          {createdByMe && <Icons.Crown className='text-crown' />}
+        </div>
+      </Link>
     </li>
   );
 }
