@@ -1,12 +1,8 @@
 import React, { createContext, useContext, useId } from 'react';
+import InputLabel from '@/components/common/input/InputLabel';
 import { cn } from '@/utils/cn';
 import Button from './Button';
 import TextArea from './TextArea';
-
-// TODO: 상위 컴포넌트에서 API 호출 구현
-// const handleCommentSubmit = () => {
-//   setCommentValue('');
-// };
 
 type CommentContextValue = {
   value: string;
@@ -53,7 +49,7 @@ function Root({
   };
 
   return (
-    <CommentContext.Provider
+    <CommentContext
       value={{
         value,
         onChange,
@@ -65,31 +61,37 @@ function Root({
       <form onSubmit={handleSubmit} className={cn('flex max-w-[520px] flex-col gap-4', className)}>
         {children}
       </form>
-    </CommentContext.Provider>
+    </CommentContext>
   );
 }
 
 type TitleProps = {
   children?: React.ReactNode;
   className?: string;
+  required?: boolean;
 };
 
-function Title({ children = '댓글', className }: TitleProps) {
+function Title({ children = '댓글', className, required }: TitleProps) {
   const { textAreaId } = useCommentContext();
   return (
-    <label htmlFor={textAreaId} className={cn('font-lg-bold text-gray-700', className)}>
+    <InputLabel
+      htmlFor={textAreaId}
+      required={required}
+      className={cn('font-lg-bold text-gray-700', className)}>
       {children}
-    </label>
+    </InputLabel>
   );
 }
 
 type FieldProps = {
-  className?: string; // relative wrapper 커스텀용
-  textareaClassName?: string; // TextArea padding 보정용
+  className?: string;
+  textareaClassName?: string;
   children?: React.ReactNode;
 };
+
 function Field({ className, textareaClassName, children }: FieldProps) {
   const { value, onChange, placeholder, textAreaId } = useCommentContext();
+
   return (
     <fieldset className={cn('relative flex flex-col border-0 p-0', className)}>
       <legend className='sr-only'>댓글 입력</legend>
@@ -98,6 +100,7 @@ function Field({ className, textareaClassName, children }: FieldProps) {
         value={value}
         onChange={onChange}
         placeholder={placeholder}
+        hideLabel // ✅ label 겹침 원천 방지
         className={cn('pr-20 pb-12', textareaClassName)}
       />
       {children}
@@ -109,6 +112,7 @@ type SubmitProps = {
   children?: React.ReactNode;
   className?: string;
 };
+
 function Submit({ children = '입력', className }: SubmitProps) {
   const { disabled } = useCommentContext();
   return (
@@ -123,12 +127,5 @@ function Submit({ children = '입력', className }: SubmitProps) {
   );
 }
 
-// Compound export
-const Comment = {
-  Root,
-  Title,
-  Field,
-  Submit,
-};
-
+const Comment = { Root, Title, Field, Submit };
 export default Comment;
