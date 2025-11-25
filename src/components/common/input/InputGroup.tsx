@@ -22,7 +22,7 @@ function autoAddToFields(children: React.ReactNode) {
     if (child.type === InputField) {
       return cloneElement(child as React.ReactElement<InputFieldProps>, {
         _hasSuffix: hasSuffix,
-        _hasPreffix: hasPrefix,
+        _hasPrefix: hasPrefix,
       });
     }
 
