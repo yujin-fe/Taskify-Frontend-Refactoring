@@ -1,5 +1,6 @@
 import { isValidElement, Children, cloneElement } from 'react';
 import InputField, { type InputFieldProps } from '@/components/common/input/InputField';
+import InputPrefixIcon from '@/components/common/input/InputPrefixIcon';
 import InputSuffixButton from '@/components/common/input/InputSuffixButton';
 import useInputContext from '@/hooks/useInputContext';
 import { cn } from '@/utils/cn';
@@ -9,13 +10,20 @@ function autoAddSuffixToFields(children: React.ReactNode) {
     (c) => isValidElement(c) && c.type === InputSuffixButton
   );
 
+  const hasPrefix = Children.toArray(children).some(
+    (c) => isValidElement(c) && c.type === InputPrefixIcon
+  );
+
   return Children.map(children, (child) => {
     if (!isValidElement(child)) {
       return child;
     }
 
     if (child.type === InputField) {
-      return cloneElement(child as React.ReactElement<InputFieldProps>, { _hasSuffix: hasSuffix });
+      return cloneElement(child as React.ReactElement<InputFieldProps>, {
+        _hasSuffix: hasSuffix,
+        _hasPreffix: hasPrefix,
+      });
     }
 
     return child;
