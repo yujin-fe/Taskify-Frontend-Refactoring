@@ -6,7 +6,10 @@ export const useModal = (modalName: string) => {
   const isOpen = searchParams.get(modalName) === 'true';
 
   useEffect(() => {
-    if (isOpen) {
+    const hasAnyModalOpen = Array.from(searchParams.entries()).some(
+      ([, value]) => value === 'true'
+    );
+    if (hasAnyModalOpen) {
       document.body.classList.add('modal-open');
     } else {
       document.body.classList.remove('modal-open');
