@@ -29,13 +29,14 @@ interface FormModalProps extends VariantProps<typeof FormModalFrameStyle> {
   className?: string;
   children: React.ReactNode;
   modalName: string;
+  closeBtn?: boolean;
 }
 
 /**
  * - size="lg": 기본 패딩 32px (모바일 24px)
  * - size="md": 기본 패딩 24px (모바일 16px)
- *
- * gap은 Title ↔ Form 사이 간격을 의미합니다.
+ * - 닫힘 아이콘이 따로 있다면 closeBtn=true 프롭으로 명시
+ * - gap은 Title ↔ Form 사이 간격을 의미합니다.
  *
  * ⚠️ 아래 예시처럼 useModal의 인수와 FormModal의 modalName은 일치해야 합니다!!
  *
@@ -66,11 +67,18 @@ interface FormModalProps extends VariantProps<typeof FormModalFrameStyle> {
  * <button onClick={handleModalOpen}>열기</button>
  */
 
-export default function FormModal({ size, gap, children, className, modalName }: FormModalProps) {
+export default function FormModal({
+  size,
+  gap,
+  children,
+  className,
+  modalName,
+  closeBtn = false,
+}: FormModalProps) {
   const finalSize = size ?? 'lg';
   const modal = useModal(modalName);
   return (
-    <FormModalContext value={{ finalSize, ...modal }}>
+    <FormModalContext value={{ finalSize, ...modal, closeBtn }}>
       <ModalPortal>
         {modal.isOpen && (
           <div className='modal-dimmed'>
