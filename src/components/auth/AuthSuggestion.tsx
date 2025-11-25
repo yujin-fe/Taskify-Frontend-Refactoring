@@ -1,6 +1,6 @@
 import { Link } from 'react-router';
 
-interface AuthSuggestion {
+interface AuthSuggestionProps {
   message: string;
   linkText: string;
   to: string;
@@ -18,7 +18,7 @@ interface AuthSuggestion {
  *   to="/login"
  * />
  */
-export default function AuthSuggestion({ message, linkText, to }: AuthSuggestion) {
+export default function AuthSuggestion({ message, linkText, to }: AuthSuggestionProps) {
   return (
     <div className='flex gap-[8px] text-gray-700'>
       <span>{message}</span>
