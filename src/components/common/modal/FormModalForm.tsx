@@ -5,13 +5,13 @@ export default function FormModalForm({
   onSubmit,
 }: {
   children: React.ReactNode;
-  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  onSubmit: () => void;
 }) {
   const { handleModalClose } = useContext(FormModalContext);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onSubmit(e);
+    onSubmit();
     handleModalClose();
   };
   return <form onSubmit={handleSubmit}>{children}</form>;
