@@ -18,5 +18,5 @@ export const useModal = (modalName: string) => {
     });
   };
 
-  return { isOpen, handleModalOpen, handleModalClose };
+  return { modalName, isOpen, handleModalOpen, handleModalClose };
 };

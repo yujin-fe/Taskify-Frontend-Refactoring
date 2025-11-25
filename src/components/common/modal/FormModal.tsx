@@ -4,6 +4,7 @@ import FormModalFooter from '@/components/common/modal/FormModalFooter';
 import FormModalTitle from '@/components/common/modal/FormModalTitle';
 import ModalPortal from '@/components/common/modal/ModalPortal';
 import { FormModalContext } from '@/context/formModalContext';
+import { useModal } from '@/hooks/useModal';
 import { cn } from '@/utils/cn';
 
 const FormModalFrameStyle = cva(`flex flex-col bg-gray-0 rounded-2xl`, {
@@ -26,11 +27,7 @@ const FormModalFrameStyle = cva(`flex flex-col bg-gray-0 rounded-2xl`, {
 interface FormModalProps extends VariantProps<typeof FormModalFrameStyle> {
   className?: string;
   children: React.ReactNode;
-  modal: {
-    isOpen: boolean;
-    handleModalOpen: () => void;
-    handleModalClose: () => void;
-  };
+  modalName: string;
 }
 
 /**
@@ -68,20 +65,23 @@ interface FormModalProps extends VariantProps<typeof FormModalFrameStyle> {
  * <button onClick={newTaskModal.handleModalOpen}>열기</button>
  */
 
-export default function FormModal({ size, gap, children, className, modal }: FormModalProps) {
+export default function FormModal({ size, gap, children, className, modalName }: FormModalProps) {
   const finalSize = size ?? 'lg';
+  const modal = useModal(modalName);
   return (
     <FormModalContext value={{ finalSize, ...modal }}>
       <ModalPortal>
-        <div className='modal-dimmed'>
-          <div
-            role='dialog'
-            aria-modal='true'
-            tabIndex={0}
-            className={cn(FormModalFrameStyle({ size, gap }), className)}>
-            {children}
+        {modal.isOpen && (
+          <div className='modal-dimmed'>
+            <div
+              role='dialog'
+              aria-modal='true'
+              tabIndex={0}
+              className={cn(FormModalFrameStyle({ size, gap }), className)}>
+              {children}
+            </div>
           </div>
-        </div>
+        )}
       </ModalPortal>
     </FormModalContext>
   );
