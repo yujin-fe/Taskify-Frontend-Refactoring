@@ -4,7 +4,7 @@ import { FormModalContext } from '@/context/formModalContext';
 export default function FormModalTitle({ title }: { title: string }) {
   const { finalSize } = useContext(FormModalContext);
   return finalSize === 'md' ? (
-    <Title as='h2' size='2xl' weight={'bold'} className='md:text-lg'>
+    <Title as='h2' size='2xl' weight={'bold'} className='max-sm:text-lg'>
       {title}
     </Title>
   ) : (

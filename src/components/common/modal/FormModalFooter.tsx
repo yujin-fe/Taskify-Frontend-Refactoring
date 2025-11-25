@@ -10,7 +10,7 @@ export default function FormModalFooter({
 }) {
   const { handleModalClose } = useContext(FormModalContext);
   return (
-    <div className={'flex w-[295px] max-sm:gap-[7px] sm:w-[520px] sm:gap-2'}>
+    <div className={'flex w-full max-sm:gap-[7px] sm:gap-2'}>
       <Button
         size='lg'
         theme={'outlined'}

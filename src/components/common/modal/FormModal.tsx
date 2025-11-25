@@ -10,7 +10,7 @@ const FormModalFrameStyle = cva(`flex flex-col bg-gray-0 rounded-2xl`, {
   variants: {
     size: {
       lg: 'sm:p-[32px] p-[24px]',
-      md: 'sm:p-[24px] py-[24px] px-[16px] rounded-lg w-[327px]',
+      md: 'sm:p-[24px] py-[24px] px-[16px] rounded-lg w-[327px] mx-[24px]',
     },
     gap: {
       32: 'gap-[32px]',
@@ -87,6 +87,7 @@ export default function FormModal({ size, gap, children, className, modal }: For
   );
 }
 
+// FormModal.Trigger = FormModalTrigger;
 //title 프롭스로 모달의 타이틀 작성
 FormModal.Title = FormModalTitle;
 
