@@ -5,7 +5,7 @@ import InputSuffixButton from '@/components/common/input/InputSuffixButton';
 import useInputContext from '@/hooks/useInputContext';
 import { cn } from '@/utils/cn';
 
-function autoAddSuffixToFields(children: React.ReactNode) {
+function autoAddToFields(children: React.ReactNode) {
   const hasSuffix = Children.toArray(children).some(
     (c) => isValidElement(c) && c.type === InputSuffixButton
   );
@@ -40,7 +40,7 @@ export default function InputGroup({ children }: { children: React.ReactNode }) 
         hasError && 'border-error focus-within:border-error',
         disabled && 'cursor-not-allowed text-gray-400'
       )}>
-      {autoAddSuffixToFields(children)}
+      {autoAddToFields(children)}
     </div>
   );
 }
