@@ -6,7 +6,7 @@ export default function HomeHeader() {
     <header className='mx-auto flex h-[70px] max-w-[1760px] items-center justify-between'>
       <Logo color='base' className='hidden sm:flex' />
       <Logo color='base' size='Small' className='sm:hidden' />
-      <nav className='flex gap-[36px] text-gray-0'>
+      <nav className='flex gap-[24px] text-gray-0 sm:gap-[36px]'>
         <Link to='/login'>로그인</Link>
         <Link to='/signup'>회원가입</Link>
       </nav>
