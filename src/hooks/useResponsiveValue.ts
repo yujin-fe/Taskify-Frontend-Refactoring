@@ -1,44 +1,55 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
+
+const BREAKPOINT = {
+  mobile: 640,
+  tablet: 768,
+};
 
 type UseResponsiveValueParams<T> = {
   mobile: T;
+  tablet: T;
   desktop: T;
-  breakpoint?: number; // 기본 640 (tailwind sm 기준)
-  throttleMs?: number; // 리사이즈 시 최소 간격
+  mobileMax?: number;
+  tabletMax?: number;
+  throttleMs?: number;
 };
 
-/**
- * 화면 너비에 따라 서로 다른 값을 반환하는 훅
- *
- * 예)
- * const maxToShow = useResponsiveValue({ mobile: 2, desktop: 3 });
- */
 export function useResponsiveValue<T>({
   mobile,
+  tablet,
   desktop,
-  breakpoint = 639,
+  mobileMax = BREAKPOINT.mobile,
+  tabletMax = BREAKPOINT.tablet,
   throttleMs = 100,
 }: UseResponsiveValueParams<T>) {
-  const [value, setValue] = useState<T>(() => {
+  // ⭐ getValue를 useCallback으로 감싸기
+  const getValue = useCallback(() => {
     if (typeof window === 'undefined') {
       return desktop;
     }
-    return window.innerWidth < breakpoint ? mobile : desktop;
-  });
+
+    const width = window.innerWidth;
+
+    if (width < mobileMax) {
+      return mobile;
+    }
+    if (width < tabletMax) {
+      return tablet;
+    }
+    return desktop;
+  }, [mobile, tablet, desktop, mobileMax, tabletMax]);
+
+  // 초기값
+  const [value, setValue] = useState<T>(getValue);
+
   useEffect(() => {
     const calcValue = () => {
-      if (window.innerWidth < breakpoint) {
-        setValue(mobile);
-      } else {
-        setValue(desktop);
-      }
+      setValue(getValue());
     };
 
-    // 스로틀된 핸들러 생성
     let timeoutId: number | null = null;
 
     const handleResize = () => {
-      // 이미 예약된 실행이 있으면 무시
       if (timeoutId !== null) {
         return;
       }
@@ -49,9 +60,7 @@ export function useResponsiveValue<T>({
       }, throttleMs);
     };
 
-    // 처음 마운트 시 한 번 계산
     calcValue();
-
     window.addEventListener('resize', handleResize);
 
     return () => {
@@ -60,7 +69,7 @@ export function useResponsiveValue<T>({
         clearTimeout(timeoutId);
       }
     };
-  }, [mobile, desktop, breakpoint, throttleMs]);
+  }, [getValue, throttleMs]);
 
   return value;
 }

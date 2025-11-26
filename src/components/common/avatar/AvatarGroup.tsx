@@ -5,18 +5,20 @@ import { cn } from '@/utils/cn';
 
 const AVATAR_MAX = {
   mobile: 2,
-  desktop: 3,
+  tablet: 3,
+  desktop: 4,
 };
 
 interface AvatarGroupProps {
   users: UserMe[];
-  size?: 's' | 'm';
+  size?: 'm';
   className?: string;
 }
 
 export default function AvatarGroup({ users, size = 'm', className }: AvatarGroupProps) {
   const maxToShow = useResponsiveValue({
     mobile: AVATAR_MAX.mobile,
+    tablet: AVATAR_MAX.tablet,
     desktop: AVATAR_MAX.desktop,
   });
 
@@ -25,7 +27,7 @@ export default function AvatarGroup({ users, size = 'm', className }: AvatarGrou
 
   return (
     <div
-      className={cn('flex items-center', size === 's' ? '-space-x-1.5' : '-space-x-2', className)}>
+      className={cn('flex items-center', size === 'm' ? '-space-x-3' : '-space-x-3.5', className)}>
       {visibleUsers.map((user) => (
         <Avatar key={user.id} size={size} user={user}>
           <Avatar.Img />
@@ -38,7 +40,7 @@ export default function AvatarGroup({ users, size = 'm', className }: AvatarGrou
           className={cn(
             'flex items-center justify-center rounded-full font-lg-medium',
             'border-2 border-gray-0 bg-profile-pink-100 text-pink-500',
-            size === 'm' ? 'h-[38px] w-[38px] font-lg-medium' : 'h-[38px] w-[38px]'
+            size === 'm' ? 'h-[38px] w-[38px] font-lg-medium' : 'h-[24px] w-[24px] font-sm-medium'
           )}>
           +{rest}
         </div>
