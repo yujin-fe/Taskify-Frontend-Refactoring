@@ -9,9 +9,10 @@ export default function Layout() {
   return (
     <div>
       <SideBar isCollapsed={isCollapsed} onClickSidebarIcon={() => setIsCollapsed(!isCollapsed)} />
-      <div className={cn('min-h-dvh', isCollapsed ? 'pl-[67px]' : 'pl-[300px]')}>
-        <header>헤더</header>
-        <main>
+      <div className={cn(isCollapsed ? 'pl-[67px]' : 'pl-[300px]')}>
+        {/* header는 테스트용 코드입니다 */}
+        <header className='fixed top-0 h-[70px] w-full bg-gray-0'>헤더</header>
+        <main className='min-h-dvh bg-base pt-[70px]'>
           <Outlet />
         </main>
       </div>
