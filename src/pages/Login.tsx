@@ -38,9 +38,9 @@ export default function Login() {
 
   useEffect(() => {
     if (isLoggedIn) {
-      navigate('/mydashboard', { replace: true });
+      navigate('/mydashboard');
     }
-  });
+  }, []);
 
   const handleSubmit = async () => {
     // TODO: useMutation 훅 구현 시 적용하기
@@ -106,7 +106,9 @@ export default function Login() {
         </Button>
       </AuthForm>
       <AuthSuggestion message='회원이 아니신가요?' to='/signup' linkText='회원가입하기' />
-      {isOpen && <BaseModalFrame setOnModal={handleModalClose}>{apiErrorMsg}</BaseModalFrame>}
+      {isOpen && (
+        <BaseModalFrame setOnModal={() => handleModalClose()}>{apiErrorMsg}</BaseModalFrame>
+      )}
     </>
   );
 }
