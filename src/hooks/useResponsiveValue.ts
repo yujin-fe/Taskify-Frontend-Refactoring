@@ -23,7 +23,7 @@ export function useResponsiveValue<T>({
     if (typeof window === 'undefined') {
       return desktop;
     }
-    return window.innerWidth <= breakpoint ? mobile : desktop;
+    return window.innerWidth < breakpoint ? mobile : desktop;
   });
   useEffect(() => {
     const calcValue = () => {
