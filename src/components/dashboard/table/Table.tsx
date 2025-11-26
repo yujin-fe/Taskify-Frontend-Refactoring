@@ -31,7 +31,6 @@ export function DashboardItem({
   className,
   children,
 }: DashboardItemProps) {
-  // Members Context Value 생성
   const memberContextValue = useMemo(() => {
     if (type === 'MembersItem') {
       return {
@@ -57,9 +56,9 @@ export function DashboardItem({
 
   const contextProvider =
     type === 'MembersItem' && memberContextValue ? (
-      <MemberContext.Provider value={memberContextValue}>{children}</MemberContext.Provider>
+      <MemberContext value={memberContextValue}>{children}</MemberContext>
     ) : type === 'InvitesItem' && invitesContextValue ? (
-      <InvitesContext.Provider value={invitesContextValue}>{children}</InvitesContext.Provider>
+      <InvitesContext value={invitesContextValue}>{children}</InvitesContext>
     ) : (
       children
     );
