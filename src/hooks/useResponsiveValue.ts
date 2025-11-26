@@ -16,14 +16,18 @@ type UseResponsiveValueParams<T> = {
 export function useResponsiveValue<T>({
   mobile,
   desktop,
-  breakpoint = 640,
+  breakpoint = 639,
   throttleMs = 100,
 }: UseResponsiveValueParams<T>) {
-  const [value, setValue] = useState<T>(desktop);
-
+  const [value, setValue] = useState<T>(() => {
+    if (typeof window === 'undefined') {
+      return desktop;
+    }
+    return window.innerWidth <= breakpoint ? mobile : desktop;
+  });
   useEffect(() => {
     const calcValue = () => {
-      if (window.innerWidth <= breakpoint) {
+      if (window.innerWidth < breakpoint) {
         setValue(mobile);
       } else {
         setValue(desktop);
