@@ -1,98 +1,33 @@
-import React, { useMemo } from 'react';
-import InvitesContext from '@/context/invitesContext';
-import MemberContext from '@/context/memberContext';
-import type { UserMe } from '@/types/userMe';
-import { cn } from '@/utils/cn';
-import {
-  MembersItemContent,
-  MembersItemAction,
-  InvitesItemContent,
-  InvitesItemAction,
-} from './DashboardItem';
+import { DashboardItemRoot, ContentWrapper, ActionWrapper } from './DashboardItem';
 
-export type ItemType = 'MembersItem' | 'InvitesItem';
-
-type DashboardItemProps = {
-  type: ItemType;
-  member: UserMe;
-  email: string;
-  onCancel: (userID: number) => void;
-  onDelete: (userID: number) => void;
-  className?: string;
-  children: React.ReactNode;
+/**
+ * DashboardItem 컴포넌트는 목록의 개별 항목(<li>)을 렌더링하는 루트 컨테이너입니다.
+ * * 내부에서 Context를 통해 데이터와 액션을 하위 컴포넌트에 전달합니다.
+ * * @example
+ * <DashboardItem type='MembersItem' member={...} onDelete={handleDelete}>
+ * <DashboardItem.Content type='MembersItem' />
+ * <DashboardItem.Action type='MembersItem' />
+ * </DashboardItem>
+ */
+const DashboardItem = DashboardItemRoot as typeof DashboardItemRoot & {
+  Content: typeof ContentWrapper;
+  Action: typeof ActionWrapper;
 };
 
-export function DashboardItem({
-  type,
-  member,
-  email,
-  onCancel,
-  onDelete,
-  className,
-  children,
-}: DashboardItemProps) {
-  const memberContextValue = useMemo(() => {
-    if (type === 'MembersItem') {
-      return {
-        ...member,
-        type: 'MembersItem' as const,
-        onDelete,
-      };
-    }
-    return null;
-  }, [type, member, onDelete]);
+/**
+ * 항목의 내용을 렌더링하는 컴포넌트입니다.
+ * type에 따라 멤버(닉네임/아바타) 또는 초대(이메일) 내용을 보여줍니다.
+ * * @example
+ * <DashboardItem.Content type='MembersItem' />
+ */
+DashboardItem.Content = ContentWrapper;
 
-  const invitesContextValue = useMemo(() => {
-    if (type === 'InvitesItem') {
-      return {
-        ...member,
-        email,
-        type: 'InvitesItem' as const,
-        onCancel,
-      };
-    }
-    return null;
-  }, [type, member, email, onCancel]);
+/**
+ * 항목의 액션 버튼을 렌더링하는 컴포넌트입니다.
+ * type에 따라 삭제 또는 취소 버튼을 보여줍니다.
+ * * @example
+ * <DashboardItem.Action type='MembersItem' />
+ */
+DashboardItem.Action = ActionWrapper;
 
-  const contextProvider =
-    type === 'MembersItem' && memberContextValue ? (
-      <MemberContext value={memberContextValue}>{children}</MemberContext>
-    ) : type === 'InvitesItem' && invitesContextValue ? (
-      <InvitesContext value={invitesContextValue}>{children}</InvitesContext>
-    ) : (
-      children
-    );
-
-  return (
-    <ul className={cn('flex items-center justify-between border-8 border-gray-0 p-3', className)}>
-      {contextProvider}
-    </ul>
-  );
-}
-
-const ContentWrapper = ({ type }: { type: ItemType }) => {
-  if (type === 'MembersItem') {
-    return <MembersItemContent />;
-  }
-  if (type === 'InvitesItem') {
-    return <InvitesItemContent />;
-  }
-  return null;
-};
-
-const ActionWrapper = ({ type }: { type: ItemType }) => {
-  if (type === 'MembersItem') {
-    return <MembersItemAction />;
-  }
-  if (type === 'InvitesItem') {
-    return <InvitesItemAction />;
-  }
-  return null;
-};
-
-const AssignedDashboardItem = Object.assign(DashboardItem, {
-  Content: ContentWrapper,
-  Action: ActionWrapper,
-});
-
-export default AssignedDashboardItem;
+export default DashboardItem;

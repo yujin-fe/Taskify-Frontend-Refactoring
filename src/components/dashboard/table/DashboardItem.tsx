@@ -1,11 +1,29 @@
+import React, { useMemo } from 'react';
 import Avatar from '@/components/common/avatar/Avatar';
 import Button from '@/components/common/Button';
+import InvitesContext from '@/context/invitesContext';
+import MemberContext from '@/context/memberContext';
 import useInvitesContext from '@/hooks/useInvitesContext';
 import useMemberContext from '@/hooks/useMemberContext';
+import type { UserMe } from '@/types/userMe';
+import { cn } from '@/utils/cn';
 
-export const MembersItemContent = () => {
+export type ItemType = 'MembersItem' | 'InvitesItem';
+
+type DashboardItemProps = {
+  type: ItemType;
+  member: UserMe;
+  email: string;
+  onCancel: (userID: number) => void;
+  onDelete: (userID: number) => void;
+  className?: string;
+  children: React.ReactNode;
+};
+
+type WrapperProps = { type: ItemType };
+
+const MembersItemContent = () => {
   const memberContext = useMemberContext();
-
   const { nickname } = memberContext;
 
   return (
@@ -21,7 +39,7 @@ export const MembersItemContent = () => {
   );
 };
 
-export const MembersItemAction = () => {
+const MembersItemAction = () => {
   const { id, onDelete } = useMemberContext();
 
   const handleDeleteClick = () => {
@@ -42,7 +60,7 @@ export const MembersItemAction = () => {
   );
 };
 
-export const InvitesItemContent = () => {
+const InvitesItemContent = () => {
   const { email } = useInvitesContext();
 
   return (
@@ -52,7 +70,7 @@ export const InvitesItemContent = () => {
   );
 };
 
-export const InvitesItemAction = () => {
+const InvitesItemAction = () => {
   const { id, onCancel } = useInvitesContext();
 
   const handleCancelClick = () => {
@@ -72,3 +90,62 @@ export const InvitesItemAction = () => {
     </div>
   );
 };
+
+export const ContentWrapper = ({ type }: WrapperProps) => {
+  if (type === 'MembersItem') {
+    return <MembersItemContent />;
+  }
+  if (type === 'InvitesItem') {
+    return <InvitesItemContent />;
+  }
+  return null;
+};
+
+export const ActionWrapper = ({ type }: WrapperProps) => {
+  if (type === 'MembersItem') {
+    return <MembersItemAction />;
+  }
+  if (type === 'InvitesItem') {
+    return <InvitesItemAction />;
+  }
+  return null;
+};
+
+export function DashboardItemRoot({
+  type,
+  member,
+  email,
+  onCancel,
+  onDelete,
+  className,
+  children,
+}: DashboardItemProps) {
+  const memberContextValue = useMemo(() => {
+    if (type === 'MembersItem') {
+      return { ...member, type: 'MembersItem' as const, onDelete };
+    }
+    return null;
+  }, [type, member, onDelete]);
+
+  const invitesContextValue = useMemo(() => {
+    if (type === 'InvitesItem') {
+      return { ...member, email, type: 'InvitesItem' as const, onCancel };
+    }
+    return null;
+  }, [type, member, email, onCancel]);
+
+  const contextProvider =
+    type === 'MembersItem' && memberContextValue ? (
+      <MemberContext value={memberContextValue}>{children}</MemberContext>
+    ) : type === 'InvitesItem' && invitesContextValue ? (
+      <InvitesContext value={invitesContextValue}>{children}</InvitesContext>
+    ) : (
+      children
+    );
+
+  return (
+    <li className={cn('flex items-center justify-between border-8 border-gray-0 p-3', className)}>
+      {contextProvider}
+    </li>
+  );
+}
