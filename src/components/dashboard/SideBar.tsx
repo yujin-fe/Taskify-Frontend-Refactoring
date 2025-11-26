@@ -81,7 +81,7 @@ export default function SideBar({
               <Icons.AddDashboard className='text-gray-500' />
             </button>
           </div>
-          <ul className={cn('gap-2', 'isCollapsed && flex flex-col gap-3.5')}>
+          <ul className={cn('flex flex-col gap-2', isCollapsed && 'gap-3.5')}>
             {dashboards.map((dashboard) => (
               <DashboardName
                 key={dashboard.id}
