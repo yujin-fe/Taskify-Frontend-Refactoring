@@ -34,14 +34,13 @@ export default function Login() {
   const { isLoggedIn, login } = useAuthContext();
   const { isOpen, handleModalClose, handleModalOpen } = useBaseModal();
   const [apiErrorMsg, setApiErrorMsg] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (isLoggedIn) {
       navigate('/mydashboard', { replace: true });
     }
   });
-
-  const navigate = useNavigate();
 
   const handleSubmit = async () => {
     // TODO: useMutation 훅 구현 시 적용하기
@@ -53,11 +52,7 @@ export default function Login() {
       setAuthForm(loginInitialValue);
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        if (error.response?.status === 400) {
-          setApiErrorMsg('비밀번호가 일치하지 않습니다.');
-        } else {
-          setApiErrorMsg(error.response?.data?.message ?? '오류가 발생했습니다.');
-        }
+        setApiErrorMsg(error.response?.data?.message ?? '오류가 발생했습니다.');
         handleModalOpen();
       }
     } finally {
