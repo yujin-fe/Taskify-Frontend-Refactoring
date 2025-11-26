@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import validators from '@/utils/validation';
+import { validators } from '@/utils/validation';
 
 interface ShowPasswordType {
   password: boolean;
