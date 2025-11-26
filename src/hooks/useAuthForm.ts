@@ -37,9 +37,7 @@ const useAuthForm = <InitT extends Record<string, string>>(initialValue: InitT) 
     };
 
   const handleBlur = (key: string) => (value: string) => {
-    let message = '';
-
-    message = validators[key](value);
+    const message = key in validators ? validators[key](value) : '';
     setError((prev) => ({ ...prev, [key]: message }));
   };
 
