@@ -1,35 +1,26 @@
-import { useEffect, useState } from 'react';
 import Avatar from '@/components/common/avatar/Avatar';
+import { useResponsiveValue } from '@/hooks/useResponsiveValue';
 import type { UserMe } from '@/types/userMe';
 import { cn } from '@/utils/cn';
+
+const AVATAR_MAX = {
+  mobile: 2,
+  desktop: 3,
+};
 
 interface AvatarGroupProps {
   users: UserMe[];
   size?: 's' | 'm';
-  max?: number; // 데스크탑 기본값
   className?: string;
 }
 
-export default function AvatarGroup({ users, size = 'm', max = 3, className }: AvatarGroupProps) {
-  const [dynamicMax, setDynamicMax] = useState(max);
+export default function AvatarGroup({ users, size = 'm', className }: AvatarGroupProps) {
+  const maxToShow = useResponsiveValue({
+    mobile: AVATAR_MAX.mobile,
+    desktop: AVATAR_MAX.desktop,
+  });
 
-  /** 모바일 여부 체크 (640px 이하 기준) */
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth <= 640) {
-        setDynamicMax(2); // 모바일 일 때 max = 2
-      } else {
-        setDynamicMax(max); // 데스크탑/태블릿 일 때 기본 max 사용
-      }
-    };
-
-    handleResize();
-    window.addEventListener('resize', handleResize);
-
-    return () => window.removeEventListener('resize', handleResize);
-  }, [max]);
-
-  const visibleUsers = users.slice(0, dynamicMax);
+  const visibleUsers = users.slice(0, maxToShow);
   const rest = users.length - visibleUsers.length;
 
   return (
@@ -47,7 +38,7 @@ export default function AvatarGroup({ users, size = 'm', max = 3, className }: A
           className={cn(
             'flex items-center justify-center rounded-full font-lg-medium',
             'border-2 border-gray-0 bg-profile-pink-100 text-pink-500',
-            size === 's' ? 'h-[24px] w-[24px] text-xs' : 'h-[38px] w-[38px] text-sm'
+            size === 'm' ? 'h-[38px] w-[38px] font-lg-medium' : 'h-[38px] w-[38px]'
           )}>
           +{rest}
         </div>
