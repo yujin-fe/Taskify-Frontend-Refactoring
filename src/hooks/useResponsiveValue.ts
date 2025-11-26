@@ -1,16 +1,14 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 const BREAKPOINT = {
-  mobile: 640,
-  tablet: 768,
+  mobileMax: 639,
+  tabletMax: 767,
 };
 
 type UseResponsiveValueParams<T> = {
   mobile: T;
-  tablet: T;
+  tablet?: T;
   desktop: T;
-  mobileMax?: number;
-  tabletMax?: number;
   throttleMs?: number;
 };
 
@@ -18,28 +16,20 @@ export function useResponsiveValue<T>({
   mobile,
   tablet,
   desktop,
-  mobileMax = BREAKPOINT.mobile,
-  tabletMax = BREAKPOINT.tablet,
   throttleMs = 100,
 }: UseResponsiveValueParams<T>) {
-  // ⭐ getValue를 useCallback으로 감싸기
   const getValue = useCallback(() => {
-    if (typeof window === 'undefined') {
-      return desktop;
-    }
-
     const width = window.innerWidth;
 
-    if (width < mobileMax) {
+    if (width <= BREAKPOINT.mobileMax) {
       return mobile;
     }
-    if (width < tabletMax) {
+    if (tablet !== undefined && width <= BREAKPOINT.tabletMax) {
       return tablet;
     }
     return desktop;
-  }, [mobile, tablet, desktop, mobileMax, tabletMax]);
+  }, [mobile, tablet, desktop]);
 
-  // 초기값
   const [value, setValue] = useState<T>(getValue);
 
   useEffect(() => {
@@ -61,6 +51,7 @@ export function useResponsiveValue<T>({
     };
 
     calcValue();
+
     window.addEventListener('resize', handleResize);
 
     return () => {
