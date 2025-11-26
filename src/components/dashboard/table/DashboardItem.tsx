@@ -1,69 +1,74 @@
 import Avatar from '@/components/common/avatar/Avatar';
 import Button from '@/components/common/Button';
-import useMemberContext from '@/context/memberContext';
+import useInvitesContext from '@/hooks/useInvitesContext';
+import useMemberContext from '@/hooks/useMemberContext';
 
-export const ItemContent = () => {
-  const { type, member, email } = useMemberContext();
+export const MembersItemContent = () => {
+  const memberContext = useMemberContext();
 
-  const membersItemContent = type === 'MembersItem' && (
-    <div className='flex items-center gap-[8px] sm:gap-[12px]'>
-      <Avatar size='m' user={member}>
-        <Avatar.Img />
-        <Avatar.Fallback />
-      </Avatar>
-      <span className='font-md-regular text-gray-700 sm:font-lg-regular'>{member.nickname}</span>
-    </div>
-  );
-
-  const invitesItemContent = type === 'InvitesItem' && (
-    <span className='font-md-regular text-gray-700 sm:font-lg-regular'>{email}</span>
-  );
+  const { nickname } = memberContext;
 
   return (
     <div className='flex flex-grow items-center'>
-      {membersItemContent}
-      {invitesItemContent}
+      <div className='flex items-center gap-[8px] sm:gap-[12px]'>
+        <Avatar size='m' user={memberContext}>
+          <Avatar.Img />
+          <Avatar.Fallback />
+        </Avatar>
+        <span className='font-md-regular text-gray-700 sm:font-lg-regular'>{nickname}</span>
+      </div>
     </div>
   );
 };
 
-export const ItemAction = () => {
-  const { type, member, onCancel, onDelete } = useMemberContext();
+export const MembersItemAction = () => {
+  const { id, onDelete } = useMemberContext();
 
   const handleDeleteClick = () => {
-    onDelete(member.id);
+    onDelete(id);
   };
-
-  const handleCancelClick = () => {
-    onCancel(member.id);
-  };
-
-  const membersItemAction = type === 'MembersItem' && (
-    <Button
-      theme='secondary'
-      size='sm'
-      type='button'
-      onClick={handleDeleteClick}
-      className='w-[52px] flex-shrink-0 flex-grow-0 bg-gray-0 px-[9px] font-xs-medium whitespace-nowrap sm:w-[84px] sm:font-md-medium'>
-      삭제
-    </Button>
-  );
-
-  const invitesItemAction = type === 'InvitesItem' && (
-    <Button
-      theme='secondary'
-      size='sm'
-      type='button'
-      onClick={handleCancelClick}
-      className='w-[52px] flex-shrink-0 flex-grow-0 bg-gray-0 px-[9px] font-xs-medium whitespace-nowrap sm:w-[84px] sm:font-md-medium'>
-      취소
-    </Button>
-  );
 
   return (
     <div className='ml-4 flex-shrink-0 flex-grow-0'>
-      {membersItemAction}
-      {invitesItemAction}
+      <Button
+        theme='secondary'
+        size='sm'
+        type='button'
+        onClick={handleDeleteClick}
+        className='w-[52px] flex-shrink-0 flex-grow-0 bg-gray-0 px-[9px] font-xs-medium whitespace-nowrap sm:w-[84px] sm:font-md-medium'>
+        삭제
+      </Button>
+    </div>
+  );
+};
+
+export const InvitesItemContent = () => {
+  const { email } = useInvitesContext();
+
+  return (
+    <div className='flex flex-grow items-center'>
+      <span className='font-md-regular text-gray-700 sm:font-lg-regular'>{email}</span>
+    </div>
+  );
+};
+
+export const InvitesItemAction = () => {
+  const { id, onCancel } = useInvitesContext();
+
+  const handleCancelClick = () => {
+    onCancel(id);
+  };
+
+  return (
+    <div className='ml-4 flex-shrink-0 flex-grow-0'>
+      <Button
+        theme='secondary'
+        size='sm'
+        type='button'
+        onClick={handleCancelClick}
+        className='w-[52px] flex-shrink-0 flex-grow-0 bg-gray-0 px-[9px] font-xs-medium whitespace-nowrap sm:w-[84px] sm:font-md-medium'>
+        취소
+      </Button>
     </div>
   );
 };

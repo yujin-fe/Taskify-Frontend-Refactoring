@@ -1,17 +1,18 @@
-/**  <Table
- *   <Table.Content />
- *   <Table.Action />
- * </Table>
- **/
 import React, { useMemo } from 'react';
-import { MemberContext } from '@/context/memberContext';
+import InvitesContext from '@/context/invitesContext';
+import MemberContext from '@/context/memberContext';
 import type { UserMe } from '@/types/userMe';
 import { cn } from '@/utils/cn';
-import { ItemContent, ItemAction } from './DashboardItem';
+import {
+  MembersItemContent,
+  MembersItemAction,
+  InvitesItemContent,
+  InvitesItemAction,
+} from './DashboardItem';
 
 export type ItemType = 'MembersItem' | 'InvitesItem';
 
-type TableProps = {
+type DashboardItemProps = {
   type: ItemType;
   member: UserMe;
   email: string;
@@ -21,22 +22,78 @@ type TableProps = {
   children: React.ReactNode;
 };
 
-function TableRoot({ type, member, email, onCancel, onDelete, className, children }: TableProps) {
-  const value = useMemo(
-    () => ({ type, member, email, onCancel, onDelete }),
-    [type, member, email, onCancel, onDelete]
-  );
+export function DashboardItem({
+  type,
+  member,
+  email,
+  onCancel,
+  onDelete,
+  className,
+  children,
+}: DashboardItemProps) {
+  // Members Context Value 생성
+  const memberContextValue = useMemo(() => {
+    if (type === 'MembersItem') {
+      return {
+        ...member,
+        type: 'MembersItem' as const,
+        onDelete,
+      };
+    }
+    return null;
+  }, [type, member, onDelete]);
+
+  const invitesContextValue = useMemo(() => {
+    if (type === 'InvitesItem') {
+      return {
+        ...member,
+        email,
+        type: 'InvitesItem' as const,
+        onCancel,
+      };
+    }
+    return null;
+  }, [type, member, email, onCancel]);
+
+  const contextProvider =
+    type === 'MembersItem' && memberContextValue ? (
+      <MemberContext.Provider value={memberContextValue}>{children}</MemberContext.Provider>
+    ) : type === 'InvitesItem' && invitesContextValue ? (
+      <InvitesContext.Provider value={invitesContextValue}>{children}</InvitesContext.Provider>
+    ) : (
+      children
+    );
 
   return (
-    <li className={cn('flex items-center justify-between border-8 border-gray-0 p-3', className)}>
-      <MemberContext.Provider value={value}>{children}</MemberContext.Provider>
-    </li>
+    <ul className={cn('flex items-center justify-between border-8 border-gray-0 p-3', className)}>
+      {contextProvider}
+    </ul>
   );
 }
 
-const Table = Object.assign(TableRoot, {
-  Content: ItemContent,
-  Action: ItemAction,
+const ContentWrapper = ({ type }: { type: ItemType }) => {
+  if (type === 'MembersItem') {
+    return <MembersItemContent />;
+  }
+  if (type === 'InvitesItem') {
+    return <InvitesItemContent />;
+  }
+  return null;
+};
+
+const ActionWrapper = ({ type }: { type: ItemType }) => {
+  if (type === 'MembersItem') {
+    return <MembersItemAction />;
+  }
+  if (type === 'InvitesItem') {
+    return <InvitesItemAction />;
+  }
+  return null;
+};
+
+const AssignedDashboardItem = Object.assign(DashboardItem, {
+  Content: ContentWrapper,
+  Action: ActionWrapper,
 });
 
-export default Table;
+export default AssignedDashboardItem;
