@@ -10,7 +10,7 @@ const validatePassword = (value: string) => {
 
 // TODO: 회원가입 구현 시 닉네임 검증 함수 구현 및 validators에 연결
 
-const validators = {
+const validators: Record<string, (v: string) => string> = {
   email: validateEmail,
   password: validatePassword,
 };
