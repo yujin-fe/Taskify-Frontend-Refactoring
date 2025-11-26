@@ -6,9 +6,9 @@ import Button from '@/components/common/Button';
 import Input from '@/components/common/input/Input';
 import useAuthForm from '@/hooks/useAuthForm';
 
-type loginFormType = 'email' | 'password';
+type LoginFormType = 'email' | 'password';
 
-const loginInitialValue: Record<loginFormType, string> = {
+const loginInitialValue: Record<LoginFormType, string> = {
   email: '',
   password: '',
 };
