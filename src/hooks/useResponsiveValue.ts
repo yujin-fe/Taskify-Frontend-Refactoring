@@ -17,7 +17,7 @@ export function useResponsiveValue<T>({
   mobile,
   desktop,
   breakpoint = 640,
-  throttleMs = 200,
+  throttleMs = 100,
 }: UseResponsiveValueParams<T>) {
   const [value, setValue] = useState<T>(desktop);
 
