@@ -65,7 +65,7 @@ export default function Login() {
             />
             <Input.SuffixButton
               onClick={() => handleShowPasswordToggle('password')}
-              ariaLabel={showPassword.password ? '비밀번호 보기' : '비밀번호 숨기기'}>
+              ariaLabel={showPassword.password ? '비밀번호 숨기기' : '비밀번호 보기'}>
               {showPassword.password ? <Icons.PasswordShow /> : <Icons.PasswordHidden />}
             </Input.SuffixButton>
           </Input.Group>
