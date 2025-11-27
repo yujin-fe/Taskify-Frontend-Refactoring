@@ -1,9 +1,7 @@
 import Button from '@/components/common/Button';
-import type { UserMe } from '@/types/userMe';
 
 interface InvitesItemContentProps {
   email: string;
-  user: UserMe;
 }
 
 export const InvitesItemContent = ({ email }: InvitesItemContentProps) => {

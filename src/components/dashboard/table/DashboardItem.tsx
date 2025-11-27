@@ -25,11 +25,7 @@ export type DashboardItemRootProps = (MemberItemProps | InviteItemProps) & {
 
 function DashboardItem(props: DashboardItemRootProps) {
   return (
-    <li
-      className={cn(
-        'flex items-center justify-between border-8 border-gray-0 p-3',
-        props.className
-      )}>
+    <li className={cn('flex items-center justify-between px-7 py-0', props.className)}>
       {props.children}
     </li>
   );

@@ -41,7 +41,7 @@ export const ActionWrapper = (props: WrapperProps) => {
     return <MembersItemAction userId={props.userId} onDelete={props.onDelete} />;
   }
   if (props.type === 'InvitesItem') {
-    return <InvitesItemAction id={props.id} onCancel={props.onCancel} />;
+    return <InvitesItemAction userId={props.id} onCancel={props.onCancel} />;
   }
   return null;
 };
