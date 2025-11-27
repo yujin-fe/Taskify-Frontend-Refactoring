@@ -6,36 +6,6 @@ import DashboardName from '@/components/dashboard/DashboardName';
 import { DashboardContext } from '@/context/dashboardContext';
 import { cn } from '@/utils/cn';
 
-//TODO: 레이아웃 페이지에서 dashboardsResponse 조회
-// const dashboards: Dashboard[] = [
-//   {
-//     id: 1,
-//     title: 'string',
-//     color: 'orange',
-//     createdAt: '2025-11-26T06:20:05.527Z',
-//     updatedAt: '2025-11-26T06:20:05.527Z',
-//     createdByMe: true,
-//     userId: 1,
-//   },
-//   {
-//     id: 2,
-//     title: 'hi',
-//     color: 'green',
-//     createdAt: '2025-11-26T06:20:05.527Z',
-//     updatedAt: '2025-11-26T06:20:05.527Z',
-//     createdByMe: true,
-//     userId: 2,
-//   },
-//   {
-//     id: 3,
-//     title: 'today',
-//     color: 'purple',
-//     createdAt: '2025-11-26T06:20:05.527Z',
-//     updatedAt: '2025-11-26T06:20:05.527Z',
-//     createdByMe: false,
-//     userId: 3,
-//   },
-// ];
 interface SideBarProps {
   isCollapsed: boolean;
   onClickSidebarIcon: () => void;

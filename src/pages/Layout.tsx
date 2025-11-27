@@ -13,6 +13,8 @@ const TABLETSIZE = 8;
 const MOBILESIZE = 6;
 
 export default function Layout() {
+  //TODO: 로컬스토리지에서 관리
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const [dashboardsData, setDashboardsData] = useState({
     dashboards: [],
     totalCount: 0,
@@ -24,18 +26,17 @@ export default function Layout() {
     tablet: TABLETSIZE,
     desktop: DESKTOPSIZE,
   });
-  const { totalCount, cursorId } = dashboardsData;
 
+  const { totalCount, cursorId } = dashboardsData;
   const page = useResponsiveValue({
     mobile: Math.ceil(totalCount / 6),
     tablet: Math.ceil(totalCount / 8),
     desktop: Math.ceil(totalCount / 10),
   });
 
-  //TODO: useQuery hook 생성되면 교체
-
   const { currentPage, handlePrev, handleNext, isPrevDisabled, isNextDisabled } =
     usePagination(page);
+
   const parmas = {
     navigationMethod: 'pagination',
     page: currentPage,
@@ -43,6 +44,7 @@ export default function Layout() {
     cursorId,
   };
 
+  //TODO: useQuery hook 생성되면 교체
   useEffect(() => {
     const getDashboardsData = async () => {
       try {
@@ -55,8 +57,6 @@ export default function Layout() {
     getDashboardsData();
   }, [size, currentPage]);
 
-  //TODO: 로컬스토리지에서 관리
-  const [isCollapsed, setIsCollapsed] = useState(false);
   return (
     <DashboardContext value={{ dashboardsData }}>
       <div>
