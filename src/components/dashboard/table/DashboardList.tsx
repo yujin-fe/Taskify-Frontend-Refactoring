@@ -7,7 +7,7 @@ export interface DashboardListProps {
 /**
  * 대시보드의 테이블 리스트 전체를 렌더링하는 리스트 컴포넌트입니다.
  * className을 통해 외부 스타일 확장이 가능하며, title을 표시합니다.
- * * @example
+ * @example
  * // 1. 단일 문자열 (하나의 제목) 전달 시
  * <DashboardList title="이름">
  * <DashboardItem>
@@ -29,10 +29,10 @@ export default function DashboardList({ className, title, children }: DashboardL
   return (
     <div className={className}>
       <div className='flex items-center justify-between'>
-        {titles.map((title, index) => (
-          <h2 key={index} className='font-md-regular text-gray-400 sm:font-lg-regular'>
-            {title}
-          </h2>
+        {titles.map((t, index) => (
+          <h3 key={index} className='font-md-regular text-gray-400 sm:font-lg-regular'>
+            {t}
+          </h3>
         ))}
       </div>
       <ul>{children}</ul>
