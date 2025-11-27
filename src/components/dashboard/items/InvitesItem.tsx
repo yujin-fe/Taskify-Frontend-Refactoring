@@ -1,10 +1,10 @@
 import Button from '@/components/common/Button';
-import { useInvitesContext } from '@/hooks/useInvitesContext';
 
-export const InvitesItemContent = () => {
-  const { invitee } = useInvitesContext();
-  const email = invitee.email;
+interface InvitesItemContentProps {
+  email: string;
+}
 
+export const InvitesItemContent = ({ email }: InvitesItemContentProps) => {
   return (
     <div className='flex flex-grow items-center'>
       <span className='font-md-regular text-gray-700 sm:font-lg-regular'>{email}</span>
@@ -12,9 +12,12 @@ export const InvitesItemContent = () => {
   );
 };
 
-export const InvitesItemAction = () => {
-  const { id, onCancel } = useInvitesContext();
+interface InvitesItemActionProps {
+  id: number;
+  onCancel?: (invitationId: number) => void;
+}
 
+export const InvitesItemAction = ({ id, onCancel }: InvitesItemActionProps) => {
   const handleCancelClick = () => {
     onCancel?.(id);
   };

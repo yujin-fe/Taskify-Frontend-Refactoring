@@ -1,15 +1,18 @@
 import Avatar from '@/components/common/avatar/Avatar';
 import Button from '@/components/common/Button';
-import { useMemberContext } from '@/hooks/useMemberContext';
+import type { UserMe } from '@/types/userMe';
 
-export const MembersItemContent = () => {
-  const memberContext = useMemberContext();
-  const { nickname } = memberContext;
+interface MembersItemContentProps {
+  user: UserMe;
+}
+
+export const MembersItemContent = ({ user }: MembersItemContentProps) => {
+  const { nickname } = user;
 
   return (
     <div className='flex flex-grow items-center'>
       <div className='flex items-center gap-[8px] sm:gap-[12px]'>
-        <Avatar size='m' user={memberContext}>
+        <Avatar size='m' user={user}>
           <Avatar.Img />
           <Avatar.Fallback />
         </Avatar>
@@ -19,9 +22,12 @@ export const MembersItemContent = () => {
   );
 };
 
-export const MembersItemAction = () => {
-  const { userId, onDelete } = useMemberContext();
+interface MembersItemActionProps {
+  userId: number;
+  onDelete?: (userId: number) => void;
+}
 
+export const MembersItemAction = ({ userId, onDelete }: MembersItemActionProps) => {
   const handleDeleteClick = () => {
     onDelete?.(userId);
   };

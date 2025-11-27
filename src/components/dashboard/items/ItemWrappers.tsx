@@ -1,25 +1,47 @@
-import type { ItemType } from '@/components/dashboard/table/DashboardItem';
-import { InvitesItemAction, InvitesItemContent } from './InvitesItem'; // InvitesItem 컴포넌트 import
+import { InvitesItemAction, InvitesItemContent } from './InvitesItem';
 import { MembersItemAction, MembersItemContent } from './MembersItem';
 
-type WrapperProps = { type: ItemType };
+type InvitesItemProps = {
+  type: 'InvitesItem';
+  email: string;
+  id: number;
+  onCancel?: (invitationId: number) => void;
+};
 
-export const ContentWrapper = ({ type }: WrapperProps) => {
-  if (type === 'MembersItem') {
-    return <MembersItemContent />;
+type MembersItemProps = {
+  type: 'MembersItem';
+
+  user: {
+    nickname: string;
+    profileImageUrl: string | null;
+    initials: string;
+    id: number;
+    email: string;
+    createdAt: string;
+    updatedAt: string;
+  };
+  userId: number;
+  onDelete?: (userId: number) => void;
+};
+
+type WrapperProps = InvitesItemProps | MembersItemProps;
+
+export const ContentWrapper = (props: WrapperProps) => {
+  if (props.type === 'MembersItem') {
+    return <MembersItemContent user={props.user} />;
   }
-  if (type === 'InvitesItem') {
-    return <InvitesItemContent />;
+  if (props.type === 'InvitesItem') {
+    return <InvitesItemContent email={props.email} />;
   }
   return null;
 };
 
-export const ActionWrapper = ({ type }: WrapperProps) => {
-  if (type === 'MembersItem') {
-    return <MembersItemAction />;
+export const ActionWrapper = (props: WrapperProps) => {
+  if (props.type === 'MembersItem') {
+    return <MembersItemAction userId={props.userId} onDelete={props.onDelete} />;
   }
-  if (type === 'InvitesItem') {
-    return <InvitesItemAction />;
+  if (props.type === 'InvitesItem') {
+    return <InvitesItemAction id={props.id} onCancel={props.onCancel} />;
   }
   return null;
 };

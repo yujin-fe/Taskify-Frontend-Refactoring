@@ -1,15 +1,15 @@
 import { ActionWrapper, ContentWrapper } from '@/components/dashboard/items/ItemWrappers';
-// 💡 수정: DashboardItemRoot를 정의된 경로에서 정확히 import 합니다.
 import { DashboardItemRoot } from '@/components/dashboard/table/DashboardItem';
 
 /**
  * * @example
- * <DashboardItem type='MembersItem' data={...} onDelete={handleDelete}>
+ * <DashboardItem type='MembersItem' user={...} onDelete={handleDelete}>
  * <DashboardItem.Content />
  * <DashboardItem.Action />
  * </DashboardItem>
  */
 
+// 💡 DashboardItemRoot의 props 타입(DashboardItemProps)을 상속받아 정확한 타입을 정의합니다.
 const DashboardItem = DashboardItemRoot as typeof DashboardItemRoot & {
   Content: typeof ContentWrapper;
   Action: typeof ActionWrapper;

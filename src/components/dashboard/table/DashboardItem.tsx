@@ -1,23 +1,19 @@
-// DashboardItemRoot.tsx
-
-import React, { useMemo } from 'react';
-import InvitesContext from '@/context/invitesContext';
-import MemberContext from '@/context/memberContext';
-import type { InvitationData } from '@/types/invitationData';
-import type { MemberData } from '@/types/memberData';
+import type { UserMe } from '@/types/userMe';
 import { cn } from '@/utils/cn';
 
 export type ItemType = 'MembersItem' | 'InvitesItem';
 
 type MemberItemProps = {
   type: 'MembersItem';
-  data: MemberData;
+  user: UserMe;
+  userId: number;
   onDelete: (userId: number) => void;
 };
 
 type InviteItemProps = {
   type: 'InvitesItem';
-  data: InvitationData;
+  email: string;
+  id: number;
   onCancel: (invitationId: number) => void;
 };
 
@@ -27,44 +23,13 @@ export type DashboardItemProps = (MemberItemProps | InviteItemProps) & {
 };
 
 export function DashboardItemRoot(props: DashboardItemProps) {
-  const memberContextValue = useMemo(() => {
-    if (props.type === 'MembersItem') {
-      return {
-        ...props.data,
-        type: 'MembersItem' as const,
-        onDelete: props.onDelete,
-      };
-    }
-    return null;
-  }, [props]);
-
-  const invitesContextValue = useMemo(() => {
-    if (props.type === 'InvitesItem') {
-      return {
-        ...props.data,
-        type: 'InvitesItem' as const,
-        onCancel: props.onCancel,
-      };
-    }
-    return null;
-  }, [props]);
-
-  const contextProvider =
-    props.type === 'MembersItem' && memberContextValue ? (
-      <MemberContext value={memberContextValue}>{props.children}</MemberContext>
-    ) : props.type === 'InvitesItem' && invitesContextValue ? (
-      <InvitesContext value={invitesContextValue}>{props.children}</InvitesContext>
-    ) : (
-      props.children
-    );
-
   return (
     <li //추후 수정
       className={cn(
         'flex items-center justify-between border-8 border-gray-0 p-3',
         props.className
       )}>
-      {contextProvider}
+      {props.children}
     </li>
   );
 }
