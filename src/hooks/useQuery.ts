@@ -15,8 +15,8 @@ const useQuery = <TData, TParams = object>({ fetchFn, params }: UseQueryType<TDa
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const data = await fetchFn(params);
-        setData(data);
+        const resData = await fetchFn(params);
+        setData(resData);
       } catch (error) {
         if (axios.isAxiosError(error)) {
           setError(error.response?.data);
