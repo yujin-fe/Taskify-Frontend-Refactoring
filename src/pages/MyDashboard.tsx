@@ -14,10 +14,6 @@ export default function MyDashboard() {
           <CreateButton className='h-[58px] font-lg-semibold' onClick={handleModalOpen}>
             새로운 대시보드
           </CreateButton>
-          <CreateButton className='h-[66px] font-2lg-bold' onClick={handleModalOpen}>
-            새로운 컬럼 추가하기
-          </CreateButton>
-          <CreateButton onClick={handleModalOpen} />
         </div>
       </main>
       {/* TODO: 새로운 대시보드 내부 요소 구현 및 API 연결 필요 */}
