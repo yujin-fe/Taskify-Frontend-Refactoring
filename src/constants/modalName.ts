@@ -1,1 +1,1 @@
-export const NEW_DASHBOARD = 'newDashbord';
+export const NEW_DASHBOARD = 'newDashboard';
