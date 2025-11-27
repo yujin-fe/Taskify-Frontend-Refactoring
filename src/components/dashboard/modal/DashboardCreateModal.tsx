@@ -23,6 +23,7 @@ export default function DashboardCreateModal() {
     const reqBody = { title: dashboardName, color: selectedColor };
     try {
       const data = await createDashboard(reqBody);
+      handleModalClose();
       navigate(`/dashboard/${data.id}`);
     } catch (error) {
       if (axios.isAxiosError(error)) {
