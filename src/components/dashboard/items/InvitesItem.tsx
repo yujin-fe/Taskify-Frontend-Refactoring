@@ -1,7 +1,9 @@
 import Button from '@/components/common/Button';
+import type { UserMe } from '@/types/userMe';
 
 interface InvitesItemContentProps {
   email: string;
+  user: UserMe;
 }
 
 export const InvitesItemContent = ({ email }: InvitesItemContentProps) => {
@@ -13,13 +15,13 @@ export const InvitesItemContent = ({ email }: InvitesItemContentProps) => {
 };
 
 interface InvitesItemActionProps {
-  id: number;
-  onCancel?: (invitationId: number) => void;
+  userId: number;
+  onCancel?: (userId: number) => void;
 }
 
-export const InvitesItemAction = ({ id, onCancel }: InvitesItemActionProps) => {
+export const InvitesItemAction = ({ userId, onCancel }: InvitesItemActionProps) => {
   const handleCancelClick = () => {
-    onCancel?.(id);
+    onCancel?.(userId);
   };
 
   return (
