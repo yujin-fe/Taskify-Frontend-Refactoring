@@ -28,11 +28,7 @@ export default function Layout() {
   });
 
   const { totalCount, cursorId } = dashboardsData;
-  const pageCount = useResponsiveValue({
-    mobile: Math.ceil(totalCount / MOBILECOUNT),
-    tablet: Math.ceil(totalCount / TABLETCOUNT),
-    desktop: Math.ceil(totalCount / DESKTOPCOUNT),
-  });
+  const pageCount = Math.ceil(totalCount / size);
 
   const { currentPage, handlePrev, handleNext, isPrevDisabled, isNextDisabled } =
     usePagination(pageCount);
