@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import type { InvitationData } from '@/types/InvitationData';
+import type { InvitationData } from '@/types/invitationData';
 
 interface InvitesContextType extends InvitationData {
   type: 'InvitesItem';

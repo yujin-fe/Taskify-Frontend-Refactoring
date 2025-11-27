@@ -3,7 +3,7 @@
 import React, { useMemo } from 'react';
 import InvitesContext from '@/context/invitesContext';
 import MemberContext from '@/context/memberContext';
-import type { InvitationData } from '@/types/InvitationData';
+import type { InvitationData } from '@/types/invitationData';
 import type { MemberData } from '@/types/memberData';
 import { cn } from '@/utils/cn';
 
