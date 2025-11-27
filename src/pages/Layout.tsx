@@ -4,10 +4,9 @@ import SideBar from '@/components/dashboard/SideBar';
 import { DashboardContext } from '@/context/dashboardContext';
 import { usePagination } from '@/hooks/usePagination';
 import { useResponsiveValue } from '@/hooks/useResponsiveValue';
-import { api } from '@/lib/axios';
+import { getDashboards } from '@/lib/apis/dashboards';
 import { type DashboardsResponse } from '@/types/dashboardsData';
 import { cn } from '@/utils/cn';
-
 const DESKTOPCOUNT = 10;
 const TABLETCOUNT = 8;
 const MOBILECOUNT = 6;
@@ -43,12 +42,8 @@ export default function Layout() {
   //TODO: useQuery hook 생성되면 교체
   useEffect(() => {
     const getDashboardsData = async () => {
-      try {
-        const res = await api.get('/dashboards/', { params });
-        setDashboardsData(res.data);
-      } catch (e) {
-        console.error(e);
-      }
+      const data = await getDashboards(params);
+      setDashboardsData(data);
     };
     getDashboardsData();
   }, [size, currentPage]);
