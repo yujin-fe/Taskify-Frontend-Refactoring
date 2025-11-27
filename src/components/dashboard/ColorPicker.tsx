@@ -16,7 +16,7 @@ const colorPickerStyle = cva('w-[30px] h-[30px] rounded-full cursor-pointer', {
 });
 
 interface ColorPickerProps {
-  selectedColor: string;
+  selectedColor: ColorHex;
   setSelectedColor: React.Dispatch<React.SetStateAction<ColorHex>>;
 }
 
