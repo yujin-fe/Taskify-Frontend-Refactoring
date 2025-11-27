@@ -16,6 +16,7 @@ export default function DashboardCreateModal() {
   const [dashboardName, setDashboardName] = useState('');
   const [apiErrorMsg, setApiErrorMsg] = useState('');
   const navigate = useNavigate();
+  const disabled = dashboardName.trim() === '';
 
   const handleSubmit = async () => {
     // TODO: useMutation 구현 시 변경
@@ -54,7 +55,7 @@ export default function DashboardCreateModal() {
           <Button theme={'outlined'} onClick={handleModalClose}>
             취소
           </Button>
-          <Button theme={'primary'} type='submit'>
+          <Button theme={'primary'} type='submit' disabled={disabled}>
             생성
           </Button>
         </FormModal.Footer>
