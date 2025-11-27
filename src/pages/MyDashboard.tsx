@@ -4,7 +4,7 @@ import { NEW_DASHBOARD } from '@/constants/modalName';
 import { useModal } from '@/hooks/useModal';
 
 export default function MyDashboard() {
-  const { handleModalOpen } = useModal(NEW_DASHBOARD);
+  const { handleModalOpen, isOpen } = useModal(NEW_DASHBOARD);
 
   return (
     <>
@@ -15,7 +15,7 @@ export default function MyDashboard() {
           </CreateButton>
         </div>
       </div>
-      <DashboardCreateModal />
+      {isOpen && <DashboardCreateModal />}
     </>
   );
 }

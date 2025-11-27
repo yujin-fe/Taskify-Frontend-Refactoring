@@ -27,9 +27,6 @@ export default function DashboardCreateModal() {
       if (axios.isAxiosError(error)) {
         setApiErrorMsg(error.response?.data?.message ?? '오류가 발생했습니다.');
       }
-    } finally {
-      setDashboardName('');
-      setSelectedColor(DEFAULT_COLOR);
     }
   };
 
