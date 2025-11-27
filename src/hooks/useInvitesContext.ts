@@ -1,13 +1,14 @@
+// useInvitesContext.ts
+
 import { useContext } from 'react';
 import InvitesContext from '@/context/invitesContext';
 
-const useInvitesContext = () => {
+export const useInvitesContext = () => {
   const context = useContext(InvitesContext);
 
-  if (!context) {
-    throw new Error('useInvitesContext must be used within a <InvitesContext.Provider>.');
+  if (context === null) {
+    throw new Error('useInvitesContext must be used within an InvitesContextProvider');
   }
+
   return context;
 };
-
-export default useInvitesContext;

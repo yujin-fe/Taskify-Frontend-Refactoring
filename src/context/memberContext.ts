@@ -1,9 +1,10 @@
 import { createContext } from 'react';
-import type { UserMe } from '@/types/userMe';
+import type { MemberData } from '@/types/memberData';
 
-interface MemberContextType extends UserMe {
+interface MemberContextType extends MemberData {
   type: 'MembersItem';
-  onDelete: (userID: number) => void;
+
+  onDelete?: (userId: number) => void;
 }
 
 const MemberContext = createContext<MemberContextType | null>(null);

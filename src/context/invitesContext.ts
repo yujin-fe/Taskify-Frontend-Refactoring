@@ -1,10 +1,11 @@
 import { createContext } from 'react';
-import type { UserMe } from '@/types/userMe';
+import type { InvitationData } from '@/types/InvitationData';
 
-interface InvitesContextType extends UserMe {
+interface InvitesContextType extends InvitationData {
   type: 'InvitesItem';
-  onCancel: (userID: number) => void;
+  onCancel?: (invitationId: number) => void;
 }
+
 const InvitesContext = createContext<InvitesContextType | null>(null);
 
 export default InvitesContext;

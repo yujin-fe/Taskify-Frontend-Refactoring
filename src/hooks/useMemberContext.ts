@@ -1,13 +1,16 @@
+// useMemberContext.ts
+
 import { useContext } from 'react';
 import MemberContext from '@/context/memberContext';
 
-const useMemberContext = () => {
+export const useMemberContext = () => {
   const context = useContext(MemberContext);
 
-  if (!context) {
-    throw new Error('useMemberContext must be used within a <MemberContext.Provider>.');
+  if (context === null) {
+    throw new Error('useMemberContext must be used within a MemberContextProvider');
   }
+
   return context;
 };
 
-export default useMemberContext;
+export default MemberContext;
