@@ -9,7 +9,7 @@ interface UseQueryType<TData, TParams = object> {
 const useQuery = <TData, TParams = object>({ fetchFn, params }: UseQueryType<TData, TParams>) => {
   const [data, setData] = useState<TData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<unknown | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -17,9 +17,11 @@ const useQuery = <TData, TParams = object>({ fetchFn, params }: UseQueryType<TDa
       try {
         const resData = await fetchFn(params);
         setData(resData);
-      } catch (error) {
+      } catch (error: unknown) {
         if (axios.isAxiosError(error)) {
           setError(error.response?.data);
+        } else {
+          setError(error);
         }
       } finally {
         setIsLoading(false);
