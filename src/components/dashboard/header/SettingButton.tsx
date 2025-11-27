@@ -6,7 +6,7 @@ export default function SettingButton() {
   return (
     <Button
       as={Link}
-      to='/dashboard/{dashboardId}/edit' //TODO: setting 추후 추가
+      to={`/dashboard/${dashboardId}/edit`}
       theme='outlined'
       size='lg'
       className='h-[30px] w-[49px] gap-2 sm:h-[40px] sm:w-[88px]'>
