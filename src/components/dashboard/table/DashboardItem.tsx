@@ -17,14 +17,15 @@ type InviteItemProps = {
   onCancel: (invitationId: number) => void;
 };
 
-export type DashboardItemProps = (MemberItemProps | InviteItemProps) & {
+export type DashboardItemRootProps = (MemberItemProps | InviteItemProps) & {
   className?: string;
+
   children: React.ReactNode;
 };
 
-export function DashboardItemRoot(props: DashboardItemProps) {
+export function DashboardItemRoot(props: DashboardItemRootProps) {
   return (
-    <li //추후 수정
+    <li
       className={cn(
         'flex items-center justify-between border-8 border-gray-0 p-3',
         props.className
