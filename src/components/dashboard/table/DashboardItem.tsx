@@ -1,3 +1,4 @@
+import { ContentWrapper, ActionWrapper } from '@/components/dashboard/items/ItemWrappers';
 import type { UserMe } from '@/types/userMe';
 import { cn } from '@/utils/cn';
 
@@ -19,11 +20,10 @@ type InviteItemProps = {
 
 export type DashboardItemRootProps = (MemberItemProps | InviteItemProps) & {
   className?: string;
-
   children: React.ReactNode;
 };
 
-export function DashboardItemRoot(props: DashboardItemRootProps) {
+function DashboardItem(props: DashboardItemRootProps) {
   return (
     <li
       className={cn(
@@ -34,3 +34,17 @@ export function DashboardItemRoot(props: DashboardItemRootProps) {
     </li>
   );
 }
+
+/**
+ * 항목의 내용을 렌더링하는 컴포넌트입니다.
+ * * @example <DashboardItem.Content />
+ */
+DashboardItem.Content = ContentWrapper;
+
+/**
+ * 항목의 액션 버튼을 렌더링하는 컴포넌트입니다.
+ * * @example <DashboardItem.Action />
+ */
+DashboardItem.Action = ActionWrapper;
+
+export default DashboardItem;
