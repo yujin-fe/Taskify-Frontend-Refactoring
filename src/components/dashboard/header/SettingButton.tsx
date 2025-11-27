@@ -6,11 +6,11 @@ export default function SettingButton() {
   return (
     <Button
       as={Link}
-      to='' //TODO: setting 페이지 추후 추가
+      to='' //TODO: setting 추후 추가
       theme='outlined'
       size='lg'
-      className='h-[85px] w-[36px] gap-2 sm:h-[49px] sm:w-[30px]'>
-      <Icons.Setting className='h-[20px] w-[20px]' aria-hidden />
+      className='h-[30px] w-[49px] gap-2 sm:h-[40px] sm:w-[88px]'>
+      <Icons.Setting className='hidden h-[20px] w-[20px] sm:block' aria-hidden />
       <span className='font-lg-medium text-gray-500'>관리</span>
     </Button>
   );
