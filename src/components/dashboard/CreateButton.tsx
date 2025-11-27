@@ -16,6 +16,7 @@ export default function CreateButton({ onClick, className, children }: CreateBut
         children && 'gap-[12px] text-gray-700 sm:h-[70px]',
         className
       )}
+      aria-label={children ? '' : '할 일 추가하기'}
       onClick={onClick}>
       {children}
       <Icons.Plus
