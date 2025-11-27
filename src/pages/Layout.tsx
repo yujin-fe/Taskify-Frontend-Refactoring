@@ -1,15 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Outlet } from 'react-router';
 import SideBar from '@/components/dashboard/SideBar';
+import { MOBILECOUNT, TABLETCOUNT, DESKTOPCOUNT } from '@/constants/sidebar';
 import { DashboardContext } from '@/context/dashboardContext';
 import { usePagination } from '@/hooks/usePagination';
 import { useResponsiveValue } from '@/hooks/useResponsiveValue';
 import { getDashboards } from '@/lib/apis/dashboards';
 import { type DashboardsResponse } from '@/types/dashboardsData';
 import { cn } from '@/utils/cn';
-const DESKTOPCOUNT = 10;
-const TABLETCOUNT = 8;
-const MOBILECOUNT = 6;
 
 export default function Layout() {
   //TODO: 로컬스토리지에서 관리
