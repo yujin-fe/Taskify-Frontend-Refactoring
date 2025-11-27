@@ -8,9 +8,9 @@ import { api } from '@/lib/axios';
 import { type DashboardsResponse } from '@/types/dashboardsData';
 import { cn } from '@/utils/cn';
 
-const DESKTOPSIZE = 10;
-const TABLETSIZE = 8;
-const MOBILESIZE = 6;
+const DESKTOPCOUNT = 10;
+const TABLETCOUNT = 8;
+const MOBILECOUNT = 6;
 
 export default function Layout() {
   //TODO: 로컬스토리지에서 관리
@@ -22,22 +22,22 @@ export default function Layout() {
   } as DashboardsResponse);
 
   const size = useResponsiveValue({
-    mobile: MOBILESIZE,
-    tablet: TABLETSIZE,
-    desktop: DESKTOPSIZE,
+    mobile: MOBILECOUNT,
+    tablet: TABLETCOUNT,
+    desktop: DESKTOPCOUNT,
   });
 
   const { totalCount, cursorId } = dashboardsData;
-  const page = useResponsiveValue({
-    mobile: Math.ceil(totalCount / 6),
-    tablet: Math.ceil(totalCount / 8),
-    desktop: Math.ceil(totalCount / 10),
+  const pageCount = useResponsiveValue({
+    mobile: Math.ceil(totalCount / MOBILECOUNT),
+    tablet: Math.ceil(totalCount / TABLETCOUNT),
+    desktop: Math.ceil(totalCount / DESKTOPCOUNT),
   });
 
   const { currentPage, handlePrev, handleNext, isPrevDisabled, isNextDisabled } =
-    usePagination(page);
+    usePagination(pageCount);
 
-  const parmas = {
+  const params = {
     navigationMethod: 'pagination',
     page: currentPage,
     size,
@@ -48,7 +48,7 @@ export default function Layout() {
   useEffect(() => {
     const getDashboardsData = async () => {
       try {
-        const res = await api.get('/dashboards/', { params: parmas });
+        const res = await api.get('/dashboards/', { params });
         setDashboardsData(res.data);
       } catch (e) {
         console.error(e);
