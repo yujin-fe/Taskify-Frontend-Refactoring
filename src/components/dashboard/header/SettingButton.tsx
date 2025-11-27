@@ -1,8 +1,9 @@
-import { Link } from 'react-router';
+import { Link, useParams } from 'react-router';
 import Icons from '@/assets/icons';
 import Button from '@/components/common/Button';
 
 export default function SettingButton() {
+  const { dashboardId } = useParams<{ dashboardId: string }>();
   return (
     <Button
       as={Link}
