@@ -1,9 +1,9 @@
-import type { ColorTypes } from '@/constants/color';
+import type { ColorHex } from '@/constants/color';
 
 export interface Dashboard {
   id: number;
   title: string;
-  color: ColorTypes;
+  color: ColorHex;
   createdAt: string;
   updatedAt: string;
   createdByMe: boolean;

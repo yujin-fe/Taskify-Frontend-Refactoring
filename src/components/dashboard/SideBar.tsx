@@ -41,6 +41,8 @@ interface SideBarProps {
   onClickSidebarIcon: () => void;
   handleNext: () => void;
   handlePrev: () => void;
+  isNextDisabled: boolean;
+  isPrevDisabled: boolean;
 }
 
 export default function SideBar({
@@ -48,6 +50,8 @@ export default function SideBar({
   onClickSidebarIcon,
   handleNext,
   handlePrev,
+  isNextDisabled,
+  isPrevDisabled,
 }: SideBarProps) {
   const { dashboardsData } = useContext(DashboardContext);
   return (
@@ -89,7 +93,14 @@ export default function SideBar({
             ))}
           </ul>
         </div>
-        {!isCollapsed && <PageNation onPrev={handleNext} onNext={handlePrev} />}
+        {!isCollapsed && (
+          <PageNation
+            onPrev={handlePrev}
+            onNext={handleNext}
+            prevDisabled={isPrevDisabled}
+            nextDisabled={isNextDisabled}
+          />
+        )}
       </div>
     </aside>
   );
