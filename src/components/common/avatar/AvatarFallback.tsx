@@ -3,17 +3,20 @@ import { useContext } from 'react';
 import { AvatarContext } from '@/context/avatarContext';
 import { getMonogram, getProfileColorForId } from '@/utils/avatar';
 
-const AvatarFallbackStyle = cva('flex items-center justify-center w-full h-full text-gray-0', {
-  variants: {
-    color: {
-      orange: 'bg-orange-500/80',
-      blue: 'bg-blue-500/80',
-      green: 'bg-green-500/80',
-      pink: 'bg-pink-500/80',
-      purple: 'bg-purple-500/80',
+const AvatarFallbackStyle = cva(
+  'flex items-center justify-center w-full h-full text-gray-0 select-none',
+  {
+    variants: {
+      color: {
+        orange: 'bg-profile-orange',
+        blue: 'bg-profile-blue',
+        green: 'bg-profile-green',
+        pink: 'bg-profile-pink',
+        purple: 'bg-profile-purple',
+      },
     },
-  },
-});
+  }
+);
 
 export default function AvatarFallback() {
   const { nickname, id } = useContext(AvatarContext);
