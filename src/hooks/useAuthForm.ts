@@ -4,16 +4,19 @@ import { validators } from '@/utils/validation';
 interface ShowPasswordType {
   password: boolean;
   confirmPassword: boolean;
-  currentPassword: boolean;
+  newPassword: boolean;
 }
 
-const useAuthForm = <InitT extends Record<string, string>>(initialValue: InitT) => {
+const useAuthForm = <InitT extends Record<string, string>>(
+  initialValue: InitT,
+  confirmCompareKey: string = 'password'
+) => {
   const [authForm, setAuthForm] = useState(initialValue);
   const [error, setError] = useState(initialValue);
   const [showPassword, setShowPassword] = useState({
     password: false,
     confirmPassword: false,
-    currentPassword: false,
+    newPassword: false,
   });
 
   const disabled = Object.entries(authForm).some(([key, value]) => {
@@ -24,7 +27,7 @@ const useAuthForm = <InitT extends Record<string, string>>(initialValue: InitT) 
       return validators[key](value) !== '';
     }
     if (key === 'confirmPassword') {
-      return value !== authForm.password;
+      return value !== authForm[confirmCompareKey];
     }
 
     return false;
