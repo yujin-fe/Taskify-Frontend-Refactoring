@@ -41,10 +41,12 @@ export default function PasswordChangeForm() {
     const reqbody = { password: authForm.password, newPassword: authForm.newPassword };
     try {
       await changePassword(reqbody);
+      setApiErrorMsg('');
       setSuccessMsg('비밀번호가 변경되었습니다.');
       handleModalOpen();
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        setSuccessMsg('');
         setApiErrorMsg(error.response?.data?.message ?? '오류가 발생했습니다.');
         handleModalOpen();
       }
