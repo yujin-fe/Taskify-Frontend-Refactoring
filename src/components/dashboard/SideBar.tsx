@@ -3,7 +3,7 @@ import Icons from '@/assets/icons';
 import { Logo } from '@/components/common/Logo';
 import PageNation from '@/components/common/PageNation';
 import DashboardName from '@/components/dashboard/DashboardName';
-import DashboardSkeleton from '@/components/skeleton/DashboardSideBarSkeleton';
+import DashboardSideBarSkeleton from '@/components/skeleton/DashboardSideBarSkeleton';
 import { NEW_DASHBOARD } from '@/constants/modalName';
 import { DashboardContext } from '@/context/dashboardContext';
 import { useModal } from '@/hooks/useModal';
@@ -59,7 +59,7 @@ export default function SideBar({
         </button>
       </div>
       {isLoading ? (
-        <DashboardSkeleton isCollapsed={isCollapsed} length={size} />
+        <DashboardSideBarSkeleton isCollapsed={isCollapsed} length={size} />
       ) : (
         <div className={cn('flex flex-col gap-8', isCollapsed && 'gap-3.5')}>
           <div className={cn('flex flex-col gap-4', isCollapsed && 'gap-3.5')}>
