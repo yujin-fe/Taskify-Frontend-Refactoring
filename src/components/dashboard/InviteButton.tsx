@@ -32,7 +32,7 @@ export default function InviteButton({ onClick, type = 'header' }: InviteButtonP
       onClick={onClick}
       className='flex h-[30px] w-[73px] items-center gap-2 sm:h-[40px] sm:w-[116px]'>
       <div className='hidden h-[16px] w-[16px] items-center justify-center rounded border-2 border-gray-500 sm:flex'>
-        <Icons.Plus className='h-[14px] w-[14px] text-gray-500' aria-hidden />
+        <Icons.Plus className='h-[14px] w-[14px] text-gray-500' aria-hidden='true' />
       </div>
       <span className='font-lg-medium text-gray-500'>초대하기</span>
     </Button>
