@@ -30,6 +30,6 @@ export const requestSignup = async (signupInfo: RequestSignupType) => {
 
 /** 비밀번호 변경 api */
 export const changePassword = async (changePasswordInfo: ChangePasswordType) => {
-  const res = await api.post('/users', changePasswordInfo);
-  return res.data;
+  const res = await api.post('/auth/password', changePasswordInfo);
+  return res;
 };
