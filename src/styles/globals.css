@@ -6,7 +6,7 @@
 @import './components/modalUtilities.css';
 @import './components/dropdownUtilites.css';
 @import './components/nameCardUtilites.css'; 
-@import './components/mypageUtilites.css';
+@import './components/mypageUtilities.css';
 
 li {
   list-style: none;
