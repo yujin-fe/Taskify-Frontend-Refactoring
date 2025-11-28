@@ -17,7 +17,7 @@ export interface DashboardListProps {
  * </DashboardList>
  * * @example
  * // 2. 문자열 배열 (여러 개의 열 제목) 전달 시
- * <DashboardList title={["이름", "초대자", "수락여부"]} titleClassName='sm:pl-7 pl-5' >
+ * <DashboardList title={["이름", "초대자"]} titleClassName='sm:pl-7 pl-5' >
  * <DashboardItem>
  * <DashboardItem.Content />
  * </DashboardItem>
