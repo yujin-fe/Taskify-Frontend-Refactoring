@@ -29,7 +29,7 @@ const useQuery = <TData, TParams = object>({ fetchFn, params }: UseQueryType<TDa
     };
 
     fetchData();
-  }, [params]);
+  }, [JSON.stringify(params)]);
 
   return { data, isLoading, error };
 };
