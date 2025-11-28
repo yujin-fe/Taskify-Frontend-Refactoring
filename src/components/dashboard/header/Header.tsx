@@ -61,7 +61,11 @@ export default function Header({ isCollapsed }: HeaderProps) {
 
   if (isLoading) {
     return (
-      <HeaderSkeleton isDashboardDetail={isDashboardDetail} shouldViewButtons={shouldViewButtons} />
+      <HeaderSkeleton
+        isCollapsed={isCollapsed}
+        isDashboardDetail={isDashboardDetail}
+        shouldViewButtons={shouldViewButtons}
+      />
     );
   }
 
