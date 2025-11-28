@@ -1,3 +1,4 @@
+import HeaderSkeleton from '@/components/skeleton/HeaderSkeleton';
 import Skeleton from '@/components/skeleton/Skeleton';
 
 /**
@@ -21,13 +22,7 @@ export default function DashboardSkeleton({ length }: { length: number }) {
         <Skeleton className='mt-[32px] h-10 w-[80px]' />
       </aside>
       <div className='ml-[300px] w-full'>
-        <header className='fixed top-0 right-0 left-[300px] flex h-[70px] items-center border-b border-gray-200 bg-gray-0 px-[40px]'>
-          <Skeleton className='h-8 w-32' />
-          <div className='ml-auto flex items-center gap-3'>
-            <Skeleton className='ml-6 h-[38px] w-[38px] rounded-full' />
-            <Skeleton className='h-[30px] w-[80px]' />
-          </div>
-        </header>
+        <HeaderSkeleton />
         <main className='h-[100dvh] bg-base px-[40px] pt-[100px]' />
       </div>
     </div>
