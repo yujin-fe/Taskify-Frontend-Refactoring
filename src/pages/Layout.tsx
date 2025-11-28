@@ -23,7 +23,6 @@ export default function Layout() {
     tablet: TABLETCOUNT,
     desktop: DESKTOPCOUNT,
   });
-
   const { totalCount, cursorId } = dashboardsData;
   const pageCount = Math.ceil(totalCount / size);
 
@@ -57,7 +56,7 @@ export default function Layout() {
           isPrevDisabled={isPrevDisabled}
           isNextDisabled={isNextDisabled}
         />
-        <div className={cn(isCollapsed ? 'pl-[67px]' : 'pl-[300px]')}>
+        <div className={cn(isCollapsed ? 'pl-[67px]' : 'pl-[67px] md:pl-[300px]')}>
           {/* header는 테스트용 코드입니다 */}
           <header className='fixed top-0 h-[70px] w-full bg-gray-0'>헤더</header>
           <main className='min-h-dvh bg-base pt-[70px]'>
