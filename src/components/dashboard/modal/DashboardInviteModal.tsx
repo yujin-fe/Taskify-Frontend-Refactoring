@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import Button from '@/components/common/Button';
 import Input from '@/components/common/input/Input';
 import FormModal from '@/components/common/modal/FormModal';
@@ -11,7 +12,6 @@ interface DashboardInviteModalProps {
   errorMsg: string;
   setErrorMsg: React.Dispatch<React.SetStateAction<string>>;
   apiErrorMsg: string;
-  setApiErrorMsg: React.Dispatch<React.SetStateAction<string>>;
   onSubmit: () => Promise<void>;
 }
 
@@ -21,19 +21,22 @@ export default function DashboardInviteModal({
   errorMsg,
   setErrorMsg,
   apiErrorMsg,
-  setApiErrorMsg,
   onSubmit,
 }: DashboardInviteModalProps) {
   const { handleModalClose } = useModal(INVITE);
+
+  useEffect(() => {
+    return () => {
+      setInviteeEmail('');
+      setErrorMsg('');
+    };
+  }, [setInviteeEmail, setErrorMsg]);
 
   const handleChange = (value: string) => {
     setInviteeEmail(value);
 
     if (errorMsg) {
       setErrorMsg('');
-    }
-    if (apiErrorMsg) {
-      setApiErrorMsg('');
     }
   };
 
