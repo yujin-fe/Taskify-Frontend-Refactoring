@@ -10,7 +10,7 @@ import DashboardList from '@/components/dashboard/table/DashboardList';
 import { usePagination } from '@/hooks/usePagination';
 import useQuery from '@/hooks/useQuery';
 import { getMemberdata, deleteMemberdata } from '@/lib/apis/memberdata';
-import type { MembersResponse, Members } from '@/types/membersData';
+import type { MembersResponse, Member } from '@/types/membersData';
 
 const MEMBERS_TOTAL_PAGES = 4;
 const TEAM_ID = 'teams';
@@ -71,7 +71,7 @@ export default function DashboardEdit() {
     }
   }, []);
 
-  const members: Members[] = memberData?.members || [];
+  const members: Member[] = memberData?.members || [];
 
   const memberListItems = isLoading ? (
     <p className='p-5'>구성원 목록 로딩 중...</p>

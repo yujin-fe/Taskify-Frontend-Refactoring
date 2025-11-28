@@ -1,4 +1,4 @@
-export interface Members {
+export interface Member {
   id: number;
   userId: number;
   email: string;
@@ -6,10 +6,10 @@ export interface Members {
   profileImageUrl: string | null;
   createdAt: string;
   updatedAt: string;
-  isOwer: boolean;
+  isOwner: boolean;
   initials: string;
 }
 
 export interface MembersResponse {
-  members: Members[]; // 현재 페이지의 구성원 목록
+  members: Member[]; // 현재 페이지의 구성원 목록
 }
