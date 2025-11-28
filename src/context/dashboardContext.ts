@@ -6,6 +6,6 @@ interface DashboardContextType {
   isLoading: boolean;
 }
 export const DashboardContext = createContext({
-  dashboardsData: { dashboards: [], totalCount: 0, cursorId: 0 },
+  dashboardsData: null,
   isLoading: true,
 } as DashboardContextType);
