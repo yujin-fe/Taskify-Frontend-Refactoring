@@ -1,5 +1,12 @@
 import Skeleton from '@/components/skeleton/Skeleton';
 
+/**
+ * 대시보드 로딩 상태를 표시하는 스켈레톤 컴포넌트
+ * 사이드바와 헤더, 메인 영역의 스켈레톤을 렌더링합니다.
+ *
+ * @example
+ * <DashboardSkeleton length={5} />
+ */
 export default function DashboardSkeleton({ length }: { length: number }) {
   return (
     <div className='flex'>
