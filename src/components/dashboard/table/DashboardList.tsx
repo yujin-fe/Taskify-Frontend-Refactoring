@@ -1,3 +1,5 @@
+import { cn } from '@/utils/cn';
+
 export interface DashboardListProps {
   className?: string;
   title: string | string[];
@@ -38,7 +40,7 @@ export default function DashboardList({
         {titles.map((t, index) => (
           <h3
             key={index}
-            className={`font-md-regular text-gray-400 sm:font-lg-regular ${titleClassName}`}>
+            className={cn('font-md-regular text-gray-400 sm:font-lg-regular', titleClassName)}>
             {t}
           </h3>
         ))}
