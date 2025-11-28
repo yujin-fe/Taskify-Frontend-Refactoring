@@ -10,7 +10,7 @@ export default function HeaderSkeleton({
   isDashboardDetail,
 }: HeaderSkeletonProps) {
   return (
-    <header className='fixed top-0 right-0 left-[300px] flex h-[70px] items-center border-b border-gray-200 bg-gray-0 px-[40px]'>
+    <header className='fixed top-0 right-0 left-[300px] flex h-[70px] items-center justify-between border-b border-gray-200 bg-gray-0 px-[40px]'>
       <Skeleton className='h-8 w-32' />
       {shouldViewButtons && (
         <div className='mr-[40px] ml-auto flex gap-[16px]'>
