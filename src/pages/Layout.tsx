@@ -3,7 +3,6 @@ import { Outlet } from 'react-router';
 import Header from '@/components/dashboard/header/Header';
 import DashboardCreateModal from '@/components/dashboard/modal/DashboardCreateModal';
 import SideBar from '@/components/dashboard/SideBar';
-import DashboardSkeleton from '@/components/skeleton/DashboardSkeleton';
 import { NEW_DASHBOARD } from '@/constants/modalName';
 import { MOBILECOUNT, TABLETCOUNT, DESKTOPCOUNT } from '@/constants/sidebar';
 import { DashboardContext } from '@/context/dashboardContext';
@@ -52,23 +51,17 @@ export default function Layout() {
     localStorage.setItem('sidebar-collapsed', JSON.stringify(isCollapsed));
   }, [isCollapsed]);
 
-  if (!dashboardsData || isLoading) {
-    return <DashboardSkeleton length={size} />;
-  }
-
-  const { totalCount } = dashboardsData;
-  const pageCount = Math.ceil(totalCount / size);
-
   return (
     <>
-      <DashboardContext value={{ dashboardsData }}>
+      <DashboardContext value={{ dashboardsData, isLoading }}>
         <SideBar
           isCollapsed={isCollapsed}
           onClickSidebarIcon={() => setIsCollapsed(!isCollapsed)}
           handlePrev={handlePrev}
           handleNext={handleNext}
           isPrevDisabled={isPrevDisabled}
-          isNextDisabled={pageCount === currentPage}
+          size={size}
+          currentPage={currentPage}
         />
         <Header isCollapsed={isCollapsed} />
         <div className={cn(isCollapsed ? 'pl-[67px]' : 'pl-[67px] md:pl-[300px]')}>
