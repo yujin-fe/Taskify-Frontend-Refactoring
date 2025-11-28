@@ -1,9 +1,7 @@
-import HeaderSkeleton from '@/components/skeleton/HeaderSkeleton';
 import Skeleton from '@/components/skeleton/Skeleton';
 
 /**
- * 대시보드 로딩 상태를 표시하는 스켈레톤 컴포넌트
- * 사이드바와 헤더, 메인 영역의 스켈레톤을 렌더링합니다.
+ * 사이드바의 스켈레톤을 렌더링합니다.
  *
  * @example
  * <DashboardSkeleton length={5} />
@@ -21,10 +19,6 @@ export default function DashboardSkeleton({ length }: { length: number }) {
         </div>
         <Skeleton className='mt-[32px] h-10 w-[80px]' />
       </aside>
-      <div className='ml-[300px] w-full'>
-        <HeaderSkeleton />
-        <main className='h-[100dvh] bg-base px-[40px] pt-[100px]' />
-      </div>
     </div>
   );
 }
