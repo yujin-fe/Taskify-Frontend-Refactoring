@@ -39,7 +39,7 @@ export default function Header({ isCollapsed }: HeaderProps) {
 
   const title = getBasicTitle(pathname);
   const isDashboardDetail = /^\/dashboard\/\d+/.test(pathname);
-  const dashboardId = pathname.split('/')[2];
+  const dashboardId = isDashboardDetail ? pathname.split('/')[2] : undefined;
 
   const { data: userData, isLoading: userDataLoading } = useQuery<UserMe>({ fetchFn: getUsersMe });
 
