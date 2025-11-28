@@ -50,8 +50,8 @@ export default function Layout() {
   }, [size, currentPage]);
 
   return (
-    <DashboardContext value={{ dashboardsData }}>
-      <div>
+    <>
+      <DashboardContext value={{ dashboardsData }}>
         <SideBar
           isCollapsed={isCollapsed}
           onClickSidebarIcon={() => setIsCollapsed(!isCollapsed)}
