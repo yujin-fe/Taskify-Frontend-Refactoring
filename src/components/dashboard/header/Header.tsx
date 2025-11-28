@@ -71,14 +71,14 @@ export default function Header({ isCollapsed }: HeaderProps) {
         'fixed top-0 left-0 w-full bg-gray-0 px-[8px] md:pr-[24px] lg:pr-[40px]',
         isCollapsed ? 'pl-[65px]' : 'md:pl-[300px]'
       )}>
-      <div className='flex h-[70px] items-center justify-between pl-[16px] md:pl-[40px]'>
-        <Title size={'xl'} weight={'bold'} className='flex items-center gap-[8px]'>
+      <div className='flex h-[60px] items-center justify-between pl-[16px] sm:h-[70px] md:pl-[40px]'>
+        <Title size={'xl'} weight={'bold'} className='hidden items-center gap-[8px] sm:flex'>
           {title || dashboardData?.title}
           {dashboardData?.createdByMe && <Icons.Crown className='text-crown' />}
         </Title>
 
         {shouldViewButtons && (
-          <div className='mr-[40px] ml-auto flex gap-[16px]'>
+          <div className='mr-[16px] ml-auto flex gap-[16px] sm:mr-[32px] md:mr-[40px]'>
             <SettingButton />
             <InviteButton onClick={handleModalOpen} />
           </div>
@@ -86,7 +86,9 @@ export default function Header({ isCollapsed }: HeaderProps) {
 
         {isDashboardDetail && <AvatarGroup users={memberData?.members} />}
 
-        {shouldViewButtons && <div className='mx-[32px] h-[38px] border-r border-gray-300' />}
+        {shouldViewButtons && (
+          <div className='mx-[16px] h-[38px] border-r border-gray-300 sm:mx-[24px] md:mx-[32px]' />
+        )}
         <HeaderUserInfo user={userData} />
       </div>
     </header>
