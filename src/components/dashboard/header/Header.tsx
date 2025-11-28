@@ -9,7 +9,7 @@ import HeaderSkeleton from '@/components/skeleton/HeaderSkeleton';
 import { INVITE } from '@/constants/modalName';
 import { useModal } from '@/hooks/useModal';
 import useQuery from '@/hooks/useQuery';
-import { getDashbordDetail } from '@/lib/apis/dashboards';
+import { getDashboardDetail } from '@/lib/apis/dashboards';
 import { getMemberList } from '@/lib/apis/members';
 import { getUsersMe } from '@/lib/apis/users';
 import type { Dashboard } from '@/types/dashboardsData';
@@ -45,7 +45,7 @@ export default function Header({ isCollapsed }: HeaderProps) {
 
   const { data: dashboardData, isLoading: dashboardDataLoading } = useQuery<Dashboard>({
     fetchFn: () =>
-      dashboardId && isDashboardDetail ? getDashbordDetail(dashboardId) : Promise.resolve(null),
+      dashboardId && isDashboardDetail ? getDashboardDetail(dashboardId) : Promise.resolve(null),
     params: { dashboardId },
   });
   const { data: memberData, isLoading: memberDataLoading } = useQuery<MembersResponse>({
