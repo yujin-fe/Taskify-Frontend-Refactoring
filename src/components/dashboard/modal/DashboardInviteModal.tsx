@@ -45,8 +45,7 @@ export default function DashboardInviteModal({
     setErrorMsg(message);
   };
 
-  const disabled =
-    inviteeEmail.trim() === '' || validateEmail(inviteeEmail) !== '' || apiErrorMsg !== '';
+  const disabled = inviteeEmail.trim() === '' || validateEmail(inviteeEmail) !== '';
 
   return (
     <FormModal closeBtn modalName={INVITE}>
