@@ -4,6 +4,7 @@ import { validators } from '@/utils/validation';
 interface ShowPasswordType {
   password: boolean;
   confirmPassword: boolean;
+  currentPassword: boolean;
 }
 
 const useAuthForm = <InitT extends Record<string, string>>(initialValue: InitT) => {
@@ -12,6 +13,7 @@ const useAuthForm = <InitT extends Record<string, string>>(initialValue: InitT) 
   const [showPassword, setShowPassword] = useState({
     password: false,
     confirmPassword: false,
+    currentPassword: false,
   });
 
   const disabled = Object.entries(authForm).some(([key, value]) => {
