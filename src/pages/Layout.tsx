@@ -10,19 +10,22 @@ import { type DashboardsResponse } from '@/types/dashboardsData';
 import { cn } from '@/utils/cn';
 
 export default function Layout() {
+  const size = useResponsiveValue({
+    mobile: MOBILECOUNT,
+    tablet: TABLETCOUNT,
+    desktop: DESKTOPCOUNT,
+  });
   //TODO: 로컬스토리지에서 관리
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(() => {
+    const collapsed = localStorage.getItem('sidebar-collapsed');
+    return collapsed && JSON.parse(collapsed);
+  });
   const [dashboardsData, setDashboardsData] = useState({
     dashboards: [],
     totalCount: 0,
     cursorId: 0,
   } as DashboardsResponse);
 
-  const size = useResponsiveValue({
-    mobile: MOBILECOUNT,
-    tablet: TABLETCOUNT,
-    desktop: DESKTOPCOUNT,
-  });
   const { totalCount, cursorId } = dashboardsData;
   const pageCount = Math.ceil(totalCount / size);
 
@@ -44,6 +47,10 @@ export default function Layout() {
     };
     getDashboardsData();
   }, [size, currentPage]);
+
+  useEffect(() => {
+    localStorage.setItem('sidebar-collapsed', JSON.stringify(isCollapsed));
+  }, [isCollapsed]);
 
   return (
     <DashboardContext value={{ dashboardsData }}>
