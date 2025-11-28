@@ -12,8 +12,6 @@ export const validateNickname = (value: string) => {
   return value.length <= NICKNAME_MAX_LEN ? '' : `${NICKNAME_MAX_LEN}자 이하로 작성해주세요.`;
 };
 
-// TODO: 회원가입 구현 시 닉네임 검증 함수 구현 및 validators에 연결
-
 export const validators: Record<string, (v: string) => string> = {
   email: validateEmail,
   password: validatePassword,

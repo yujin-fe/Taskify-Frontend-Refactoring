@@ -36,6 +36,7 @@ export default function Signup() {
   const { isOpen, handleModalClose, handleModalOpen } = useBaseModal();
   const navigate = useNavigate();
   const [apiErrorMsg, setApiErrorMsg] = useState('');
+  const [isChecked, setIsChecked] = useState(false);
   const handleSubmit = async () => {
     const formData = {
       email: authForm.email,
@@ -44,14 +45,14 @@ export default function Signup() {
     };
     try {
       await requestSignup(formData);
-      navigate('/login', { replace: true });
     } catch (error) {
       if (axios.isAxiosError(error)) {
         setApiErrorMsg(error.response?.data?.message ?? '오류가 발생했습니다.');
-        handleModalOpen();
       }
     } finally {
+      handleModalOpen();
       setAuthForm(signupInitialValue);
+      setIsChecked(false);
     }
   };
   return (
@@ -119,7 +120,7 @@ export default function Signup() {
           <Input.Label>비밀번호 확인</Input.Label>
           <Input.Group>
             <Input.Field
-              name='password'
+              name='confirmPassword'
               type={showPassword.confirmPassword ? 'text' : 'password'}
               placeholder='비밀번호를 한번 더 입력해 주세요'
               autoComplete='off'
@@ -132,13 +133,34 @@ export default function Signup() {
           </Input.Group>
           <Input.ErrorMessage>{error.confirmPassword}</Input.ErrorMessage>
         </Input>
-        <Button disabled={disabled} className='sm:mt-2' type='submit'>
+        <label className='flex cursor-pointer items-center gap-2 font-lg-regular text-gray-700'>
+          <input
+            type='checkbox'
+            className='peer sr-only'
+            checked={isChecked}
+            onChange={() => {
+              setIsChecked(!isChecked);
+            }}
+          />
+          {isChecked ? <Icons.Checkbox /> : <Icons.EmptyCheckbox />}
+          이용약관에 동의합니다.
+        </label>
+        <Button disabled={disabled || !isChecked} className='sm:mt-2' type='submit'>
           가입하기
         </Button>
       </AuthForm>
       <AuthSuggestion message='이미 회원이신가요?' to='/login' linkText='로그인하기' />
       {isOpen && (
-        <BaseModalFrame setOnModal={() => handleModalClose()}>{apiErrorMsg}</BaseModalFrame>
+        <BaseModalFrame
+          setOnModal={() => {
+            handleModalClose();
+            if (!apiErrorMsg) {
+              navigate('/login', { replace: true });
+            }
+            return;
+          }}>
+          {apiErrorMsg || '가입이 완료되었습니다!'}
+        </BaseModalFrame>
       )}
     </>
   );
