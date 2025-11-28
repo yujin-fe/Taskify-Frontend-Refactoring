@@ -18,7 +18,7 @@ export default function DashboardSkeleton({ length }: { length: number }) {
           <Skeleton className='h-8 w-32' />
           <div className='ml-auto flex items-center gap-3'>
             <Skeleton className='ml-6 h-[38px] w-[38px] rounded-full' />
-            <Skeleton className='h-[20px] w-[80px]' />
+            <Skeleton className='h-[30px] w-[80px]' />
           </div>
         </header>
         <main className='h-[100dvh] bg-base px-[40px] pt-[100px]' />
