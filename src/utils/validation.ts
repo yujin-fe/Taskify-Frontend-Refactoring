@@ -15,5 +15,6 @@ export const validateNickname = (value: string) => {
 export const validators: Record<string, (v: string) => string> = {
   email: validateEmail,
   password: validatePassword,
+  currentPassword: validatePassword,
   nickname: validateNickname,
 };
