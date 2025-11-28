@@ -4,7 +4,7 @@ import Skeleton from '@/components/skeleton/Skeleton';
  * 사이드바의 스켈레톤을 렌더링합니다.
  *
  * @example
- * <DashboardSkeleton length={5} />
+ * <DashboardSideBarSkeleton length={5} isCollapsed={false} />
  */
 interface DashboardSideBarSkeletonProps {
   length: number;
