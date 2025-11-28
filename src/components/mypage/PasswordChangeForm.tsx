@@ -12,9 +12,9 @@ import useAuthForm from '@/hooks/useAuthForm';
 import useBaseModal from '@/hooks/useBaseModal';
 import { changePassword } from '@/lib/apis/auth';
 
-type passwordChangeFormType = 'newPassword' | 'password' | 'confirmPassword';
+type PasswordChangeFormType = 'newPassword' | 'password' | 'confirmPassword';
 
-const InitialValue: Record<passwordChangeFormType, string> = {
+const InitialValue: Record<PasswordChangeFormType, string> = {
   password: '',
   newPassword: '',
   confirmPassword: '',
@@ -38,7 +38,8 @@ export default function PasswordChangeForm() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // TODO: useMutation 훅 구현 시 적용하기
-    const reqbody = { password: authForm.password, newPassword: authForm.newPassword };
+    const { password, newPassword } = authForm;
+    const reqbody = { password, newPassword };
     try {
       await changePassword(reqbody);
       setApiErrorMsg('');
