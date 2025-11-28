@@ -20,7 +20,7 @@ const AvatarFallbackStyle = cva(
 
 export default function AvatarFallback() {
   const { nickname, id, userId } = useContext(AvatarContext);
-  const color = getProfileColorForId(userId || id);
+  const color = getProfileColorForId(userId ?? id);
 
   return <div className={AvatarFallbackStyle({ color })}>{getMonogram(nickname)}</div>;
 }
