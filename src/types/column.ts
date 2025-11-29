@@ -3,7 +3,7 @@ interface ColumnsData {
   title: string;
   teamId: string;
   dashboardId: number;
-  createAt: string;
+  createdAt: string;
   updatedAt: string;
 }
 
