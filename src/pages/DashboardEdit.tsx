@@ -1,4 +1,6 @@
+import axios from 'axios';
 import { useMemo, useCallback, useState } from 'react';
+import { useParams } from 'react-router';
 import BaseModalFrame from '@/components/common/modal/BaseModalFrame';
 import PageIndicator from '@/components/common/PageIndicator';
 import PageNation from '@/components/common/PageNation';
@@ -23,36 +25,26 @@ interface GetMemberListParams {
   dashboardId: string;
 }
 
-interface DashboardEditProps {
-  dashboardId: string;
-}
-
-export default function DashboardEdit({ dashboardId }: DashboardEditProps) {
+export default function DashboardEdit() {
   const { currentPage, handlePrev, handleNext, isPrevDisabled } = usePagination();
   const { isOpen, handleModalOpen, handleModalClose: setIsOpen } = useBaseModal();
+  const { dashboardId } = useParams<{ dashboardId: string }>();
 
   const [deleteMessage, setDeleteMessage] = useState('');
   const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null);
 
-  const params: GetMemberListParams = useMemo(
-    () => ({
-      page: currentPage,
-      size: MEMBERS_PAGE_SIZE,
-      dashboardId,
-    }),
-    [currentPage, dashboardId]
-  );
+  const params: GetMemberListParams = {
+    page: currentPage,
+    size: MEMBERS_PAGE_SIZE,
+    dashboardId: dashboardId!,
+  };
 
-  // 구성원 목록 조회
   const {
     data: memberData,
     isLoading,
     refetch,
   } = useQuery<MembersResponse, GetMemberListParams>({
-    fetchFn: async (queryParams) => {
-      const effectiveParams = queryParams || params;
-      return await getMemberList(effectiveParams);
-    },
+    fetchFn: () => getMemberList(params),
     params,
   });
 
@@ -65,7 +57,6 @@ export default function DashboardEdit({ dashboardId }: DashboardEditProps) {
 
   const isNextDisabled = currentPage >= calculatedTotalPages;
 
-  // 삭제 처리
   const deleteMutation = useMutation({
     mutationFn: deleteMemberdata,
     onSuccess: () => {
@@ -80,10 +71,17 @@ export default function DashboardEdit({ dashboardId }: DashboardEditProps) {
       refetch();
     },
     onError: (error) => {
-      const errorMessage =
-        error instanceof Error
-          ? `구성원 삭제 실패: ${error.message}`
-          : '구성원 삭제 중 알 수 없는 오류가 발생했습니다.';
+      let errorMessage = '구성원 삭제 중 알 수 없는 오류가 발생했습니다.';
+
+      if (axios.isAxiosError(error) && error.response?.data) {
+        const data = error.response.data;
+        if (typeof data === 'object' && 'message' in data && typeof data.message === 'string') {
+          errorMessage = data.message;
+        }
+      } else if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+
       setDeleteMessage(errorMessage);
       handleModalOpen();
     },
@@ -92,12 +90,11 @@ export default function DashboardEdit({ dashboardId }: DashboardEditProps) {
   const handleDelete = useCallback(
     (memberId: number) => {
       setDeleteTargetId(memberId);
-      deleteMutation.mutate({ memberId, dashboardId });
+      deleteMutation.mutate({ memberId, dashboardId: dashboardId! });
     },
     [dashboardId, deleteMutation]
   );
 
-  // 목록 렌더링
   const memberListItems = isLoading ? (
     <p className='p-5'>구성원 목록 로딩 중...</p>
   ) : members.length === 0 ? (
@@ -111,12 +108,14 @@ export default function DashboardEdit({ dashboardId }: DashboardEditProps) {
         userId={member.userId}
         onDelete={handleDelete}>
         <DashboardItem.Content type='MembersItem' user={member} userId={member.userId} />
-        <DashboardItem.Action
-          type='MembersItem'
-          user={member}
-          userId={member.userId}
-          onDelete={() => handleDelete(member.id)}
-        />
+        {!member.isOwner && (
+          <DashboardItem.Action
+            type='MembersItem'
+            user={member}
+            userId={member.userId}
+            onDelete={() => handleDelete(member.id)}
+          />
+        )}
       </DashboardItem>
     ))
   );
