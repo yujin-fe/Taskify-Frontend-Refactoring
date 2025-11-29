@@ -101,7 +101,7 @@ export default function ProfileEditForm() {
                     name='nickname'
                     type='text'
                     placeholder='닉네임을 입력해 주세요'
-                    autoComplete='nickname'
+                    autoComplete='off'
                   />
                 </Input.Group>
                 <Input.ErrorMessage>{error.nickname}</Input.ErrorMessage>
