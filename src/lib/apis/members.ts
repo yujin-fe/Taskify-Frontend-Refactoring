@@ -27,9 +27,9 @@ export const getMemberList = async (params: GetMemberListParams) => {
 };
 
 export const deleteMemberdata = async (params: DeleteMemberParams) => {
-  const { memberId } = params;
+  const { memberId, dashboardId } = params;
 
-  const res = await api.delete(`/members/${memberId}`);
+  const res = await api.delete(`/members/${memberId}`, { params: { dashboardId: dashboardId } });
 
   return res;
 };
