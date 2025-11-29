@@ -2,7 +2,7 @@ import { api, fileApi } from '@/lib/axios';
 
 interface ChangeUserInfoType {
   nickname: string;
-  profileImageUrl?: string;
+  profileImageUrl?: string | null;
 }
 
 /** 내 정보 조회 api */
