@@ -66,7 +66,7 @@ const cardDataArray = [
 ];
 
 export default function DashboardDetail() {
-  const isCollapsed = localStorage.getItem('sidebar-collapsed');
+  const isCollapsed = localStorage.getItem('sidebar-collapsed') === 'true';
   const [columnName, setColumnName] = useState('');
   const [duplicatedError, setDuplicatedError] = useState('');
   const { isOpen, handleModalOpen, handleModalClose } = useModal(CREATE_COLUMN);
@@ -80,13 +80,8 @@ export default function DashboardDetail() {
     fetchFn: () => getColumnList(dashboardId!),
   });
 
-  const reqBody = {
-    title: columnName,
-    dashboardId: Number(dashboardId),
-  };
-
   const { mutate, error } = useMutation<ColumnsData, CreateColumnType>({
-    mutationFn: () => createColumn(reqBody),
+    mutationFn: (reqBody) => createColumn(reqBody),
     onSuccess: () => {
       refetch();
       handleModalClose();
@@ -112,7 +107,10 @@ export default function DashboardDetail() {
       return;
     }
 
-    await mutate(reqBody);
+    await mutate({
+      title: columnName,
+      dashboardId: Number(dashboardId),
+    });
   };
 
   const canAddColumn = columnDataList.data.length < 10;
