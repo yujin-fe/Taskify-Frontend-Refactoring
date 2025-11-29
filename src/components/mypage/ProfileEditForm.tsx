@@ -88,7 +88,12 @@ export default function ProfileEditForm() {
         </DashboardHeader>
         <DashboardBody className='mt-[40px] sm:mt-[24px]'>
           <form noValidate className='flex gap-[42px]' onSubmit={handleSubmit}>
-            <ImageUpload file={imageFile} onFileChange={setImageFile} size='Large' />
+            <ImageUpload
+              defaultImageUrl={userProfile?.profileImageUrl}
+              file={imageFile}
+              onFileChange={setImageFile}
+              size='Large'
+            />
             <div className='flex w-full flex-col gap-[16px]'>
               <Input disabled value={userProfile?.email || '이메일을 입력해 주세요.'}>
                 <Input.Label className='mypage-label'>이메일</Input.Label>
