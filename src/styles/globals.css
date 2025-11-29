@@ -5,8 +5,8 @@
 @import './base/font-utilities.css';
 @import './components/modalUtilities.css';
 @import './components/dropdownUtilites.css';
-@import './components/nameCardUtilites.css'; 
-@import './components/mypageUtilities.css';
+@import './components/nameCardUtilities.css'; 
+@import './components/mypageUtilites.css';
 
 li {
   list-style: none;
