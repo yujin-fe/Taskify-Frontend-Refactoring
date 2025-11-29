@@ -24,7 +24,7 @@ interface GetMemberListParams {
 }
 
 interface DashboardEditProps {
-  dashboardId: string;
+  dashboardId?: string;
 }
 
 export default function DashboardEdit({ dashboardId }: DashboardEditProps) {
