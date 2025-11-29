@@ -50,9 +50,7 @@ export default function ProfileEditForm() {
 
           reqbody.profileImageUrl = resImage?.profileImageUrl;
         } catch (error) {
-          if (axios.isAxiosError(error)) {
-            setApiErrorMsg('이미지 업로드 중\n오류가 발생했습니다.');
-          }
+          setApiErrorMsg(`${error}\n이미지 업로드 중\n오류가 발생했습니다.`);
           handleModalOpen();
           return;
         }
