@@ -24,7 +24,7 @@ interface GetMemberListParams {
 }
 
 interface DashboardEditProps {
-  dashboardId?: string;
+  dashboardId: string;
 }
 
 export default function DashboardEdit({ dashboardId }: DashboardEditProps) {
@@ -38,54 +38,43 @@ export default function DashboardEdit({ dashboardId }: DashboardEditProps) {
     () => ({
       page: currentPage,
       size: MEMBERS_PAGE_SIZE,
-      dashboardId: dashboardId || '',
+      dashboardId,
     }),
     [currentPage, dashboardId]
   );
 
+  // 구성원 목록 조회
   const {
     data: memberData,
     isLoading,
     refetch,
   } = useQuery<MembersResponse, GetMemberListParams>({
-    fetchFn: async (queryParams?: GetMemberListParams): Promise<MembersResponse> => {
+    fetchFn: async (queryParams) => {
       const effectiveParams = queryParams || params;
-
-      if (!effectiveParams.dashboardId) {
-        return { members: [], totalCount: 0 };
-      }
-
-      const data = await getMemberList(effectiveParams);
-
-      return data;
+      return await getMemberList(effectiveParams);
     },
     params,
   });
 
-  const members: Member[] = useMemo(() => {
-    if (!memberData) {
-      return [];
-    }
-
-    return memberData.members;
-  }, [memberData]);
+  const members: Member[] = useMemo(() => memberData?.members || [], [memberData]);
 
   const calculatedTotalPages = useMemo(() => {
     const total = memberData?.totalCount || 0;
-    return total === 0 || params.size === 0 ? 1 : Math.ceil(total / params.size);
-  }, [memberData?.totalCount, params.size]);
+    return total === 0 ? 1 : Math.ceil(total / MEMBERS_PAGE_SIZE);
+  }, [memberData?.totalCount]);
 
   const isNextDisabled = currentPage >= calculatedTotalPages;
 
+  // 삭제 처리
   const deleteMutation = useMutation({
     mutationFn: deleteMemberdata,
     onSuccess: () => {
       if (deleteTargetId === null) {
         return;
       }
+
       const deletedMember = members.find((m) => m.id === deleteTargetId);
       const nickname = deletedMember ? deletedMember.nickname : `ID ${deleteTargetId}`;
-
       setDeleteMessage(`구성원 '${nickname}' 님의 삭제가 완료되었습니다.`);
       handleModalOpen();
       refetch();
@@ -102,18 +91,13 @@ export default function DashboardEdit({ dashboardId }: DashboardEditProps) {
 
   const handleDelete = useCallback(
     (memberId: number) => {
-      if (!dashboardId) {
-        setDeleteMessage('오류: 대시보드 ID를 찾을 수 없습니다.');
-        handleModalOpen();
-        return;
-      }
-
       setDeleteTargetId(memberId);
       deleteMutation.mutate({ memberId, dashboardId });
     },
-    [dashboardId, deleteMutation, handleModalOpen]
+    [dashboardId, deleteMutation]
   );
 
+  // 목록 렌더링
   const memberListItems = isLoading ? (
     <p className='p-5'>구성원 목록 로딩 중...</p>
   ) : members.length === 0 ? (
@@ -127,7 +111,6 @@ export default function DashboardEdit({ dashboardId }: DashboardEditProps) {
         userId={member.userId}
         onDelete={handleDelete}>
         <DashboardItem.Content type='MembersItem' user={member} userId={member.userId} />
-        {/* TODO: 소유자 Action 버튼 표시 주석 처리 */}
         <DashboardItem.Action
           type='MembersItem'
           user={member}
