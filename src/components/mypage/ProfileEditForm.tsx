@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Button from '@/components/common/Button';
 import ImageUpload from '@/components/common/ImageUpload';
 import Input from '@/components/common/input/Input';
@@ -32,6 +32,12 @@ export default function ProfileEditForm() {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [apiErrorMsg, setApiErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
+
+  useEffect(() => {
+    if (userProfile) {
+      setAuthForm({ nickname: userProfile.nickname ?? '' });
+    }
+  }, [userProfile, setAuthForm]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     // TODO: useMutation 훅 구현 시 적용
