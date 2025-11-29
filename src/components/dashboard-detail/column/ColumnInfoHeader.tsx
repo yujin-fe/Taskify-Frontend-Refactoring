@@ -16,7 +16,11 @@ export default function ColumnInfoHeader({ title, totalCount, onClick }: ColumnI
           {totalCount}
         </span>
       </div>
-      <button type='button' className='cursor-pointer' onClick={onClick}>
+      <button
+        type='button'
+        className='cursor-pointer'
+        aria-label='컬럼 설정 수정'
+        onClick={onClick}>
         <Icons.Setting width={24} height={24} className='text-gray-500' />
       </button>
     </div>
