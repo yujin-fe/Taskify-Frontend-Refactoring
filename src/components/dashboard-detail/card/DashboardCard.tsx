@@ -24,8 +24,8 @@ export default function DashboardCard({ cardData }: DashboardCardProps) {
       )}
       <div className='w-full'>
         <span className='mb-[10px] block w-full truncate'>{title}</span>
-        <div className='flex w-full items-center gap-[16px] md:flex-col md:items-start md:gap-[8px]'>
-          <div className='flex shrink-0 flex-wrap gap-[6px]'>
+        <div className='flex w-full items-center gap-[16px] sm:items-end md:flex-col md:items-start md:gap-[8px]'>
+          <div className='flex shrink-0 flex-wrap gap-[6px] sm:w-[60%] md:w-fit'>
             {tags.map((t, idx) => (
               <Tag key={t + idx} color={getProfileColorForId(idx)}>
                 {t}
