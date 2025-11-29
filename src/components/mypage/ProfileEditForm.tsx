@@ -20,7 +20,7 @@ const InitialValue: Record<'nickname', string> = {
 
 interface ReqBody {
   nickname: string;
-  profileImageUrl?: string;
+  profileImageUrl?: string | null;
 }
 
 export default function ProfileEditForm() {
@@ -30,12 +30,15 @@ export default function ProfileEditForm() {
   const { isOpen, handleModalClose, handleModalOpen } = useBaseModal();
 
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [defaultImageUrl, setDefaultImageUrl] = useState<string | null>(null);
+
   const [apiErrorMsg, setApiErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
 
   useEffect(() => {
     if (userProfile) {
       setAuthForm({ nickname: userProfile.nickname ?? '' });
+      setDefaultImageUrl(userProfile?.profileImageUrl);
     }
   }, [userProfile, setAuthForm]);
 
@@ -44,7 +47,7 @@ export default function ProfileEditForm() {
     e.preventDefault();
 
     const { nickname } = authForm;
-    const reqbody: ReqBody = { nickname };
+    const reqbody: ReqBody = { nickname, profileImageUrl: defaultImageUrl };
 
     try {
       if (imageFile) {
@@ -89,7 +92,8 @@ export default function ProfileEditForm() {
         <DashboardBody className='mt-[40px] sm:mt-[24px]'>
           <form noValidate className='flex gap-[42px]' onSubmit={handleSubmit}>
             <ImageUpload
-              defaultImageUrl={userProfile?.profileImageUrl}
+              defaultImageUrl={defaultImageUrl}
+              setDefaultImageUrl={setDefaultImageUrl}
               file={imageFile}
               onFileChange={setImageFile}
               size='Large'
