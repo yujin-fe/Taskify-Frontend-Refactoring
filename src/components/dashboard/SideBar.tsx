@@ -34,9 +34,8 @@ export default function SideBar({
   if (!dashboardsData) {
     return null;
   }
-
-  const pageCount = Math.ceil(dashboardsData.totalCount / size);
-
+  const { totalCount } = dashboardsData;
+  const pageCount = Math.ceil(totalCount / size);
   return (
     <aside
       className={cn(
@@ -86,7 +85,7 @@ export default function SideBar({
               ))}
             </ul>
           </div>
-          {!isCollapsed && (
+          {!isCollapsed && totalCount !== 0 && (
             <PageNation
               onPrev={handlePrev}
               onNext={handleNext}
