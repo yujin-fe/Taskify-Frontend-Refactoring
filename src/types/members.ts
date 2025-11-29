@@ -7,8 +7,7 @@ export interface Member {
   createdAt: string;
   updatedAt: string;
   isOwner: boolean;
-  initials: string;
-  refetchKey?: number;
+  initials?: string;
 }
 
 export interface MembersResponse {

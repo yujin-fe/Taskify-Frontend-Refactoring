@@ -50,7 +50,7 @@ export default function Header({ isCollapsed }: HeaderProps) {
   });
   const { data: memberData, isLoading: memberDataLoading } = useQuery<MembersResponse>({
     fetchFn: () =>
-      dashboardId && isDashboardDetail ? getMemberList(dashboardId) : Promise.resolve(null),
+      dashboardId && isDashboardDetail ? getMemberList({ dashboardId }) : Promise.resolve(null),
     params: { dashboardId },
   });
 

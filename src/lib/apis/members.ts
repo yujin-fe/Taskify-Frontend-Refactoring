@@ -14,6 +14,12 @@ export interface GetMemberListParams {
   dashboardId: string;
   page?: number;
   size?: number;
+  refetchKey?: number;
+}
+
+interface DeleteMemberParams {
+  memberId: number;
+  dashboardId: string | number;
 }
 
 export const getMemberList = async (params: GetMemberListParams) => {
@@ -26,6 +32,14 @@ export const getMemberList = async (params: GetMemberListParams) => {
   const res = await api.get('/members', {
     params: apiParams,
   });
+
+  return res.data;
+};
+
+export const deleteMemberdata = async (params: DeleteMemberParams) => {
+  const { memberId } = params;
+
+  const res = await api.delete(`/members/${memberId}`);
 
   return res.data;
 };
