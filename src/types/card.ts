@@ -1,5 +1,5 @@
 type assigneeType = {
-  profileImageUrl: string;
+  profileImageUrl: string | null;
   nickname: string;
   id: number;
 };
@@ -9,9 +9,9 @@ export interface CardDetailResponse {
   title: string;
   description: string;
   tags: string[];
-  dueDate: string;
+  dueDate: string | null;
   assignee: assigneeType;
-  imageUrl: string;
+  imageUrl: string | null;
   teamId: string;
   columnId: number;
   createdAt: string;
