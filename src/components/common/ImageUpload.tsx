@@ -8,6 +8,7 @@ type ImageUploadProps = {
   onFileChange?: (file: File | null) => void;
   edit?: boolean;
   defaultImageUrl?: string | null;
+  setDefaultImageUrl?: (img: string | null) => void;
 };
 
 /**
@@ -40,6 +41,7 @@ export default function ImageUpload({
   size = 'Small',
   onFileChange,
   defaultImageUrl,
+  setDefaultImageUrl,
   file,
   edit = false,
 }: ImageUploadProps) {
@@ -71,6 +73,7 @@ export default function ImageUpload({
       inputRef.current.value = '';
     }
     onFileChange?.(null);
+    setDefaultImageUrl?.(null);
   };
 
   // value(File)가 바뀔 때 preview 업데이트
