@@ -1,5 +1,4 @@
 import CreateButton from '@/components/dashboard/CreateButton';
-import DashboardCard from '@/components/dashboard-detail/card/DashboardCard';
 import ColumnContainer from '@/components/dashboard-detail/column/ColumnContainer';
 import ColumnInfoHeader from '@/components/dashboard-detail/column/ColumnInfoHeader';
 
@@ -15,7 +14,6 @@ export default function DashboardDetail() {
         />
         <div className='flex flex-col gap-[16px]'>
           <CreateButton onClick={() => console.log('할일 생성 모달')} />
-          <DashboardCard />
         </div>
       </ColumnContainer>
     </div>
