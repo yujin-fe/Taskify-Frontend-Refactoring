@@ -54,26 +54,18 @@ export default function Header({ isCollapsed }: HeaderProps) {
     params: { dashboardId },
   });
 
-  /** 버튼 렌더링 조건 */
-  const shouldViewButtons = !pathname.includes('/mydashboard') && !pathname.includes('/mypage');
-
   const isLoading = userDataLoading || dashboardDataLoading || memberDataLoading;
 
   if (isLoading) {
-    return (
-      <HeaderSkeleton
-        isCollapsed={isCollapsed}
-        isDashboardDetail={isDashboardDetail}
-        shouldViewButtons={shouldViewButtons}
-      />
-    );
+    return <HeaderSkeleton isCollapsed={isCollapsed} isDashboardDetail={isDashboardDetail} />;
   }
 
   return (
     <header
       className={cn(
         'fixed top-0 left-0 w-full bg-gray-0 px-[8px] md:pr-[24px] lg:pr-[40px]',
-        isCollapsed ? 'pl-[65px]' : 'md:pl-[300px]'
+        isCollapsed ? 'pl-[65px]' : 'md:pl-[300px]',
+        isDashboardDetail && 'border-b border-gray-300'
       )}>
       <div className='flex h-[60px] items-center justify-between pl-[16px] sm:h-[70px] md:pl-[40px]'>
         <div className='mr-[16px] overflow-hidden'>
@@ -88,7 +80,7 @@ export default function Header({ isCollapsed }: HeaderProps) {
             </Title>
           )}
         </div>
-        {shouldViewButtons && (
+        {isDashboardDetail && (
           <div className='mr-[16px] ml-auto flex gap-[16px] lg:mr-[32px]'>
             <SettingButton />
             <InviteButton onClick={handleModalOpen} />
@@ -97,7 +89,7 @@ export default function Header({ isCollapsed }: HeaderProps) {
 
         {isDashboardDetail && <AvatarGroup users={memberData?.members} />}
 
-        {shouldViewButtons && (
+        {isDashboardDetail && (
           <div className='mx-[16px] h-[38px] border-r border-gray-300 lg:mx-[32px]' />
         )}
         <HeaderUserInfo user={userData} />
