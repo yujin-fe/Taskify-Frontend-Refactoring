@@ -6,7 +6,7 @@ export interface GetMemberListParams {
   size?: number;
 }
 
-interface DeleteMemberParams {
+export interface DeleteMemberParams {
   memberId: number;
   dashboardId: string | number;
 }
@@ -27,7 +27,6 @@ export const getMemberList = async (params: GetMemberListParams) => {
 
 export const deleteMemberdata = async (params: DeleteMemberParams) => {
   const { memberId, dashboardId } = params;
-
   const res = await api.delete(`/members/${memberId}`, { params: { dashboardId: dashboardId } });
 
   return res;
