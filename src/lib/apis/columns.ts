@@ -1,7 +1,7 @@
 import { api } from '@/lib/axios';
 import type { ColumnsResponse } from '@/types/column';
 
-interface CreateColumnType {
+export interface CreateColumnType {
   title: string;
   dashboardId: number;
 }
