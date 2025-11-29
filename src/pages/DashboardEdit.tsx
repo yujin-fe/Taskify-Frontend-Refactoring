@@ -1,4 +1,6 @@
 import { useMemo, useCallback, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import BaseModalFrame from '@/components/common/modal/BaseModalFrame';
 import PageIndicator from '@/components/common/PageIndicator';
 import PageNation from '@/components/common/PageNation';
 import Title from '@/components/common/Title';
@@ -7,94 +9,120 @@ import DashboardContainer from '@/components/dashboard/table/DashboardContainer'
 import DashboardHeader from '@/components/dashboard/table/DashboardHeader';
 import DashboardItem from '@/components/dashboard/table/DashboardItem';
 import DashboardList from '@/components/dashboard/table/DashboardList';
+import useBaseModal from '@/hooks/useBaseModal';
 import { usePagination } from '@/hooks/usePagination';
 import useQuery from '@/hooks/useQuery';
-import { getMemberdata, deleteMemberdata } from '@/lib/apis/memberdata';
-import type { MembersResponse, Member } from '@/types/membersData';
+import { deleteMemberdata } from '@/lib/apis/memberdelete';
+import { getMemberList } from '@/lib/apis/members';
+import type { MembersResponse, Member } from '@/types/members';
 
-const MEMBERS_TOTAL_PAGES = 4;
-const TEAM_ID = 'teams';
-const DASHBOARD_ID = 7;
+const MEMBERS_PAGE_SIZE = 4;
 
-interface GetMemberdataparams {
-  teamId: string;
+interface GetMemberListParams {
   page: number;
   size: number;
-  dashboardId: number;
-  refetchKey: number;
+  dashboardId: string;
 }
 
 export default function DashboardEdit() {
+  const { dashboardId } = useParams<{ dashboardId: string }>();
+
+  const currentDashboardId = dashboardId;
+
   const { currentPage, handlePrev, handleNext, isPrevDisabled } = usePagination();
+  const { isOpen, handleModalOpen, handleModalClose: setIsOpen } = useBaseModal();
+  const [deleteMessage, setDeleteMessage] = useState('');
+  const [modalType, setModalType] = useState<'Login' | 'Account'>('Login');
 
-  const [refetchKey, setRefetchKey] = useState(0);
-
-  const params: GetMemberdataparams = useMemo(
+  const params: GetMemberListParams = useMemo(
     () => ({
-      teamId: TEAM_ID,
       page: currentPage,
-      size: 4,
-      dashboardId: DASHBOARD_ID,
-      refetchKey: refetchKey,
+      size: MEMBERS_PAGE_SIZE,
+
+      dashboardId: currentDashboardId || '',
     }),
-    [currentPage, refetchKey]
+    [currentPage, currentDashboardId]
   );
 
-  const { data: memberData, isLoading } = useQuery<MembersResponse, GetMemberdataparams>({
-    fetchFn: () => getMemberdata(params),
+  const { data: memberData, isLoading } = useQuery<MembersResponse, GetMemberListParams>({
+    fetchFn: () => {
+      if (!currentDashboardId) {
+        return Promise.resolve({
+          members: [],
+          totalCount: 0,
+        } as MembersResponse);
+      }
+
+      return getMemberList(params);
+    },
     params,
   });
 
+  const calculatedTotalPages = useMemo(() => {
+    if (!memberData || !memberData.totalCount || params.size === 0) {
+      return 1;
+    }
+    return Math.ceil(memberData.totalCount / params.size);
+  }, [memberData, params.size]);
+
   const isNextDisabled = useMemo(() => {
-    return currentPage >= MEMBERS_TOTAL_PAGES;
-  }, [currentPage]);
+    return currentPage >= calculatedTotalPages;
+  }, [currentPage, calculatedTotalPages]);
 
-  const handleNextWithLimit = useCallback(() => {
-    if (currentPage < MEMBERS_TOTAL_PAGES) {
-      handleNext();
-    }
-  }, [currentPage, handleNext]);
+  const handleDelete = useCallback(
+    async (memberUserId: number) => {
+      if (!currentDashboardId) {
+        setDeleteMessage('오류: 대시보드 ID를 찾을 수 없어 구성원 삭제를 진행할 수 없습니다.');
+        setModalType('Account');
+        handleModalOpen();
+        return;
+      }
 
-  const handleDelete = useCallback(async (memberUserId: number) => {
-    try {
-      await deleteMemberdata({
-        teamId: TEAM_ID,
-        memberId: memberUserId,
-      });
+      try {
+        await deleteMemberdata({
+          memberId: memberUserId,
 
-      console.log(`구성원 User ID ${memberUserId} 삭제 완료.`);
+          dashboardId: currentDashboardId,
+        });
 
-      setRefetchKey((prevKey) => prevKey + 1);
-    } catch (error) {
-      console.error('구성원 삭제 실패:', error);
-      alert('구성원 삭제에 실패했습니다.');
-    }
-  }, []);
+        setDeleteMessage(`구성원 ID ${memberUserId} 삭제가 완료되었습니다.`);
+        setModalType('Login');
+        handleModalOpen();
+      } catch (error) {
+        const errorMessage = `구성원 삭제 실패: ${error instanceof Error ? error.message : '알 수 없는 에러'}`;
+        setDeleteMessage(errorMessage);
+        setModalType('Account');
+        handleModalOpen();
+      }
+    },
+    [currentDashboardId, handleModalOpen]
+  );
 
   const members: Member[] = memberData?.members || [];
 
-  const memberListItems = isLoading ? (
-    <p className='p-5'>구성원 목록 로딩 중...</p>
-  ) : members.length === 0 ? (
-    <p className='p-5'>등록된 구성원이 없습니다.</p>
-  ) : (
-    members.map((member) => (
-      <DashboardItem
-        key={member.id}
-        type='MembersItem'
-        user={member}
-        userId={member.userId}
-        onDelete={handleDelete}>
-        <DashboardItem.Content type='MembersItem' user={member} userId={member.userId} />
-        <DashboardItem.Action
+  const memberListItems =
+    isLoading && currentDashboardId ? (
+      <p className='p-5'>구성원 목록 로딩 중...</p>
+    ) : currentDashboardId && members.length === 0 ? (
+      <p className='p-5'>등록된 구성원이 없습니다.</p>
+    ) : (
+      members.map((member) => (
+        <DashboardItem
+          key={member.id}
           type='MembersItem'
           user={member}
           userId={member.userId}
-          onDelete={() => handleDelete(member.userId)}
-        />
-      </DashboardItem>
-    ))
-  );
+          onDelete={handleDelete}>
+          <DashboardItem.Content type='MembersItem' user={member} userId={member.userId} />
+          <DashboardItem.Action
+            type='MembersItem'
+            user={member}
+            userId={member.userId}
+            onDelete={() => handleDelete(member.userId)}
+          />
+        </DashboardItem>
+      ))
+    );
 
   return (
     <DashboardContainer type='Members'>
@@ -102,10 +130,10 @@ export default function DashboardEdit() {
         <Title as='h2' size='xl' weight='bold' className='pl-5 sm:pl-7 sm:text-2xl'>
           구성원
         </Title>
-        <PageIndicator currentPage={currentPage} totalPages={MEMBERS_TOTAL_PAGES} />
+        <PageIndicator currentPage={currentPage} totalPages={calculatedTotalPages} />
         <PageNation
           onPrev={handlePrev}
-          onNext={handleNextWithLimit}
+          onNext={handleNext}
           prevDisabled={isPrevDisabled}
           nextDisabled={isNextDisabled}
           className='mr-5 rounded-[4px] border border-gray-200 sm:mr-7'
@@ -117,6 +145,12 @@ export default function DashboardEdit() {
           {memberListItems}
         </DashboardList>
       </DashboardBody>
+
+      {isOpen && (
+        <BaseModalFrame size={modalType} setOnModal={setIsOpen}>
+          <p>{deleteMessage}</p>
+        </BaseModalFrame>
+      )}
     </DashboardContainer>
   );
 }

@@ -7,6 +7,7 @@ export interface Member {
   createdAt: string;
   updatedAt: string;
   isOwner: boolean;
+  initials: string;
 }
 
 export interface MembersResponse {
