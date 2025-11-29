@@ -1,5 +1,5 @@
 import Icons from '@/assets/icons';
-import ColumnHeaderSkeleton from '@/components/skeleton/ColumnHeaderSkeletion';
+import ColumnHeaderSkeleton from '@/components/skeleton/ColumnHeaderSkeleton';
 
 interface ColumnInfoHeaderProps {
   title: string;
