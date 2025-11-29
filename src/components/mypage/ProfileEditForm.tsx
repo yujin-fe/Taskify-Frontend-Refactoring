@@ -10,9 +10,8 @@ import DashboardContainer from '@/components/dashboard/table/DashboardContainer'
 import DashboardHeader from '@/components/dashboard/table/DashboardHeader';
 import useAuthForm from '@/hooks/useAuthForm';
 import useBaseModal from '@/hooks/useBaseModal';
-import useQuery from '@/hooks/useQuery';
-import { changeUserMe, getUsersMe, uploadImage } from '@/lib/apis/users';
-import type { UserMe } from '@/types/userMe';
+import useUserContext from '@/hooks/useUserContext';
+import { changeUserMe, uploadImage } from '@/lib/apis/users';
 import { uploadImageFile } from '@/utils/uploadImageFile';
 
 const InitialValue: Record<'nickname', string> = {
@@ -25,11 +24,12 @@ interface ReqBody {
 }
 
 export default function ProfileEditForm() {
-  const { data: userData } = useQuery<UserMe>({ fetchFn: getUsersMe });
+  const { userProfile, setUserProfile } = useUserContext();
   const { authForm, setAuthForm, handleChange, handleBlur, error, disabled } =
     useAuthForm(InitialValue);
-  const [imageFile, setImageFile] = useState<File | null>(null);
   const { isOpen, handleModalClose, handleModalOpen } = useBaseModal();
+
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [apiErrorMsg, setApiErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
 
@@ -56,7 +56,8 @@ export default function ProfileEditForm() {
           return;
         }
       }
-      await changeUserMe(reqbody);
+      const updateProfile = await changeUserMe(reqbody);
+      setUserProfile(updateProfile);
       setApiErrorMsg('');
       setSuccessMsg('유저 정보가\n업데이트 되었습니다.');
       handleModalOpen();
@@ -84,7 +85,7 @@ export default function ProfileEditForm() {
           <form noValidate className='flex gap-[42px]' onSubmit={handleSubmit}>
             <ImageUpload file={imageFile} onFileChange={setImageFile} size='Large' />
             <div className='flex w-full flex-col gap-[16px]'>
-              <Input disabled value={userData?.email || '이메일을 입력해 주세요.'}>
+              <Input disabled value={userProfile?.email || '이메일을 입력해 주세요.'}>
                 <Input.Label className='mypage-label'>이메일</Input.Label>
                 <Input.Group>
                   <Input.Field name='email' />
