@@ -1,4 +1,4 @@
-type assigneeType = {
+export type Assignee = {
   profileImageUrl: string | null;
   nickname: string;
   id: number;
@@ -10,7 +10,7 @@ export interface CardDetailResponse {
   description: string;
   tags: string[];
   dueDate: string | null;
-  assignee: assigneeType;
+  assignee: Assignee;
   imageUrl: string | null;
   teamId: string;
   columnId: number;
