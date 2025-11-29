@@ -35,23 +35,31 @@ export default function InvitedDashboard() {
             </Input.Group>
           </Input>
         </div>
-        <div className='flex flex-1 flex-col gap-5'>
-          <div className={`grid w-[828px] grid-cols-[1fr_1fr_1fr] pl-[76px]`}>
-            <h4 className='font-md-regular text-gray-400 sm:font-lg-regular'>이름</h4>
-            <h4 className='font-md-regular text-gray-400 sm:font-lg-regular'>초대자</h4>
-            <h4 className='font-md-regular text-gray-400 sm:font-lg-regular'>수락 여부</h4>
-          </div>
-          <div className='h-[410px] w-full overflow-scroll'>
+        <div className='flex flex-1 flex-col gap-5 pr-7'>
+          <ul
+            className={`grid w-full grid-cols-[1fr_1fr_1fr] sm:pl-[28px] md:w-[828px] md:pl-[76px]`}>
+            <li className='font-md-regular text-gray-400 sm:font-lg-regular'>이름</li>
+            <li className='font-md-regular text-gray-400 sm:font-lg-regular'>초대자</li>
+            <li className='font-md-regular text-gray-400 sm:font-lg-regular'>수락 여부</li>
+          </ul>
+          <div className='h-[410px] w-full overflow-y-scroll'>
             {invitationData?.invitations?.map((invitation) => (
               <>
                 <div
                   key={invitation.id}
-                  className={`grid w-[828px] grid-cols-[1fr_1fr_1fr] pb-5 pl-[76px]`}>
+                  className={`grid w-full grid-cols-[1fr_1fr_1fr] pb-5 sm:pl-[28px] md:w-[828px] md:pl-[76px]`}>
                   <span>{invitation.dashboard.title}</span>
                   <span>{invitation.inviter.nickname}</span>
                   <div className='flex gap-2.5'>
-                    <Button size={'sm'}>수락</Button>
-                    <Button theme={'secondary'} size={'sm'}>
+                    <Button
+                      size={'sm'}
+                      className='max-md:font-14-medium max-md:h-[30px] max-md:min-w-[72px] max-md:p-0'>
+                      수락
+                    </Button>
+                    <Button
+                      theme={'secondary'}
+                      size={'sm'}
+                      className='max-md:font-14-medium max-md:h-[30px] max-md:min-w-[72px] max-md:p-0'>
                       거절
                     </Button>
                   </div>
