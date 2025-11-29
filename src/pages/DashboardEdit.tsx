@@ -22,10 +22,12 @@ interface GetMemberListParams {
   page: number;
   size: number;
   dashboardId: string;
+  // 새로고침을 위한 더미 키
+  refetchKey?: number;
 }
 
 export default function DashboardEdit() {
-  const { dashboardId } = useParams<{ dashboardId: string }>();
+  const { dashboardId } = useParams<{ teamId: string; dashboardId: string }>();
 
   const currentDashboardId = dashboardId;
 
@@ -34,14 +36,18 @@ export default function DashboardEdit() {
   const [deleteMessage, setDeleteMessage] = useState('');
   const [modalType, setModalType] = useState<'Login' | 'Account'>('Login');
 
+  // ⭐️ [유지] 목록 새로고침을 위한 상태
+  const [refetchTrigger, setRefetchTrigger] = useState(0);
+
   const params: GetMemberListParams = useMemo(
     () => ({
       page: currentPage,
       size: MEMBERS_PAGE_SIZE,
-
       dashboardId: currentDashboardId || '',
+      // ⭐️ [유지] params에 refetchTrigger 포함
+      refetchKey: refetchTrigger,
     }),
-    [currentPage, currentDashboardId]
+    [currentPage, currentDashboardId, refetchTrigger]
   );
 
   const { data: memberData, isLoading } = useQuery<MembersResponse, GetMemberListParams>({
@@ -52,7 +58,6 @@ export default function DashboardEdit() {
           totalCount: 0,
         } as MembersResponse);
       }
-
       return getMemberList(params);
     },
     params,
@@ -70,7 +75,7 @@ export default function DashboardEdit() {
   }, [currentPage, calculatedTotalPages]);
 
   const handleDelete = useCallback(
-    async (memberUserId: number) => {
+    async (memberId: number) => {
       if (!currentDashboardId) {
         setDeleteMessage('오류: 대시보드 ID를 찾을 수 없어 구성원 삭제를 진행할 수 없습니다.');
         setModalType('Account');
@@ -80,14 +85,17 @@ export default function DashboardEdit() {
 
       try {
         await deleteMemberdata({
-          memberId: memberUserId,
-
+          memberId: memberId,
+          // deleteMemberdata의 인터페이스가 dashboardId를 요구한다면 유지
           dashboardId: currentDashboardId,
         });
 
-        setDeleteMessage(`구성원 ID ${memberUserId} 삭제가 완료되었습니다.`);
+        setDeleteMessage(`구성원 ID ${memberId} 삭제가 완료되었습니다.`);
         setModalType('Login');
         handleModalOpen();
+
+        // ⭐️ [유지] 삭제 성공 후 목록 새로고침
+        setRefetchTrigger((prev) => prev + 1);
       } catch (error) {
         const errorMessage = `구성원 삭제 실패: ${error instanceof Error ? error.message : '알 수 없는 에러'}`;
         setDeleteMessage(errorMessage);
@@ -111,14 +119,19 @@ export default function DashboardEdit() {
           key={member.id}
           type='MembersItem'
           user={member}
-          userId={member.userId}
+          userId={member.userId} // ⭐️ [유지] 공통 컴포넌트 제약 때문에 유지
           onDelete={handleDelete}>
-          <DashboardItem.Content type='MembersItem' user={member} userId={member.userId} />
+          <DashboardItem.Content
+            type='MembersItem'
+            user={member}
+            userId={member.userId} // ⭐️ [유지] 공통 컴포넌트 제약 때문에 유지
+          />
           <DashboardItem.Action
             type='MembersItem'
             user={member}
-            userId={member.userId}
-            onDelete={() => handleDelete(member.userId)}
+            userId={member.userId} // ⭐️ [유지] 공통 컴포넌트 제약 때문에 유지
+            // ⭐️ [유지] API에 전달할 ID는 member.id로 유지
+            onDelete={() => handleDelete(member.id)}
           />
         </DashboardItem>
       ))
@@ -146,6 +159,7 @@ export default function DashboardEdit() {
         </DashboardList>
       </DashboardBody>
 
+      {/* 모달 렌더링 */}
       {isOpen && (
         <BaseModalFrame size={modalType} setOnModal={setIsOpen}>
           <p>{deleteMessage}</p>

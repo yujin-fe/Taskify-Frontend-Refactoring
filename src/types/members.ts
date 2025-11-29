@@ -8,6 +8,7 @@ export interface Member {
   updatedAt: string;
   isOwner: boolean;
   initials: string;
+  refetchKey?: number;
 }
 
 export interface MembersResponse {
