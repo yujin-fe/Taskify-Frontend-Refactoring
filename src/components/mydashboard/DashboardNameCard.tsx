@@ -23,7 +23,7 @@ export default function DashboardNameCard({ dashboard, isLoading }: DashboardNam
           className='name-card-base h-[58px] justify-start gap-4 px-5 py-5.5 sm:h-[70px]'>
           <div className={cn(DashboardColor({ colorName }))} />
           <div className='flex flex-1 items-center gap-2'>
-            <span>{title}</span>
+            <span className='font-lg-semibold text-gray-700'>{title}</span>
             {createdByMe && <Icons.Crown className='text-crown' />}
           </div>
           <Icons.ArrowRight />
