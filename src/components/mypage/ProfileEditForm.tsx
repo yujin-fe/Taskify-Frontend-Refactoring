@@ -34,6 +34,7 @@ export default function ProfileEditForm() {
   const [successMsg, setSuccessMsg] = useState('');
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    // TODO: useMutation 훅 구현 시 적용
     e.preventDefault();
 
     const { nickname } = authForm;
