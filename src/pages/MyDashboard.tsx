@@ -30,14 +30,7 @@ export default function MyDashboard() {
     fetchFn: () => getDashboards(params),
     params,
   });
-  if (isLoading) {
-    return (
-      <div className='flex flex-col gap-[70px] p-[24px]'>
-        <Skeleton className='h-[70px] w-[332px]' />
-        <Skeleton className='h-[390px] w-[960px]' />
-      </div>
-    );
-  }
+
   //TODO: 에러컴포넌트로 교체
   if (error) {
     return <div>대쉬보드를 불러오는데 실패했습니다.</div>;
@@ -46,8 +39,8 @@ export default function MyDashboard() {
   if (!dashboardsData) {
     return null;
   }
-
-  const pageCount = Math.ceil(dashboardsData.totalCount / PAGE_SIZE);
+  const totalCount = dashboardsData.totalCount;
+  const pageCount = Math.ceil(totalCount / PAGE_SIZE);
 
   return (
     <>
@@ -56,23 +49,22 @@ export default function MyDashboard() {
           <CreateButton className='h-[58px] font-lg-semibold' onClick={handleModalOpen}>
             새로운 대시보드
           </CreateButton>
-          {dashboardsData?.dashboards.map((dashboard, i) =>
-            isLoading ? (
-              <Skeleton key={`skeleton-${i}`} className='h-[70px] w-[332px]' />
-            ) : (
-              <DashboardNameCard key={dashboard.id} dashboard={dashboard} />
-            )
-          )}
+          {dashboardsData?.dashboards.map((dashboard) => (
+            <DashboardNameCard isLoading={isLoading} key={dashboard.id} dashboard={dashboard} />
+          ))}
         </div>
-        <div className='flex items-center justify-end gap-4'>
-          <PageIndicator currentPage={currentPage} totalPages={pageCount} />
-          <PageNation
-            onPrev={handlePrev}
-            onNext={handleNext}
-            prevDisabled={isPrevDisabled}
-            nextDisabled={currentPage === pageCount}
-          />
-        </div>
+        {totalCount !== 0 && (
+          <div className='flex items-center justify-end gap-4'>
+            <PageIndicator currentPage={currentPage} totalPages={pageCount} />
+            <PageNation
+              onPrev={handlePrev}
+              onNext={handleNext}
+              prevDisabled={isPrevDisabled}
+              nextDisabled={currentPage === pageCount}
+              className='bg-gray-0'
+            />
+          </div>
+        )}
       </div>
     </>
   );
