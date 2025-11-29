@@ -21,30 +21,17 @@ interface GetMemberListParams {
   page: number;
   size: number;
   dashboardId: string;
-  refetchKey?: number;
 }
 
 interface DashboardEditProps {
   dashboardId: string;
 }
 
-interface MemberWithInitials extends Member {
-  initials: string;
-}
-
-const calculateInitials = (nickname: string) => {
-  if (!nickname) {
-    return '';
-  }
-  return nickname.slice(0, 2).toUpperCase();
-};
-
 export default function DashboardEdit({ dashboardId }: DashboardEditProps) {
   const { currentPage, handlePrev, handleNext, isPrevDisabled } = usePagination();
   const { isOpen, handleModalOpen, handleModalClose: setIsOpen } = useBaseModal();
 
   const [deleteMessage, setDeleteMessage] = useState('');
-  const [refetchTrigger, setRefetchTrigger] = useState(0);
   const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null);
 
   const params: GetMemberListParams = useMemo(
@@ -52,12 +39,15 @@ export default function DashboardEdit({ dashboardId }: DashboardEditProps) {
       page: currentPage,
       size: MEMBERS_PAGE_SIZE,
       dashboardId: dashboardId || '',
-      refetchKey: refetchTrigger,
     }),
-    [currentPage, dashboardId, refetchTrigger]
+    [currentPage, dashboardId]
   );
 
-  const { data: memberData, isLoading } = useQuery<MembersResponse, GetMemberListParams>({
+  const {
+    data: memberData,
+    isLoading,
+    refetch,
+  } = useQuery<MembersResponse, GetMemberListParams>({
     fetchFn: async (queryParams?: GetMemberListParams): Promise<MembersResponse> => {
       const effectiveParams = queryParams || params;
 
@@ -72,14 +62,12 @@ export default function DashboardEdit({ dashboardId }: DashboardEditProps) {
     params,
   });
 
-  const members: MemberWithInitials[] = useMemo(() => {
+  const members: Member[] = useMemo(() => {
     if (!memberData) {
       return [];
     }
-    return memberData.members.map((member) => ({
-      ...member,
-      initials: calculateInitials(member.nickname),
-    }));
+
+    return memberData.members;
   }, [memberData]);
 
   const calculatedTotalPages = useMemo(() => {
@@ -89,7 +77,6 @@ export default function DashboardEdit({ dashboardId }: DashboardEditProps) {
 
   const isNextDisabled = currentPage >= calculatedTotalPages;
 
-  // 삭제 뮤테이션
   const deleteMutation = useMutation({
     mutationFn: deleteMemberdata,
     onSuccess: () => {
@@ -101,7 +88,7 @@ export default function DashboardEdit({ dashboardId }: DashboardEditProps) {
 
       setDeleteMessage(`구성원 '${nickname}' 님의 삭제가 완료되었습니다.`);
       handleModalOpen();
-      setRefetchTrigger((prev) => prev + 1);
+      refetch();
     },
     onError: (error) => {
       const errorMessage =
@@ -140,7 +127,7 @@ export default function DashboardEdit({ dashboardId }: DashboardEditProps) {
         userId={member.userId}
         onDelete={handleDelete}>
         <DashboardItem.Content type='MembersItem' user={member} userId={member.userId} />
-        {/* 소유자 Action 버튼 표시 주석 처리 */}
+        {/* TODO: 소유자 Action 버튼 표시 주석 처리 */}
         <DashboardItem.Action
           type='MembersItem'
           user={member}

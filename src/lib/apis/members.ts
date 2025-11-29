@@ -4,7 +4,6 @@ export interface GetMemberListParams {
   dashboardId: string;
   page?: number;
   size?: number;
-  refetchKey?: number;
 }
 
 interface DeleteMemberParams {
