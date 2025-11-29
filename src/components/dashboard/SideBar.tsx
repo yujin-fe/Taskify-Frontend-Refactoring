@@ -48,13 +48,15 @@ export default function SideBar({
           color='primary'
           className={cn(isCollapsed && 'group-hover:hidden')}
         />
-        <button type='button' onClick={onClickSidebarIcon}>
-          <Icons.Sidebar
-            className={cn(
-              'cursor-pointer text-gray-500',
-              isCollapsed && 'hidden group-hover:block'
-            )}
-          />
+        <button
+          type='button'
+          onClick={onClickSidebarIcon}
+          className={cn(
+            'flex h-8 w-9 cursor-pointer items-center justify-center rounded-md hover:bg-gray-100',
+            isCollapsed
+              && 'hidden group-hover:block group-hover:flex group-hover:h-8 group-hover:w-9'
+          )}>
+          <Icons.Sidebar className='text-gray-500' />
         </button>
       </div>
       {isLoading ? (
