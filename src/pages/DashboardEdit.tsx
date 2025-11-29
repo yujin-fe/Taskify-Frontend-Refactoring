@@ -17,6 +17,8 @@ import type { MembersResponse, Member } from '@/types/members';
 
 const MEMBERS_PAGE_SIZE = 4;
 
+// 유즈 파람스를 리액트 라우터 돔으로 쓰고 있어서 에러가 남 리액트 라우터 돔 안쓰고 싶어
+
 interface GetMemberListParams {
   page: number;
   size: number;
@@ -39,7 +41,9 @@ export default function DashboardEdit() {
   const { currentPage, handlePrev, handleNext, isPrevDisabled } = usePagination();
   const { isOpen, handleModalOpen, handleModalClose: setIsOpen } = useBaseModal();
   const [deleteMessage, setDeleteMessage] = useState('');
-  const [modalType, setModalType] = useState<'Login' | 'Account'>('Login');
+
+  // ⭐️ [제거] modalType 상태 제거 (이전에는 modalSize로 이름이 변경되었었음)
+  // const [modalSize, setModalSize] = useState<'Login' | 'Account'>('Login');
 
   const [refetchTrigger, setRefetchTrigger] = useState(0);
 
@@ -117,7 +121,7 @@ export default function DashboardEdit() {
 
       if (!currentDashboardId) {
         setDeleteMessage('오류: 대시보드 ID를 찾을 수 없어 구성원 삭제를 진행할 수 없습니다.');
-        setModalType('Account');
+        // ⭐️ [제거] setModalSize('Account');
         handleModalOpen();
         return;
       }
@@ -129,7 +133,7 @@ export default function DashboardEdit() {
         });
 
         setDeleteMessage(`구성원 '${nickname}' 님의 삭제가 완료되었습니다.`);
-        setModalType('Login');
+        // ⭐️ [제거] setModalSize('Login');
         handleModalOpen();
 
         setLocalMembers((prevMembers) =>
@@ -141,7 +145,7 @@ export default function DashboardEdit() {
       } catch (error) {
         const errorMessage = `구성원 삭제 실패: ${error instanceof Error ? error.message : '알 수 없는 에러'}`;
         setDeleteMessage(errorMessage);
-        setModalType('Account');
+        // ⭐️ [제거] setModalSize('Account');
         handleModalOpen();
       }
     },
@@ -163,7 +167,7 @@ export default function DashboardEdit() {
           onDelete={handleDelete}>
           <DashboardItem.Content type='MembersItem' user={member} userId={member.userId} />
 
-          {/*소유자(isOwner: true)가 아닐 때만 삭제 버튼을 렌더링합니다. */}
+          {/* 소유자(isOwner: true)가 아닐 때만 삭제 버튼을 렌더링합니다. */}
           {!member.isOwner && (
             <DashboardItem.Action
               type='MembersItem'
@@ -198,9 +202,9 @@ export default function DashboardEdit() {
         </DashboardList>
       </DashboardBody>
 
-      {/* 모달 렌더링 */}
-      {isOpen && (
-        <BaseModalFrame size={modalType} setOnModal={setIsOpen}>
+      {/* ⭐️ [수정] size prop 제거 및 deleteMessage가 있을 때만 내용 렌더링 */}
+      {isOpen && deleteMessage && (
+        <BaseModalFrame setOnModal={setIsOpen}>
           <p>{deleteMessage}</p>
         </BaseModalFrame>
       )}
