@@ -1,6 +1,6 @@
 interface UploadImageFileType {
   file: File | null;
-  requestFn: (formData: FormData) => Promise<string>;
+  requestFn: (formData: FormData) => Promise<Record<string, string>>;
   key?: string;
 }
 
