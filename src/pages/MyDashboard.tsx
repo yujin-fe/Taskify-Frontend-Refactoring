@@ -2,7 +2,6 @@ import PageIndicator from '@/components/common/PageIndicator';
 import PageNation from '@/components/common/PageNation';
 import CreateButton from '@/components/dashboard/CreateButton';
 import DashboardNameCard from '@/components/mydashboard/DashboardNameCard';
-import Skeleton from '@/components/skeleton/Skeleton';
 import { NEW_DASHBOARD } from '@/constants/modalName';
 import { useModal } from '@/hooks/useModal';
 import { usePagination } from '@/hooks/usePagination';
