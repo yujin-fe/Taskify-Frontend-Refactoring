@@ -29,13 +29,15 @@ const useMutation = <TData = unknown, TVariables = unknown>({
     } catch (error: unknown) {
       let errorMessage = '알 수 없는 오류가 발생했습니다.';
       if (axios.isAxiosError(error)) {
-        errorMessage = error.response?.data?.message;
+        const message = error.response?.data.message;
+        if (typeof message === 'string') {
+          errorMessage = message;
+        }
       } else if (error instanceof Error) {
         errorMessage = error.message;
       }
       setError(errorMessage);
       onError?.(errorMessage);
-      throw error;
     } finally {
       setIsLoading(false);
     }
