@@ -12,9 +12,9 @@ export default function DashboardCard({ cardData }: DashboardCardProps) {
   const { imageUrl, tags, title, dueDate, assignee } = cardData;
 
   return (
-    <div className='flex flex-row overflow-hidden rounded-[6px] border border-gray-300 bg-gray-0 px-[20px] py-[16px] select-none sm:items-center md:max-w-[314px] md:flex-col md:items-start'>
+    <div className='flex flex-col overflow-hidden rounded-[6px] border border-gray-300 bg-gray-0 p-[12px] pb-[6px] select-none sm:flex-row sm:items-center sm:px-[20px] sm:py-[16px] md:max-w-[314px] md:flex-col md:items-start'>
       {imageUrl && (
-        <div className='aspect-[17/10] sm:h-[53px] md:mb-[15px] md:h-[160px] md:w-[274px]'>
+        <div className='mr-0 mb-[6px] aspect-[17/10] h-[150px] sm:mr-[20px] sm:mb-0 sm:h-[53px] md:mr-0 md:mb-[15px] md:h-[160px] md:w-[274px]'>
           <img
             src={imageUrl}
             alt={title + ' 이미지'}
@@ -24,15 +24,15 @@ export default function DashboardCard({ cardData }: DashboardCardProps) {
       )}
       <div className='w-full'>
         <span className='mb-[10px] block w-full truncate'>{title}</span>
-        <div className='flex w-full items-center gap-[16px] sm:items-end md:flex-col md:items-start md:gap-[8px]'>
-          <div className='flex shrink-0 flex-wrap gap-[6px] sm:w-[60%] md:w-fit'>
+        <div className='flex w-full flex-col items-start gap-[6px] sm:flex-row sm:items-end sm:gap-[16px] md:flex-col md:items-start md:gap-[8px]'>
+          <div className='flex shrink-0 flex-wrap gap-[6px] sm:w-[50%] md:w-fit'>
             {tags.map((t, idx) => (
               <Tag key={t + idx} color={getProfileColorForId(idx)}>
                 {t}
               </Tag>
             ))}
           </div>
-          <div className='flex w-full justify-between'>
+          <div className='flex w-full justify-between sm:justify-end sm:gap-[12px] md:justify-between'>
             <div className='flex items-center gap-[6px] text-gray-500'>
               <Icons.Calendar width={18} height={18} />
               <span className='font-xs-medium'>{dueDate ?? '마감일을 정해주세요.'}</span>
