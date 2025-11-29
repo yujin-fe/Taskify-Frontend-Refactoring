@@ -1,13 +1,3 @@
-// import { api } from '@/lib/axios';
-
-// 추후 삭제 예정
-
-// /** 대시보드 멤버 목록 조회 */
-// export const getMemberList = async (dashboardId: string) => {
-//   const res = await api.get(`/members?page=1&size=20&dashboardId=${dashboardId}`);
-//   return res.data;
-// };
-
 import { api } from '@/lib/axios';
 
 export interface GetMemberListParams {
@@ -41,5 +31,5 @@ export const deleteMemberdata = async (params: DeleteMemberParams) => {
 
   const res = await api.delete(`/members/${memberId}`);
 
-  return res.data;
+  return res;
 };

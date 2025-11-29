@@ -1,5 +1,4 @@
 import { useMemo, useCallback, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import BaseModalFrame from '@/components/common/modal/BaseModalFrame';
 import PageIndicator from '@/components/common/PageIndicator';
 import PageNation from '@/components/common/PageNation';
@@ -10,6 +9,7 @@ import DashboardHeader from '@/components/dashboard/table/DashboardHeader';
 import DashboardItem from '@/components/dashboard/table/DashboardItem';
 import DashboardList from '@/components/dashboard/table/DashboardList';
 import useBaseModal from '@/hooks/useBaseModal';
+import useMutation from '@/hooks/useMutation';
 import { usePagination } from '@/hooks/usePagination';
 import useQuery from '@/hooks/useQuery';
 import { deleteMemberdata, getMemberList } from '@/lib/apis/members';
@@ -17,13 +17,19 @@ import type { MembersResponse, Member } from '@/types/members';
 
 const MEMBERS_PAGE_SIZE = 4;
 
-// 유즈 파람스를 리액트 라우터 돔으로 쓰고 있어서 에러가 남 리액트 라우터 돔 안쓰고 싶어
-
 interface GetMemberListParams {
   page: number;
   size: number;
   dashboardId: string;
   refetchKey?: number;
+}
+
+interface DashboardEditProps {
+  dashboardId: string;
+}
+
+interface MemberWithInitials extends Member {
+  initials: string;
 }
 
 const calculateInitials = (nickname: string) => {
@@ -33,152 +39,117 @@ const calculateInitials = (nickname: string) => {
   return nickname.slice(0, 2).toUpperCase();
 };
 
-export default function DashboardEdit() {
-  const { dashboardId } = useParams<{ teamId: string; dashboardId: string }>();
-
-  const currentDashboardId = dashboardId;
-
+export default function DashboardEdit({ dashboardId }: DashboardEditProps) {
   const { currentPage, handlePrev, handleNext, isPrevDisabled } = usePagination();
   const { isOpen, handleModalOpen, handleModalClose: setIsOpen } = useBaseModal();
+
   const [deleteMessage, setDeleteMessage] = useState('');
-
-  // ⭐️ [제거] modalType 상태 제거 (이전에는 modalSize로 이름이 변경되었었음)
-  // const [modalSize, setModalSize] = useState<'Login' | 'Account'>('Login');
-
   const [refetchTrigger, setRefetchTrigger] = useState(0);
+  const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null);
 
   const params: GetMemberListParams = useMemo(
     () => ({
       page: currentPage,
       size: MEMBERS_PAGE_SIZE,
-      dashboardId: currentDashboardId || '',
+      dashboardId: dashboardId || '',
       refetchKey: refetchTrigger,
     }),
-    [currentPage, currentDashboardId, refetchTrigger]
+    [currentPage, dashboardId, refetchTrigger]
   );
 
   const { data: memberData, isLoading } = useQuery<MembersResponse, GetMemberListParams>({
-    fetchFn: () => {
-      if (!currentDashboardId) {
-        return Promise.resolve({
-          members: [],
-          totalCount: 0,
-        } as MembersResponse);
+    fetchFn: async (queryParams?: GetMemberListParams): Promise<MembersResponse> => {
+      const effectiveParams = queryParams || params;
+
+      if (!effectiveParams.dashboardId) {
+        return { members: [], totalCount: 0 };
       }
-      return getMemberList(params);
+
+      const data = await getMemberList(effectiveParams);
+
+      return data;
     },
     params,
   });
 
-  const [localMembers, setLocalMembers] = useState<Member[] | null>(null);
-  const [localTotalCount, setLocalTotalCount] = useState<number | null>(null);
-
-  const members: Member[] = useMemo(() => {
-    if (localMembers) {
-      return localMembers;
-    }
-
+  const members: MemberWithInitials[] = useMemo(() => {
     if (!memberData) {
       return [];
     }
-
-    const filteredMembers = memberData.members;
-
-    const membersWithInitials = filteredMembers.map((member) => {
-      const calculatedInitial = calculateInitials(member.nickname);
-
-      return {
-        ...member,
-        initials: calculatedInitial,
-      };
-    });
-
-    // eslint-disable-next-line react-hooks/set-state-in-render
-    setLocalMembers(membersWithInitials);
-
-    // eslint-disable-next-line react-hooks/set-state-in-render
-    setLocalTotalCount(filteredMembers.length);
-
-    return membersWithInitials;
-  }, [memberData, localMembers]);
+    return memberData.members.map((member) => ({
+      ...member,
+      initials: calculateInitials(member.nickname),
+    }));
+  }, [memberData]);
 
   const calculatedTotalPages = useMemo(() => {
-    const total = localTotalCount !== null ? localTotalCount : memberData?.totalCount || 0;
-    if (total === 0 || params.size === 0) {
-      return 1;
-    }
-    return Math.ceil(total / params.size);
-  }, [localTotalCount, memberData?.totalCount, params.size]);
+    const total = memberData?.totalCount || 0;
+    return total === 0 || params.size === 0 ? 1 : Math.ceil(total / params.size);
+  }, [memberData?.totalCount, params.size]);
 
-  const isNextDisabled = useMemo(() => {
-    return currentPage >= calculatedTotalPages;
-  }, [currentPage, calculatedTotalPages]);
+  const isNextDisabled = currentPage >= calculatedTotalPages;
+
+  // 삭제 뮤테이션
+  const deleteMutation = useMutation({
+    mutationFn: deleteMemberdata,
+    onSuccess: () => {
+      if (deleteTargetId === null) {
+        return;
+      }
+      const deletedMember = members.find((m) => m.id === deleteTargetId);
+      const nickname = deletedMember ? deletedMember.nickname : `ID ${deleteTargetId}`;
+
+      setDeleteMessage(`구성원 '${nickname}' 님의 삭제가 완료되었습니다.`);
+      handleModalOpen();
+      setRefetchTrigger((prev) => prev + 1);
+    },
+    onError: (error) => {
+      const errorMessage =
+        error instanceof Error
+          ? `구성원 삭제 실패: ${error.message}`
+          : '구성원 삭제 중 알 수 없는 오류가 발생했습니다.';
+      setDeleteMessage(errorMessage);
+      handleModalOpen();
+    },
+  });
 
   const handleDelete = useCallback(
-    async (memberId: number) => {
-      const memberToDelete = members.find((m) => m.id === memberId);
-      const nickname = memberToDelete ? memberToDelete.nickname : `ID ${memberId}`;
-
-      if (!currentDashboardId) {
-        setDeleteMessage('오류: 대시보드 ID를 찾을 수 없어 구성원 삭제를 진행할 수 없습니다.');
-        // ⭐️ [제거] setModalSize('Account');
+    (memberId: number) => {
+      if (!dashboardId) {
+        setDeleteMessage('오류: 대시보드 ID를 찾을 수 없습니다.');
         handleModalOpen();
         return;
       }
 
-      try {
-        await deleteMemberdata({
-          memberId: memberId,
-          dashboardId: currentDashboardId,
-        });
-
-        setDeleteMessage(`구성원 '${nickname}' 님의 삭제가 완료되었습니다.`);
-        // ⭐️ [제거] setModalSize('Login');
-        handleModalOpen();
-
-        setLocalMembers((prevMembers) =>
-          prevMembers ? prevMembers.filter((m) => m.id !== memberId) : null
-        );
-        setLocalTotalCount((prevCount) => (prevCount !== null ? Math.max(0, prevCount - 1) : null));
-
-        setRefetchTrigger((prev) => prev + 1);
-      } catch (error) {
-        const errorMessage = `구성원 삭제 실패: ${error instanceof Error ? error.message : '알 수 없는 에러'}`;
-        setDeleteMessage(errorMessage);
-        // ⭐️ [제거] setModalSize('Account');
-        handleModalOpen();
-      }
+      setDeleteTargetId(memberId);
+      deleteMutation.mutate({ memberId, dashboardId });
     },
-    [currentDashboardId, handleModalOpen, members]
+    [dashboardId, deleteMutation, handleModalOpen]
   );
 
-  const memberListItems =
-    isLoading && currentDashboardId ? (
-      <p className='p-5'>구성원 목록 로딩 중...</p>
-    ) : currentDashboardId && members.length === 0 && calculatedTotalPages === 1 ? (
-      <p className='p-5'>등록된 구성원이 없습니다.</p>
-    ) : (
-      members.map((member) => (
-        <DashboardItem
-          key={member.id}
+  const memberListItems = isLoading ? (
+    <p className='p-5'>구성원 목록 로딩 중...</p>
+  ) : members.length === 0 ? (
+    <p className='p-5'>등록된 구성원이 없습니다.</p>
+  ) : (
+    members.map((member) => (
+      <DashboardItem
+        key={member.id}
+        type='MembersItem'
+        user={member}
+        userId={member.userId}
+        onDelete={handleDelete}>
+        <DashboardItem.Content type='MembersItem' user={member} userId={member.userId} />
+        {/* 소유자 Action 버튼 표시 주석 처리 */}
+        <DashboardItem.Action
           type='MembersItem'
           user={member}
           userId={member.userId}
-          onDelete={handleDelete}>
-          <DashboardItem.Content type='MembersItem' user={member} userId={member.userId} />
-
-          {/* 소유자(isOwner: true)가 아닐 때만 삭제 버튼을 렌더링합니다. */}
-          {!member.isOwner && (
-            <DashboardItem.Action
-              type='MembersItem'
-              user={member}
-              userId={member.userId}
-              onDelete={() => handleDelete(member.id)}
-            />
-          )}
-        </DashboardItem>
-      ))
-    );
+          onDelete={() => handleDelete(member.id)}
+        />
+      </DashboardItem>
+    ))
+  );
 
   return (
     <DashboardContainer type='Members'>
@@ -202,8 +173,7 @@ export default function DashboardEdit() {
         </DashboardList>
       </DashboardBody>
 
-      {/* ⭐️ [수정] size prop 제거 및 deleteMessage가 있을 때만 내용 렌더링 */}
-      {isOpen && deleteMessage && (
+      {isOpen && (
         <BaseModalFrame setOnModal={setIsOpen}>
           <p>{deleteMessage}</p>
         </BaseModalFrame>
