@@ -75,10 +75,10 @@ export default function InvitedDashboard() {
         <div className='flex max-h-[625px] flex-col sm:h-[400px] lg:h-[464px]'>
           {!isMobile && (
             <div className='flex w-fit items-center gap-4 sm:pl-[28px] md:pl-[76px]'>
-              <h4 className='w-[153px] font-md-regular text-gray-400 sm:font-lg-regular lg:w-[308px]'>
+              <h4 className='w-[153px] font-md-regular text-gray-400 sm:font-lg-regular lg:w-[298px]'>
                 이름
               </h4>
-              <h4 className='w-[117px] font-md-regular text-gray-400 sm:w-[127px] sm:font-lg-regular lg:w-[316px]'>
+              <h4 className='w-[117px] font-md-regular text-gray-400 sm:w-[127px] sm:font-lg-regular lg:w-[306px]'>
                 초대자
               </h4>
               <h4 className='w-[154px] px-[47px] font-md-regular text-gray-400 sm:font-lg-regular lg:w-[178px] lg:pr-[62px] lg:pl-[56px]'>
@@ -93,10 +93,10 @@ export default function InvitedDashboard() {
                   <li
                     key={invitation.id}
                     className={`flex w-full gap-[16px] border-b border-gray-200 py-[20px] sm:pl-[28px] md:pl-[76px]`}>
-                    <span className='inline-block w-[153px] lg:w-[308px]'>
+                    <span className='inline-block w-[153px] lg:w-[298px]'>
                       {invitation.dashboard.title}
                     </span>
-                    <span className='inline-block w-[117px] lg:w-[316px]'>
+                    <span className='inline-block w-[117px] lg:w-[306px]'>
                       {invitation.inviter.nickname}
                     </span>
                     <div className='flex w-[154px] gap-[10px] lg:w-[178px]'>
