@@ -182,7 +182,7 @@ export default function DashboardDetail() {
     }
 
     const isDuplicate = columnDataList.data.some(
-      (col) => col.title.trim() === nextTitle && col.id !== selectedColumn.id
+      (col) => col.title.trim() === nextTitle.trim() && col.id !== selectedColumn.id
     );
 
     if (isDuplicate) {
