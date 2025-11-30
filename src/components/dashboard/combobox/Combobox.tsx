@@ -21,9 +21,9 @@ interface ComboboxProps {
  * 하위 컴포넌트에 Context 형태로 전달합니다.
  *
  * @example
- * const [value, setValue] = useState('');
+ * const [value, setValue] = useState<Assignee | null>(null);
  *
- * <Combobox value={value} setValue={setValue}>
+ * <Combobox id="assignee" value={value} setValue={setValue}>
  *   <Combobox.Trigger placeholder='담당자를 선택해주세요.' name='user' />
  *   <Combobox.List>
  *     <Combobox.Item value="홍길동">
