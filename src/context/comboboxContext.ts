@@ -1,11 +1,12 @@
 import { createContext } from 'react';
+import type { Assignee } from '@/types/card';
 
 interface ComboboxContextType {
   id: string;
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
-  selectedValue: number;
-  setSelectedValue: (value: number) => void;
+  selectedValue: Assignee;
+  setSelectedValue: (value: Assignee) => void;
   searchQuery: string;
   setSearchQuery: (query: string) => void;
   selectedNode: null | React.ReactNode;

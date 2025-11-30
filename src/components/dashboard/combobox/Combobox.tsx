@@ -4,12 +4,13 @@ import ComboboxList from '@/components/dashboard/combobox/ComboboxList';
 import ComboboxTrigger from '@/components/dashboard/combobox/ComboboxTrigger';
 import ComboboxContext from '@/context/comboboxContext';
 import useComboboxState from '@/hooks/useComboboxState';
+import type { Assignee } from '@/types/card';
 
 interface ComboboxProps {
   id: string;
   children: React.ReactNode;
-  value: number;
-  setValue: (value: number) => void;
+  value: Assignee;
+  setValue: (value: Assignee) => void;
 }
 
 /**
