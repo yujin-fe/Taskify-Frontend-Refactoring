@@ -24,13 +24,6 @@ export default function ChangeColumnModal({
     setColumnName(initialName);
   }, [initialName]);
 
-  useEffect(() => {
-    return () => {
-      setColumnName('');
-      setErrorMessage('');
-    };
-  }, []);
-
   const handleSubmit = async () => {
     setErrorMessage('');
     try {
