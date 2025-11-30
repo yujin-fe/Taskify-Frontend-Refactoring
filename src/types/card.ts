@@ -21,5 +21,5 @@ export interface CardDetailResponse {
 export interface CardsResponse {
   cards: CardDetailResponse[];
   totalCount: number;
-  cursorId: null;
+  cursorId: null | number;
 }
