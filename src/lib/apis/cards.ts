@@ -1,18 +1,24 @@
-import { api } from '@/lib/axios';
+import { api, fileApi } from '@/lib/axios';
 
-interface CreateCardType {
-  assigneeUserId: number;
+export interface CreateCardType {
+  assigneeUserId: number | null;
   dashboardId: number;
   columnId: number;
   title: string;
   description: string;
-  dueDate: string;
+  dueDate: string | null;
   tags: string[];
-  imageUrl: string;
+  imageUrl: string | null;
 }
 
 /** 카드(할일) 생성 api */
 export const createCard = async (reqBody: CreateCardType) => {
   const res = await api.post('/cards', reqBody);
+  return res;
+};
+
+/** 카드 이미지 업로드 api */
+export const cardImageUpload = async (columnId: number, image: FormData) => {
+  const res = await fileApi.post(`/columns/${columnId}/card-image`, image);
   return res;
 };
