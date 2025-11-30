@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import Icons from '@/assets/icons';
 import notInvited from '@/assets/images/dashboard/no-invited-dashboard.png';
 import Button from '@/components/common/Button';
@@ -11,14 +12,15 @@ import type { InvitationParams, Invitation, MyInvitationResponse } from '@/types
 const INVITATION_LIST_SIZE = 7;
 
 export default function InvitedDashboard() {
+  const [search, setSearch] = useState<null | string>(null);
   const isMobile = useResponsiveValue({
     mobile: true,
     tablet: false,
     desktop: false,
   });
+
   const params: InvitationParams = {
     size: INVITATION_LIST_SIZE,
-    title: null,
   };
 
   const onSuccess = (prevData: MyInvitationResponse | null, newData: MyInvitationResponse) => {
@@ -31,11 +33,28 @@ export default function InvitedDashboard() {
     };
   };
 
-  const { data, error, lastItemRef } = useInfiniteScroll({
+  const { data, error, setData, lastItemRef } = useInfiniteScroll({
     fetchFn: (params) => getMyInvitations(params),
     params,
     onSuccess,
   });
+
+  const handleSearch = async (value: string) => {
+    if (!value) {
+      setSearch(value);
+      const data = await getMyInvitations({
+        size: 100,
+        cursorId: undefined,
+        title: null,
+      });
+      setData(data);
+    }
+    setSearch(value);
+    const data = await getMyInvitations({
+      title: value,
+    });
+    setData(data);
+  };
 
   //TODO: 에러발생 컴포넌트
   if (error) {
@@ -95,7 +114,7 @@ export default function InvitedDashboard() {
     );
   };
 
-  return invitations.length === 0 ? (
+  return params.title === null && invitations.length === 0 ? (
     nullList()
   ) : (
     <>
@@ -106,7 +125,7 @@ export default function InvitedDashboard() {
               초대받은 대시보드
             </Title>
           </DashboardHeader>
-          <Input value={'임시값'}>
+          <Input value={search ?? ''} onChange={handleSearch}>
             <Input.Group className='flex h-[40px] items-center'>
               <Input.PrefixIcon>
                 <Icons.Search className='text-gray-700' />

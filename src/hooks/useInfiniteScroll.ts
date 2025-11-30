@@ -40,8 +40,6 @@ const useInfiniteScroll = <TData extends InfiniteScrollResType, TParams = object
         return onSuccess(prev, data);
       });
       setCursor(data.cursorId);
-      //TODO:콘솔삭제
-      console.log(data, cursor);
     } catch (error) {
       setError(error);
     } finally {
@@ -84,6 +82,9 @@ const useInfiniteScroll = <TData extends InfiniteScrollResType, TParams = object
 
   return {
     data,
+    cursor,
+    setData,
+    setCursor,
     isLoading,
     error,
     lastItemRef,
