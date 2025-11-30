@@ -4,12 +4,19 @@ import CreateButton from '@/components/dashboard/CreateButton';
 import DashboardCard from '@/components/dashboard-detail/card/DashboardCard';
 import ColumnContainer from '@/components/dashboard-detail/column/ColumnContainer';
 import ColumnInfoHeader from '@/components/dashboard-detail/column/ColumnInfoHeader';
+import ChangeCardModal from '@/components/dashboard-detail/modal/ChangeCardModal';
 import ChangeColumnModal from '@/components/dashboard-detail/modal/ChangeColumnModal';
 import CreateCardModal from '@/components/dashboard-detail/modal/CreateCardModal';
 import CreateColumnModal from '@/components/dashboard-detail/modal/CreateColumnModal';
 import DeleteColumnModal from '@/components/dashboard-detail/modal/DeleteColumnModal';
 import ColumnSkeleton from '@/components/skeleton/ColumnSkeleton';
-import { CHANGE_COLUMN, CREATE_CARD, CREATE_COLUMN, DELETE_COLUMN } from '@/constants/modalName';
+import {
+  CHANGE_CARD,
+  CHANGE_COLUMN,
+  CREATE_CARD,
+  CREATE_COLUMN,
+  DELETE_COLUMN,
+} from '@/constants/modalName';
 import { useModal } from '@/hooks/useModal';
 import useMutation from '@/hooks/useMutation';
 import useQuery from '@/hooks/useQuery';
@@ -74,18 +81,13 @@ export default function DashboardDetail() {
 
   // 카드 모달
   const createCardModal = useModal(CREATE_CARD);
+  const changeCardModal = useModal(CHANGE_CARD);
 
-  const {
-    data: columnDataList,
-    isLoading: isColumnLoading,
-    setData: setColumnDataList,
-    refetch,
-  } = useQuery<ColumnsResponse>({
+  const columnQuery = useQuery<ColumnsResponse>({
     fetchFn: () => getColumnList(dashboardId || ''),
     params: { dashboardId },
   });
-
-  const { data: memberData } = useQuery<MembersResponse>({
+  const memberQuery = useQuery<MembersResponse>({
     fetchFn: () => getMemberList({ dashboardId: dashboardId ?? '' }),
   });
 
@@ -96,7 +98,7 @@ export default function DashboardDetail() {
       if (!response) {
         return;
       }
-      setColumnDataList((prev) => {
+      columnQuery.setData((prev) => {
         if (!prev) {
           return {
             result: 'SUCCESS',
@@ -121,7 +123,7 @@ export default function DashboardDetail() {
         return;
       }
 
-      setColumnDataList((prev) => {
+      columnQuery.setData((prev) => {
         if (!prev) {
           return prev;
         }
@@ -148,7 +150,7 @@ export default function DashboardDetail() {
   const deleteColumnMutation = useMutation({
     mutationFn: (columnId: number) => deleteColumn(columnId),
     onSuccess: () => {
-      refetch();
+      columnQuery.refetch();
       deleteColumnModal.handleModalClose();
     },
   });
@@ -167,7 +169,7 @@ export default function DashboardDetail() {
     return <div>유효하지 않은 대시보드입니다.</div>;
   }
 
-  if (isColumnLoading || !columnDataList || !memberData) {
+  if (columnQuery.isLoading || !columnQuery.data || !memberQuery.data) {
     return (
       <div className='flex flex-col md:flex-row'>
         {Array.from({ length: 3 }).map((_, i) => (
@@ -179,7 +181,9 @@ export default function DashboardDetail() {
 
   // column handler
   const handleSubmitCreateColumn = async (columnName: string) => {
-    const isDuplicate = columnDataList.data.some((col) => col.title.trim() === columnName.trim());
+    const isDuplicate = columnQuery.data?.data.some(
+      (col) => col.title.trim() === columnName.trim()
+    );
 
     if (isDuplicate) {
       throw new Error('중복된 컬럼 이름입니다.');
@@ -196,7 +200,7 @@ export default function DashboardDetail() {
       return;
     }
 
-    const isDuplicate = columnDataList.data.some(
+    const isDuplicate = columnQuery.data?.data.some(
       (col) => col.title.trim() === nextTitle.trim() && col.id !== selectedColumn.id
     );
 
@@ -231,13 +235,13 @@ export default function DashboardDetail() {
     await createCardMutation.mutate(reqBody);
   };
 
-  const canAddColumn = columnDataList.data.length < 10;
+  const canAddColumn = columnQuery.data.data.length < 10;
 
   return (
     <>
       <div className='scrollbar-hidden flex flex-col overflow-hidden md:flex-row md:overflow-x-auto'>
         <div className='flex flex-col md:flex-row'>
-          {columnDataList?.data.map((column) => (
+          {columnQuery.data.data.map((column) => (
             <ColumnContainer key={column.id}>
               {/* TODO: totalCount는 카드 조회 모달에서 가져와야 함 */}
               <ColumnInfoHeader
@@ -295,6 +299,7 @@ export default function DashboardDetail() {
           </>
         )}
       </div>
+      {/* 컬럼 생성 모달 */}
       {createColumnModal.isOpen && (
         <CreateColumnModal
           serverErrorMessage={createColumnMutation.error}
@@ -302,6 +307,7 @@ export default function DashboardDetail() {
         />
       )}
 
+      {/* 컬럼 수정 모달 */}
       {changeColumnModal.isOpen && selectedColumn && (
         <ChangeColumnModal
           initialName={selectedColumn.title}
@@ -314,6 +320,7 @@ export default function DashboardDetail() {
         />
       )}
 
+      {/* 컬럼 삭제 모달 */}
       {deleteColumnModal.isOpen && selectedColumn && (
         <DeleteColumnModal
           isLoading={deleteColumnMutation.isLoading}
@@ -321,13 +328,18 @@ export default function DashboardDetail() {
           onDelete={handleSubmitDeleteColumn}
         />
       )}
+
+      {/* 할 일 생성 모달 */}
       {createCardModal.isOpen && (
         <CreateCardModal
           serverErrorMessage={createCardMutation.error}
           onSubmit={handleSubmitCreateCard}
-          memberData={memberData}
+          memberData={memberQuery.data}
         />
       )}
+
+      {/* 할 일 수정 모달 */}
+      {changeCardModal.isOpen && <ChangeCardModal memberData={memberQuery.data} />}
     </>
   );
 }
