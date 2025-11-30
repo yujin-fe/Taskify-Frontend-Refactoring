@@ -5,7 +5,7 @@ import { formatDueDate } from '@/utils/formatDateTime';
 export const createCardRequestBody = (
   formValue: CardInitialValueType,
   columnId: number,
-  dashboardId: string | undefined,
+  dashboardId: string,
   imageUrl: string | null
 ): CreateCardType => ({
   assigneeUserId: formValue.assigneeUser?.userId ?? null,
