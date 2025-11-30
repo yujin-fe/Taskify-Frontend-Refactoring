@@ -8,7 +8,7 @@ export const createCardRequestBody = (
   dashboardId: string,
   imageUrl: string | null
 ): CreateCardType => ({
-  assigneeUserId: formValue.assigneeUser?.userId ?? null,
+  assigneeUserId: formValue.assigneeUser?.userId ?? 0,
   dashboardId: Number(dashboardId),
   columnId,
   title: formValue.title,
