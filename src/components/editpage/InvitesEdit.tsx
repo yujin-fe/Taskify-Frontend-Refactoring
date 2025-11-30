@@ -10,7 +10,7 @@ import DashboardList from '@/components/dashboard/table/DashboardList';
 import { usePagination } from '@/hooks/usePagination';
 import useQuery from '@/hooks/useQuery';
 import { getInvitationList } from '@/lib/apis/Invitations';
-import type { InvitationsResponse, Invitation } from '@/types/invitations';
+import type { InvitationResponse, Invitation } from '@/types/invitations';
 
 const INVITES_PAGE_SIZE = 5;
 
@@ -27,7 +27,7 @@ export default function InvitesEdit() {
     [dashboardId, currentPage]
   );
 
-  const { data: inviteData, isLoading } = useQuery<InvitationsResponse>({
+  const { data: inviteData, isLoading } = useQuery<InvitationResponse>({
     fetchFn: () => getInvitationList(params),
     params,
   });
