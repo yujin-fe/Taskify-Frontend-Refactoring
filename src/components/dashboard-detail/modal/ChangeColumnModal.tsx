@@ -29,7 +29,7 @@ export default function ChangeColumnModal({
     try {
       await onSubmit(columnName);
     } catch (err: unknown) {
-      const msg = (err instanceof Error && err.message) || '컬럼 생성 중 오류가 발생했습니다.';
+      const msg = (err instanceof Error && err.message) || '컬럼 수정 중 오류가 발생했습니다.';
 
       setErrorMessage(msg);
     }
