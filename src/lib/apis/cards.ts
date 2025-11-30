@@ -1,15 +1,5 @@
 import { api, fileApi } from '@/lib/axios';
 
-export interface CreateCardType extends ChangeCardType {
-  dashboardId: number;
-}
-
-interface GetCardDataParams {
-  size: number;
-  cursorId: null | number;
-  columnId: number;
-}
-
 interface ChangeCardType {
   columnId: number;
   assigneeUserId: number;
@@ -18,6 +8,16 @@ interface ChangeCardType {
   dueDate: string | null;
   tags: string[];
   imageUrl: string | null;
+}
+
+export interface CreateCardType extends ChangeCardType {
+  dashboardId: number;
+}
+
+interface GetCardDataParams {
+  size: number;
+  cursorId: null | number;
+  columnId: number;
 }
 
 /** 카드(할 일) 생성 api */
