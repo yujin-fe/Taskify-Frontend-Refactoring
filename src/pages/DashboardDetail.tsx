@@ -1,26 +1,16 @@
 import { useState } from 'react';
 import { useParams } from 'react-router';
 import CreateButton from '@/components/dashboard/CreateButton';
-import DashboardCard from '@/components/dashboard-detail/card/DashboardCard';
+import ColumnCardList from '@/components/dashboard-detail/card/ColumnCardList';
 import ColumnContainer from '@/components/dashboard-detail/column/ColumnContainer';
-import ColumnInfoHeader from '@/components/dashboard-detail/column/ColumnInfoHeader';
-import ChangeCardModal from '@/components/dashboard-detail/modal/ChangeCardModal';
 import ChangeColumnModal from '@/components/dashboard-detail/modal/ChangeColumnModal';
-import CreateCardModal from '@/components/dashboard-detail/modal/CreateCardModal';
 import CreateColumnModal from '@/components/dashboard-detail/modal/CreateColumnModal';
 import DeleteColumnModal from '@/components/dashboard-detail/modal/DeleteColumnModal';
 import ColumnSkeleton from '@/components/skeleton/ColumnSkeleton';
-import {
-  CHANGE_CARD,
-  CHANGE_COLUMN,
-  CREATE_CARD,
-  CREATE_COLUMN,
-  DELETE_COLUMN,
-} from '@/constants/modalName';
+import { CHANGE_COLUMN, CREATE_COLUMN, DELETE_COLUMN } from '@/constants/modalName';
 import { useModal } from '@/hooks/useModal';
 import useMutation from '@/hooks/useMutation';
 import useQuery from '@/hooks/useQuery';
-import { createCard, type CreateCardType } from '@/lib/apis/cards';
 import {
   changeColumn,
   createColumn,
@@ -29,40 +19,8 @@ import {
   type ChangeColumnType,
   type CreateColumnType,
 } from '@/lib/apis/columns';
-import { getMemberList } from '@/lib/apis/members';
-import type { CardInitialValueType, CardsResponse } from '@/types/card';
 import type { ColumnsData, ColumnsResponse } from '@/types/column';
-import type { MembersResponse } from '@/types/members';
-import { createCardRequestBody } from '@/utils/card/createCardReqBody';
-import { uploadCardImage } from '@/utils/card/uploadCardImage';
 import { cn } from '@/utils/cn';
-
-// TODO: 실제 데이터 연결 필요
-const cardDataArray: CardsResponse[] = [
-  {
-    cursorId: 0,
-    totalCount: 0,
-    cards: [
-      {
-        id: 0,
-        title: 'string',
-        description: 'string',
-        tags: ['string'],
-        dueDate: 'string',
-        assignee: {
-          profileImageUrl: 'string',
-          nickname: 'string',
-          id: 0,
-        },
-        imageUrl: null,
-        teamId: 'string',
-        columnId: 0,
-        createdAt: '2025-11-30T08:11:06.569Z',
-        updatedAt: '2025-11-30T08:11:06.569Z',
-      },
-    ],
-  },
-];
 
 interface ChangeColumnVariables {
   columnId: number;
@@ -79,16 +37,9 @@ export default function DashboardDetail() {
   const changeColumnModal = useModal(CHANGE_COLUMN);
   const deleteColumnModal = useModal(DELETE_COLUMN);
 
-  // 카드 모달
-  const createCardModal = useModal(CREATE_CARD);
-  const changeCardModal = useModal(CHANGE_CARD);
-
   const columnQuery = useQuery<ColumnsResponse>({
     fetchFn: () => getColumnList(dashboardId || ''),
     params: { dashboardId },
-  });
-  const memberQuery = useQuery<MembersResponse>({
-    fetchFn: () => getMemberList({ dashboardId: dashboardId ?? '' }),
   });
 
   // column mutation
@@ -155,21 +106,12 @@ export default function DashboardDetail() {
     },
   });
 
-  // card mutation
-  const createCardMutation = useMutation({
-    mutationFn: (reqBody: CreateCardType) => createCard(reqBody),
-    onSuccess: () => {
-      // TODO: 카드 데이터에 업데이트 필요
-      createCardModal.handleModalClose();
-    },
-  });
-
   if (!dashboardId) {
     // TODO: 나중에 404 페이지로 리턴
     return <div>유효하지 않은 대시보드입니다.</div>;
   }
 
-  if (columnQuery.isLoading || !columnQuery.data || !memberQuery.data) {
+  if (columnQuery.isLoading || !columnQuery.data) {
     return (
       <div className='flex flex-col md:flex-row'>
         {Array.from({ length: 3 }).map((_, i) => (
@@ -222,19 +164,6 @@ export default function DashboardDetail() {
     await deleteColumnMutation.mutate(selectedColumn.id);
   };
 
-  // card handler
-  const handleSubmitCreateCard = async (
-    formValue: CardInitialValueType,
-    imageFile: File | null
-  ) => {
-    if (!selectedColumn) {
-      return;
-    }
-    const imageUrl = await uploadCardImage(selectedColumn.id, imageFile);
-    const reqBody = createCardRequestBody(formValue, selectedColumn.id, dashboardId, imageUrl);
-    await createCardMutation.mutate(reqBody);
-  };
-
   const canAddColumn = columnQuery.data.data.length < 10;
 
   return (
@@ -243,29 +172,19 @@ export default function DashboardDetail() {
         <div className='flex flex-col md:flex-row'>
           {columnQuery.data.data.map((column) => (
             <ColumnContainer key={column.id}>
-              {/* TODO: totalCount는 카드 조회 모달에서 가져와야 함 */}
-              <ColumnInfoHeader
-                title={column.title}
-                totalCount={5}
-                onClick={() => {
+              <ColumnCardList
+                dashboardId={dashboardId}
+                selectedColumn={selectedColumn}
+                column={column}
+                onHeaderClick={() => {
                   setSelectedColumn(column);
                   updateColumnMutation.reset();
                   changeColumnModal.handleModalOpen();
                 }}
+                onCreateCardClick={() => {
+                  setSelectedColumn(column);
+                }}
               />
-              <div className='flex flex-col gap-[16px]'>
-                <CreateButton
-                  onClick={() => {
-                    setSelectedColumn(column);
-                    createCardMutation.reset();
-                    createCardModal.handleModalOpen();
-                  }}
-                />
-                {/* TODO: 실제 데이터 연결 및 함수 연결 */}
-                {cardDataArray.flatMap((c) =>
-                  c.cards.map((card) => <DashboardCard key={card.id} cardData={card} />)
-                )}
-              </div>
             </ColumnContainer>
           ))}
         </div>
@@ -328,18 +247,6 @@ export default function DashboardDetail() {
           onDelete={handleSubmitDeleteColumn}
         />
       )}
-
-      {/* 할 일 생성 모달 */}
-      {createCardModal.isOpen && (
-        <CreateCardModal
-          serverErrorMessage={createCardMutation.error}
-          onSubmit={handleSubmitCreateCard}
-          memberData={memberQuery.data}
-        />
-      )}
-
-      {/* 할 일 수정 모달 */}
-      {changeCardModal.isOpen && <ChangeCardModal memberData={memberQuery.data} />}
     </>
   );
 }
