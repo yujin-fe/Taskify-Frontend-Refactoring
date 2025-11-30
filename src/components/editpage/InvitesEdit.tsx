@@ -3,7 +3,6 @@ import { useParams } from 'react-router';
 import PageIndicator from '@/components/common/PageIndicator';
 import PageNation from '@/components/common/PageNation';
 import Title from '@/components/common/Title';
-import InviteButton from '@/components/dashboard/InviteButton';
 import DashboardBody from '@/components/dashboard/table/DashboardBody';
 import DashboardContainer from '@/components/dashboard/table/DashboardContainer';
 import DashboardHeader from '@/components/dashboard/table/DashboardHeader';
@@ -12,7 +11,7 @@ import Skeleton from '@/components/skeleton/Skeleton';
 import { usePagination } from '@/hooks/usePagination';
 import useQuery from '@/hooks/useQuery';
 import { getInvitationList } from '@/lib/apis/Invitations';
-import type { InvitationResponse, Invitation } from '@/types/invitations';
+import type { DashboardInvitationResponse, Invitation } from '@/types/invitations';
 
 const INVITES_PAGE_SIZE = 5;
 
@@ -29,7 +28,7 @@ export default function InvitesEdit() {
     [dashboardId, currentPage]
   );
 
-  const { data: inviteData, isLoading } = useQuery<InvitationResponse>({
+  const { data: inviteData, isLoading } = useQuery<DashboardInvitationResponse>({
     fetchFn: () => getInvitationList(params),
     params,
   });
