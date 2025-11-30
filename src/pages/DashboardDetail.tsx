@@ -69,7 +69,11 @@ export default function DashboardDetail() {
   const isCollapsed = localStorage.getItem('sidebar-collapsed') === 'true';
   const [columnName, setColumnName] = useState('');
   const [duplicatedError, setDuplicatedError] = useState('');
-  const { isOpen, handleModalOpen, handleModalClose } = useModal(CREATE_COLUMN);
+  const {
+    isOpen: isCreateColumnModalOpen,
+    handleModalOpen: handleCreateColumnModalOpen,
+    handleModalClose: handleCreateCloumnModalClose,
+  } = useModal(CREATE_COLUMN);
   const { dashboardId } = useParams();
 
   const {
@@ -84,7 +88,7 @@ export default function DashboardDetail() {
     mutationFn: (reqBody) => createColumn(reqBody),
     onSuccess: () => {
       refetch();
-      handleModalClose();
+      handleCreateCloumnModalClose();
     },
   });
 
@@ -142,7 +146,7 @@ export default function DashboardDetail() {
             {/* 데스크탑 버튼 */}
             <CreateButton
               className='mx-[20px] mt-[68px] hidden w-[354px] shrink-0 font-2lg-bold md:flex'
-              onClick={handleModalOpen}>
+              onClick={handleCreateColumnModalOpen}>
               새로운 컬럼 추가하기
             </CreateButton>
 
@@ -154,14 +158,14 @@ export default function DashboardDetail() {
               )}>
               <CreateButton
                 className='h-[70px] w-full shrink-0 font-2lg-bold'
-                onClick={handleModalOpen}>
+                onClick={handleCreateColumnModalOpen}>
                 새로운 컬럼 추가하기
               </CreateButton>
             </div>
           </>
         )}
       </div>
-      {isOpen && (
+      {isCreateColumnModalOpen && (
         <CreateColumnModal
           columnName={columnName}
           setColumnName={setColumnName}
