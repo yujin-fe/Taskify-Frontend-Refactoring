@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Button from '@/components/common/Button';
 import Input from '@/components/common/input/Input';
 import FormModal from '@/components/common/modal/FormModal';
@@ -6,42 +6,50 @@ import { CREATE_COLUMN } from '@/constants/modalName';
 import { useModal } from '@/hooks/useModal';
 
 interface CreateColumnModalProps {
-  onSubmit: () => Promise<void>;
-  errorMessage: string | null;
-  columnName: string;
-  setColumnName: (value: string) => void;
-  setErrorMessage: (value: string) => void;
+  onSubmit: (columnName: string) => Promise<void>;
+  serverErrorMessage: string | null;
 }
 
 export default function CreateColumnModal({
   onSubmit,
-  errorMessage,
-  columnName,
-  setColumnName,
-  setErrorMessage,
+  serverErrorMessage,
 }: CreateColumnModalProps) {
   const { handleModalClose } = useModal(CREATE_COLUMN);
-
-  const disabled = columnName.trim() === '';
+  const [columnName, setColumnName] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     return () => {
       setColumnName('');
       setErrorMessage('');
     };
-  }, [setColumnName, setErrorMessage]);
+  }, []);
+
+  const handleSubmit = async () => {
+    setErrorMessage('');
+    try {
+      await onSubmit(columnName);
+    } catch (err: unknown) {
+      const msg = (err instanceof Error && err.message) || '컬럼 생성 중 오류가 발생했습니다.';
+
+      setErrorMessage(msg);
+    }
+  };
+
+  const disabled = columnName.trim() === '';
+  const mergeError = errorMessage || serverErrorMessage;
 
   return (
     <FormModal modalName={CREATE_COLUMN}>
       <FormModal.Title title='새 컬럼 생성' />
-      <FormModal.Form onSubmit={onSubmit}>
+      <FormModal.Form onSubmit={handleSubmit}>
         <FormModal.Body>
-          <Input error={!!errorMessage} value={columnName} onChange={setColumnName}>
+          <Input error={!!mergeError} value={columnName} onChange={setColumnName}>
             <Input.Label className='font-lg-medium sm:font-2lg-medium'>이름</Input.Label>
             <Input.Group>
               <Input.Field name='columnName' type='text' placeholder='컬럼 이름을 입력해 주세요' />
             </Input.Group>
-            {errorMessage && <Input.ErrorMessage>{errorMessage}</Input.ErrorMessage>}
+            {mergeError && <Input.ErrorMessage>{mergeError}</Input.ErrorMessage>}
           </Input>
         </FormModal.Body>
         <FormModal.Footer className='pt-[24px]'>

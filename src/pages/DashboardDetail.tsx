@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useParams } from 'react-router';
 import CreateButton from '@/components/dashboard/CreateButton';
 import DashboardCard from '@/components/dashboard-detail/card/DashboardCard';
@@ -66,15 +65,14 @@ const cardDataArray = [
 ];
 
 export default function DashboardDetail() {
+  const { dashboardId } = useParams();
   const isCollapsed = localStorage.getItem('sidebar-collapsed') === 'true';
-  const [columnName, setColumnName] = useState('');
-  const [duplicatedError, setDuplicatedError] = useState('');
+
   const {
     isOpen: isCreateColumnModalOpen,
     handleModalOpen: handleCreateColumnModalOpen,
-    handleModalClose: handleCreateCloumnModalClose,
+    handleModalClose: handleCreateColumnModalClose,
   } = useModal(CREATE_COLUMN);
-  const { dashboardId } = useParams();
 
   const {
     data: columnDataList,
@@ -84,11 +82,11 @@ export default function DashboardDetail() {
     fetchFn: () => getColumnList(dashboardId!),
   });
 
-  const { mutate, error } = useMutation<ColumnsData, CreateColumnType>({
+  const createMutation = useMutation<ColumnsData, CreateColumnType>({
     mutationFn: (reqBody) => createColumn(reqBody),
     onSuccess: () => {
       refetch();
-      handleCreateCloumnModalClose();
+      handleCreateColumnModalClose();
     },
   });
 
@@ -102,16 +100,14 @@ export default function DashboardDetail() {
     );
   }
 
-  const handleCreateColumn = async () => {
-    setDuplicatedError('');
-    const isDuplicate = columnDataList.data.some((col) => col.title === columnName.trim());
+  const handleSubmitCreateColumn = async (columnName: string) => {
+    const isDuplicate = columnDataList.data.some((col) => col.title.trim() === columnName.trim());
 
     if (isDuplicate) {
-      setDuplicatedError('중복된 컬럼 이름입니다.');
-      return;
+      throw new Error('중복된 컬럼 이름입니다.');
     }
 
-    await mutate({
+    await createMutation.mutate({
       title: columnName,
       dashboardId: Number(dashboardId),
     });
@@ -167,11 +163,8 @@ export default function DashboardDetail() {
       </div>
       {isCreateColumnModalOpen && (
         <CreateColumnModal
-          columnName={columnName}
-          setColumnName={setColumnName}
-          onSubmit={handleCreateColumn}
-          errorMessage={duplicatedError || error}
-          setErrorMessage={setDuplicatedError}
+          serverErrorMessage={createMutation.error}
+          onSubmit={handleSubmitCreateColumn}
         />
       )}
     </>
