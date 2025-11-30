@@ -59,6 +59,7 @@ export default function ChangeColumnModal({
           </Input>
         </FormModal.Body>
         <FormModal.Footer className='pt-[24px]'>
+          {/* TODO: 삭제 로직 추가 예정 */}
           <Button theme={'outlined'} onClick={handleModalClose}>
             삭제
           </Button>
