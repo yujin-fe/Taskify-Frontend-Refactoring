@@ -60,7 +60,7 @@ export default function InvitedDashboard() {
         <div className='flex flex-col gap-[32px] px-4 md:px-7'>
           <DashboardHeader>
             <Title as='h3' size={'2xl'} weight={'bold'}>
-              초대받은 대쉬보드
+              초대받은 대시보드
             </Title>
           </DashboardHeader>
           <Input value={'임시값'}>
