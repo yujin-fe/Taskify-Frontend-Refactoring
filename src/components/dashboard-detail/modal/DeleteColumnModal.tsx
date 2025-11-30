@@ -19,7 +19,7 @@ export default function DeleteColumnModal({
       className='items-center justify-center gap-0 px-[16px] py-[24px] sm:p-[24px]'
       modalName={DELETE_COLUMN}>
       <FormModal.Body>
-        <div className='fw-full text-center font-xl-medium'>컬럼의 모든 카드가 삭제됩니다.</div>
+        <div className='w-full text-center font-xl-medium'>컬럼의 모든 카드가 삭제됩니다.</div>
       </FormModal.Body>
       {serverErrorMessage && (
         <span className='-mb-[20px] inline-block font-md-medium text-error'>
