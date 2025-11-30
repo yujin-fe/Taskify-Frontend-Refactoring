@@ -7,7 +7,7 @@ import ChangeColumnModal from '@/components/dashboard-detail/modal/ChangeColumnM
 import CreateColumnModal from '@/components/dashboard-detail/modal/CreateColumnModal';
 import DeleteColumnModal from '@/components/dashboard-detail/modal/DeleteColumnModal';
 import ColumnSkeleton from '@/components/skeleton/ColumnSkeleton';
-import { CHANGE_COLUMN, CREATE_COLUMN, DELETE_COLUMN } from '@/constants/modalName';
+import { CHANGE_COLUMN, CREATE_CARD, CREATE_COLUMN, DELETE_COLUMN } from '@/constants/modalName';
 import { useModal } from '@/hooks/useModal';
 import useMutation from '@/hooks/useMutation';
 import useQuery from '@/hooks/useQuery';
@@ -36,6 +36,9 @@ export default function DashboardDetail() {
   const createColumnModal = useModal(CREATE_COLUMN);
   const changeColumnModal = useModal(CHANGE_COLUMN);
   const deleteColumnModal = useModal(DELETE_COLUMN);
+
+  // 카드 모달
+  const createCardModal = useModal(CREATE_CARD);
 
   const columnQuery = useQuery<ColumnsResponse>({
     fetchFn: () => getColumnList(dashboardId || ''),
@@ -174,15 +177,19 @@ export default function DashboardDetail() {
             <ColumnContainer key={column.id}>
               <ColumnCardList
                 dashboardId={dashboardId}
-                selectedColumn={selectedColumn}
                 column={column}
+                isCreateOpen={createCardModal.isOpen && selectedColumn?.id === column.id}
                 onHeaderClick={() => {
                   setSelectedColumn(column);
                   updateColumnMutation.reset();
                   changeColumnModal.handleModalOpen();
                 }}
-                onCreateCardClick={() => {
+                onOpenCreate={() => {
                   setSelectedColumn(column);
+                  createCardModal.handleModalOpen();
+                }}
+                onCloseCreate={() => {
+                  createCardModal.handleModalClose();
                 }}
               />
             </ColumnContainer>

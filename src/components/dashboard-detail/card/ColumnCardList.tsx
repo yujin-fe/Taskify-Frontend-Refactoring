@@ -3,8 +3,6 @@ import DashboardCard from '@/components/dashboard-detail/card/DashboardCard';
 import ColumnInfoHeader from '@/components/dashboard-detail/column/ColumnInfoHeader';
 import CreateCardModal from '@/components/dashboard-detail/modal/CreateCardModal';
 import Skeleton from '@/components/skeleton/Skeleton';
-import { CREATE_CARD } from '@/constants/modalName';
-import { useModal } from '@/hooks/useModal';
 import useMutation from '@/hooks/useMutation';
 import useQuery from '@/hooks/useQuery';
 import useUserContext from '@/hooks/useUserContext';
@@ -19,18 +17,21 @@ import { uploadCardImage } from '@/utils/card/uploadCardImage';
 interface ColumnCardListProps {
   column: ColumnsData;
   dashboardId: string;
+  isCreateOpen: boolean;
   onHeaderClick: () => void;
-  onCreateCardClick: () => void;
+  onOpenCreate: () => void;
+  onCloseCreate: () => void;
 }
 
 export default function ColumnCardList({
   column,
   dashboardId,
+  isCreateOpen,
   onHeaderClick,
-  onCreateCardClick,
+  onOpenCreate,
+  onCloseCreate,
 }: ColumnCardListProps) {
   const { userProfile } = useUserContext();
-  const createCardModal = useModal(CREATE_CARD);
 
   const cardQuery = useQuery<CardsResponse>({
     fetchFn: () =>
@@ -51,7 +52,7 @@ export default function ColumnCardList({
     mutationFn: (reqBody: CreateCardType) => createCard(reqBody),
     onSuccess: () => {
       // TODO: 카드 데이터에 업데이트 필요
-      createCardModal.handleModalClose();
+      onCloseCreate();
     },
   });
 
@@ -88,9 +89,8 @@ export default function ColumnCardList({
         <ColumnInfoHeader title={column.title} totalCount={totalCount} onClick={onHeaderClick} />
         <CreateButton
           onClick={() => {
-            onCreateCardClick();
             createCardMutation.reset();
-            createCardModal.handleModalOpen();
+            onOpenCreate();
           }}
         />
         {cards.map((card) => (
@@ -99,7 +99,7 @@ export default function ColumnCardList({
       </div>
 
       {/* 할 일 생성 모달 */}
-      {createCardModal.isOpen && column.id && (
+      {isCreateOpen && (
         <CreateCardModal
           serverErrorMessage={createCardMutation.error}
           onSubmit={handleSubmitCreateCard}
