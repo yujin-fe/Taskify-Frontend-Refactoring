@@ -1,7 +1,8 @@
 export type Assignee = {
   profileImageUrl: string | null;
   nickname: string;
-  id: number;
+  id?: number;
+  userId?: number;
 };
 
 export interface CardDetailResponse {
