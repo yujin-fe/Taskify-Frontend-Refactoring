@@ -37,16 +37,16 @@ export default function InvitedDashboard() {
     onSuccess,
   });
 
-  if (!data) {
-    return null;
-  }
-
-  const invitations: Invitation[] = data.invitations;
-
   //TODO: 에러발생 컴포넌트
   if (error) {
     return <div>오류가 발생했습니다.</div>;
   }
+
+  if (!data) {
+    return null;
+  }
+  const invitations: Invitation[] = data.invitations;
+
   const nullList = () => {
     return (
       <div className='flex h-[390px] w-full max-w-[960px] flex-col gap-16 px-[40px] pt-[24px]'>

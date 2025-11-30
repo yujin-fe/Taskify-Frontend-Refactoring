@@ -23,11 +23,13 @@ const useInfiniteScroll = <TData extends InfiniteScrollResType, TParams = object
   //li 태그에 ref 연결해야함..
   const lastItemRef = useRef<HTMLLIElement>(null);
   const initLoadRef = useRef<boolean>(true);
+  const isFetchRef = useRef<boolean>(false);
 
   const fetchData = async () => {
-    if (isLoading || cursor === null) {
+    if (isFetchRef.current || cursor === null) {
       return;
     }
+    isFetchRef.current = true;
     setIsLoading(true);
     try {
       const data = await fetchFn({ ...params, cursorId: cursor });
@@ -43,6 +45,7 @@ const useInfiniteScroll = <TData extends InfiniteScrollResType, TParams = object
     } catch (error) {
       setError(error);
     } finally {
+      isFetchRef.current = false;
       setIsLoading(false);
     }
   };
