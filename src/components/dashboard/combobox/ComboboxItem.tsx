@@ -15,7 +15,7 @@ export default function ComboboxItem({ children, value }: ComboboxItemProps) {
 
   const handleListClick = () => {
     if (isSelected) {
-      setSelectedValue({} as Assignee);
+      setSelectedValue(null);
       setSelectedNode(null);
     } else {
       setSelectedValue(value);
