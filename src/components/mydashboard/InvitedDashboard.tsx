@@ -1,92 +1,47 @@
-import { useState, useEffect, useRef } from 'react';
 import Icons from '@/assets/icons';
 import Button from '@/components/common/Button';
 import Input from '@/components/common/input/Input';
 import Title from '@/components/common/Title';
 import DashboardHeader from '@/components/dashboard/table/DashboardHeader';
+import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 import { useResponsiveValue } from '@/hooks/useResponsiveValue';
 import { getMyInvitations } from '@/lib/apis/Invitations';
-import type { InvitationParams, Invitation } from '@/types/invitations';
+import type { InvitationParams, Invitation, InvitationResponse } from '@/types/invitations';
 
-const INVITATION_LIST_SIZE = 10;
+const INVITATION_LIST_SIZE = 7;
 
 export default function InvitedDashboard() {
-  const [invitations, setInvitations] = useState<Invitation[] | null>(null);
-  const [cursor, setCursor] = useState<undefined | number>(undefined);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<unknown | null>(null);
   const isMobile = useResponsiveValue({
     mobile: true,
     tablet: false,
     desktop: false,
   });
-
-  const obseverRef = useRef<null | IntersectionObserver>(null);
-  const lastItemRef = useRef<HTMLLIElement>(null);
-  const initLoadRef = useRef<boolean>(true);
   const params: InvitationParams = {
     size: INVITATION_LIST_SIZE,
-    cursorId: cursor,
     title: null,
   };
-  const fetchInvitationData = async () => {
-    if (isLoading || cursor === null) {
-      return;
-    }
-    setIsLoading(true);
-    try {
-      const data = await getMyInvitations(params);
-      setInvitations((prev) => {
-        if (!prev) {
-          return data.invitations;
-        }
-        return [...prev, ...data.invitations];
-      });
-      setCursor(data.cursorId);
-      //TODO: 콘솔 삭제
-      console.log('실행', data);
-    } catch (err) {
-      setError(err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
-  useEffect(() => {
-    if (cursor === null) {
-      return;
+  const onSuccess = (prevData: InvitationResponse | null, newData: InvitationResponse) => {
+    if (!prevData) {
+      return newData;
     }
-
-    if (initLoadRef.current) {
-      fetchInvitationData();
-      initLoadRef.current = false;
-      return;
-    }
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          fetchInvitationData();
-        }
-      },
-      {
-        threshold: 0.1,
-      }
-    );
-    obseverRef.current = observer;
-    if (lastItemRef.current) {
-      observer.observe(lastItemRef.current);
-    }
-
-    return () => {
-      if (obseverRef.current) {
-        obseverRef.current.disconnect();
-      }
+    return {
+      ...newData,
+      invitations: [...prevData.invitations, ...newData.invitations],
     };
-  }, [cursor]);
+  };
+  const { data, error, lastItemRef } = useInfiniteScroll({
+    fetchFn: (params) => getMyInvitations(params),
+    params,
+    onSuccess,
+  });
 
-  if (!invitations) {
+  if (!data) {
     return null;
   }
+
+  const invitations: Invitation[] = data.invitations;
+
   //TODO: 에러발생 컴포넌트
   if (error) {
     return <div>오류가 발생했습니다.</div>;
