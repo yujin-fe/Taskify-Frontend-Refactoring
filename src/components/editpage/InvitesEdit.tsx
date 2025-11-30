@@ -12,9 +12,9 @@ import useQuery from '@/hooks/useQuery';
 import { getInvitationList } from '@/lib/apis/Invitations';
 import type { InvitationsResponse, Invitation } from '@/types/invitations';
 
-const INVITS_PAGE_SIZE = 5;
+const INVITES_PAGE_SIZE = 5;
 
-export default function InvitsEdit() {
+export default function InvitesEdit() {
   const { currentPage, handlePrev, handleNext, isPrevDisabled } = usePagination();
   const { dashboardId } = useParams<{ dashboardId: string }>();
 
@@ -22,32 +22,35 @@ export default function InvitsEdit() {
     () => ({
       dashboardId: dashboardId || '',
       page: currentPage,
-      size: INVITS_PAGE_SIZE,
+      size: INVITES_PAGE_SIZE,
     }),
     [dashboardId, currentPage]
   );
 
-  const { data: invitData, isLoading } = useQuery<InvitationsResponse>({
+  const { data: inviteData, isLoading } = useQuery<InvitationsResponse>({
     fetchFn: () => getInvitationList(params),
     params,
   });
 
   const calculatedTotalPages = useMemo(() => {
-    const total = invitData?.totalCount || 0;
+    const total = inviteData?.totalCount || 0;
 
-    return total === 0 ? 1 : Math.ceil(total / INVITS_PAGE_SIZE);
-  }, [invitData?.totalCount]);
+    return total === 0 ? 1 : Math.ceil(total / INVITES_PAGE_SIZE);
+  }, [inviteData?.totalCount]);
 
   const isNextDisabled = currentPage >= calculatedTotalPages;
-  const invitations: Invitation[] = useMemo(() => invitData?.invitations || [], [invitData]);
+  const invitations: Invitation[] = useMemo(() => inviteData?.invitations || [], [inviteData]);
 
-  const invitsListItems = invitations.map((invitation) => (
+  const invitesListItems = invitations.map((invitation) => (
     // 임시 div 사용.
     <div key={invitation.id} className='border-b border-gray-100 px-5 py-4 sm:px-7'>
       {invitation.invitee.email}
       {/* 여기에 취소 버튼 등의 UI 추후 추가 */}
     </div>
   ));
+
+  const isUpdating = isLoading && invitations.length > 0;
+  const isInitialLoading = isLoading && invitations.length === 0;
 
   return (
     <DashboardContainer type='Invites'>
@@ -65,14 +68,11 @@ export default function InvitsEdit() {
         />
       </DashboardHeader>
       <DashboardBody>
-        {isLoading && (
-          <div className='p-5 text-center text-gray-400'>
-            {invitations.length > 0 ? '업데이트 중...' : '불러오는 중...'}
-          </div>
-        )}
+        {isInitialLoading && <div className='p-5 text-center text-gray-400'>불러오는 중...</div>}
+        {isUpdating && <div className='p-5 text-center text-gray-400'>업데이트 중...</div>}
         <DashboardList title='이메일' titleClassName='sm:pl-7 pl-5 pt-[20px] sm:pt-[31px]'>
-          {invitsListItems.length > 0 ? (
-            invitsListItems
+          {invitesListItems.length > 0 ? (
+            invitesListItems
           ) : (
             <div className='p-5 text-center text-gray-400'>현재 초대 내역이 없습니다.</div>
           )}
