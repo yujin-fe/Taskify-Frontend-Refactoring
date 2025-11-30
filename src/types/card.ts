@@ -23,3 +23,12 @@ export interface CardsResponse {
   totalCount: number;
   cursorId: null | number;
 }
+
+export interface CardInitialValueType {
+  assigneeUser: Assignee | null;
+  title: string;
+  description: string;
+  dueDate: string;
+  tags: string[];
+  imageUrl: string | null;
+}
