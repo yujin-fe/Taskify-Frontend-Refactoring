@@ -15,7 +15,7 @@ interface Dashboard {
   title: string;
 }
 
-interface Invitation {
+export interface Invitation {
   id: number;
   inviter: User;
   invitee: User;

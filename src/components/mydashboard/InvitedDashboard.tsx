@@ -1,35 +1,104 @@
+import { useState, useEffect, useRef } from 'react';
 import Icons from '@/assets/icons';
 import Button from '@/components/common/Button';
 import Input from '@/components/common/input/Input';
 import Title from '@/components/common/Title';
 import DashboardHeader from '@/components/dashboard/table/DashboardHeader';
-import useQuery from '@/hooks/useQuery';
 import { useResponsiveValue } from '@/hooks/useResponsiveValue';
 import { getMyInvitations } from '@/lib/apis/Invitations';
-import type { InvitationParams, InvitationResponse } from '@/types/invitations';
+import type { InvitationParams, Invitation } from '@/types/invitations';
+
+const INVITATION_LIST_SIZE = 10;
+
 export default function InvitedDashboard() {
-  const params: InvitationParams = {
-    size: 20,
-    title: null,
-  };
-
-  const { data: invitationData } = useQuery<InvitationResponse>({
-    fetchFn: () => getMyInvitations(params),
-    params,
-  });
-
+  const [invitations, setInvitations] = useState<Invitation[] | null>(null);
+  const [cursor, setCursor] = useState<undefined | number>(undefined);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<unknown | null>(null);
   const isMobile = useResponsiveValue({
     mobile: true,
     tablet: false,
     desktop: false,
   });
 
+  const obseverRef = useRef<null | IntersectionObserver>(null);
+  const lastItemRef = useRef<HTMLLIElement>(null);
+  const initLoadRef = useRef<boolean>(true);
+  const params: InvitationParams = {
+    size: INVITATION_LIST_SIZE,
+    cursorId: cursor,
+    title: null,
+  };
+  const fetchInvitationData = async () => {
+    if (isLoading || cursor === null) {
+      return;
+    }
+    setIsLoading(true);
+    try {
+      const data = await getMyInvitations(params);
+      setInvitations((prev) => {
+        if (!prev) {
+          return data.invitations;
+        }
+        return [...prev, ...data.invitations];
+      });
+      setCursor(data.cursorId);
+      //TODO: 콘솔 삭제
+      console.log('실행', data);
+    } catch (err) {
+      setError(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (cursor === null) {
+      return;
+    }
+
+    if (initLoadRef.current) {
+      fetchInvitationData();
+      initLoadRef.current = false;
+      return;
+    }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          fetchInvitationData();
+        }
+      },
+      {
+        threshold: 0.1,
+      }
+    );
+    obseverRef.current = observer;
+    if (lastItemRef.current) {
+      observer.observe(lastItemRef.current);
+    }
+
+    return () => {
+      if (obseverRef.current) {
+        obseverRef.current.disconnect();
+      }
+    };
+  }, [cursor]);
+
+  if (!invitations) {
+    return null;
+  }
+  //TODO: 에러발생 컴포넌트
+  if (error) {
+    return <div>오류가 발생했습니다.</div>;
+  }
+
   const mobileList = () => {
     return (
-      <div>
-        {invitationData?.invitations?.map((invitation) => (
-          <div
-            key={invitation.id}
+      <>
+        {invitations?.map((invitation, ind) => (
+          <li
+            ref={invitations.length - 1 === ind ? lastItemRef : null}
+            key={`mobile-${invitation.id}`}
             className='flex w-full flex-col gap-[14px] border-b border-gray-200 px-4 py-[14px]'>
             <div>
               <div className='flex gap-6'>
@@ -49,9 +118,9 @@ export default function InvitedDashboard() {
                 거절
               </Button>
             </div>
-          </div>
+          </li>
         ))}
-      </div>
+      </>
     );
   };
   return (
@@ -86,34 +155,34 @@ export default function InvitedDashboard() {
               </h4>
             </div>
           )}
+          {/* TODO: 스켈레톤 교체 */}
           <ul className='scrollbar-hidden w-full overflow-y-scroll'>
             {!isMobile
-              && invitationData?.invitations?.map((invitation) => (
-                <>
-                  <li
-                    key={invitation.id}
-                    className={`flex w-full gap-[16px] border-b border-gray-200 py-[20px] sm:pl-[28px] md:pl-[76px]`}>
-                    <span className='inline-block w-[153px] lg:w-[298px]'>
-                      {invitation.dashboard.title}
-                    </span>
-                    <span className='inline-block w-[117px] lg:w-[306px]'>
-                      {invitation.inviter.nickname}
-                    </span>
-                    <div className='flex w-[154px] gap-[10px] lg:w-[178px]'>
-                      <Button
-                        size={'sm'}
-                        className='max-md:font-14-medium flex-none max-md:h-[30px] max-md:min-w-[72px] max-md:p-0'>
-                        수락
-                      </Button>
-                      <Button
-                        theme={'secondary'}
-                        size={'sm'}
-                        className='max-md:font-14-medium flex-none max-md:h-[30px] max-md:min-w-[72px] max-md:p-0'>
-                        거절
-                      </Button>
-                    </div>
-                  </li>
-                </>
+              && invitations?.map((invitation, ind) => (
+                <li
+                  ref={invitations.length - 1 === ind ? lastItemRef : null}
+                  key={invitation.id}
+                  className={`flex w-full gap-[16px] border-b border-gray-200 py-[20px] sm:pl-[28px] md:pl-[76px]`}>
+                  <span className='inline-block w-[153px] lg:w-[298px]'>
+                    {invitation.dashboard.title}
+                  </span>
+                  <span className='inline-block w-[117px] lg:w-[306px]'>
+                    {invitation.inviter.nickname}
+                  </span>
+                  <div className='flex w-[154px] gap-[10px] lg:w-[178px]'>
+                    <Button
+                      size={'sm'}
+                      className='max-md:font-14-medium flex-none max-md:h-[30px] max-md:min-w-[72px] max-md:p-0'>
+                      수락
+                    </Button>
+                    <Button
+                      theme={'secondary'}
+                      size={'sm'}
+                      className='max-md:font-14-medium flex-none max-md:h-[30px] max-md:min-w-[72px] max-md:p-0'>
+                      거절
+                    </Button>
+                  </div>
+                </li>
               ))}
             {isMobile && mobileList()}
           </ul>
