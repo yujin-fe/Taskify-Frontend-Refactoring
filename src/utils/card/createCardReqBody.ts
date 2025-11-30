@@ -1,3 +1,4 @@
+import { DUE_DATE, IMAGE_URL } from '@/constants/requestCardData';
 import type { CreateCardType } from '@/lib/apis/cards';
 import type { CardInitialValueType } from '@/types/card';
 import { formatDueDate } from '@/utils/formatDateTime';
@@ -11,7 +12,7 @@ export const createCardRequestBody = (
 ): CreateCardType => {
   const formattedDueDate = formValue.dueDate
     ? formatDueDate(formValue.dueDate)
-    : formatDueDate(new Date());
+    : formatDueDate(new Date(DUE_DATE));
 
   const normalizedTags = formValue.tags && formValue.tags.length > 0 ? formValue.tags : [''];
   const assigneeUserId = formValue.assigneeUser?.userId ?? currentUserId ?? 0;
@@ -24,8 +25,6 @@ export const createCardRequestBody = (
     description: formValue.description,
     dueDate: formattedDueDate,
     tags: normalizedTags,
-    imageUrl:
-      imageUrl
-      ?? 'https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/taskify/task_image/19-7',
+    imageUrl: imageUrl ?? IMAGE_URL,
   };
 };

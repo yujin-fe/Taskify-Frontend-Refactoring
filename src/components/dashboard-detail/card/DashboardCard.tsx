@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Icons from '@/assets/icons';
 import Avatar from '@/components/common/avatar/Avatar';
 import Tag from '@/components/dashboard/Tag';
+import { DUE_DATE } from '@/constants/requestCardData';
 import type { CardDetailResponse } from '@/types/card';
 import { getProfileColorForId } from '@/utils/avatar';
 
@@ -42,7 +43,9 @@ export default function DashboardCard({ cardData }: DashboardCardProps) {
           <div className='flex w-full justify-between sm:justify-end sm:gap-[12px] md:justify-between'>
             <div className='flex items-center gap-[6px] text-gray-500'>
               <Icons.Calendar width={18} height={18} />
-              <span className='font-xs-medium'>{dueDate ?? '마감일을 정해주세요.'}</span>
+              <span className='font-xs-medium'>
+                {dueDate === DUE_DATE ? '마감일을 정해주세요.' : dueDate}
+              </span>
             </div>
             <Avatar user={assignee} size='s'>
               <Avatar.Img />
