@@ -18,7 +18,7 @@ export const createCard = async (reqBody: CreateCardType) => {
 };
 
 /** 카드 이미지 업로드 api */
-export const cardImageUpload = async (columnId: number, image: FormData) => {
+export const cardUploadImageFile = async (columnId: number, image: FormData) => {
   const res = await fileApi.post(`/columns/${columnId}/card-image`, image);
   return res;
 };
