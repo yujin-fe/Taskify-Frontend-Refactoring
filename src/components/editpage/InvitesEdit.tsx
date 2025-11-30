@@ -7,6 +7,7 @@ import DashboardBody from '@/components/dashboard/table/DashboardBody';
 import DashboardContainer from '@/components/dashboard/table/DashboardContainer';
 import DashboardHeader from '@/components/dashboard/table/DashboardHeader';
 import DashboardList from '@/components/dashboard/table/DashboardList';
+import Skeleton from '@/components/skeleton/Skeleton';
 import { usePagination } from '@/hooks/usePagination';
 import useQuery from '@/hooks/useQuery';
 import { getInvitationList } from '@/lib/apis/Invitations';
@@ -52,6 +53,14 @@ export default function InvitesEdit() {
   const isUpdating = isLoading && invitations.length > 0;
   const isInitialLoading = isLoading && invitations.length === 0;
 
+  const skeletonItems = Array(INVITES_PAGE_SIZE)
+    .fill(0)
+    .map((_, index) => (
+      <div key={index} className='border-b border-gray-100 px-5 py-4 sm:px-7'>
+        <Skeleton className='h-5 w-full' />
+      </div>
+    ));
+
   return (
     <DashboardContainer type='Invites'>
       <DashboardHeader>
@@ -68,11 +77,19 @@ export default function InvitesEdit() {
         />
       </DashboardHeader>
       <DashboardBody>
-        {isInitialLoading && <div className='p-5 text-center text-gray-400'>불러오는 중...</div>}
-        {isUpdating && <div className='p-5 text-center text-gray-400'>업데이트 중...</div>}
         <DashboardList title='이메일' titleClassName='sm:pl-7 pl-5 pt-[20px] sm:pt-[31px]'>
-          {invitesListItems.length > 0 ? (
-            invitesListItems
+          {isInitialLoading ? (
+            skeletonItems
+          ) : invitesListItems.length > 0 ? (
+            <>
+              {invitesListItems}
+
+              {isUpdating && (
+                <div className='bg-white/70 absolute inset-0 flex items-center justify-center backdrop-blur-[1px]'>
+                  <div className='p-5 text-center text-gray-400'>업데이트 중...</div>
+                </div>
+              )}
+            </>
           ) : (
             <div className='p-5 text-center text-gray-400'>현재 초대 내역이 없습니다.</div>
           )}
