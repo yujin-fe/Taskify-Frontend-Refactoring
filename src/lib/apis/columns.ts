@@ -24,12 +24,12 @@ export const createColumn = async (reqBody: CreateColumnType) => {
 
 /** 컬럼 수정 api */
 export const changeColumn = async (columnId: number, reqBody: ChangeColumnType) => {
-  const res = await api.post(`/columns/${columnId}`, reqBody);
+  const res = await api.put(`/columns/${columnId}`, reqBody);
   return res;
 };
 
 /** 컬럼 삭제 api */
 export const deleteColumn = async (columnId: number) => {
-  const res = await api.post(`/columns/${columnId}`);
+  const res = await api.delete(`/columns/${columnId}`);
   return res;
 };
