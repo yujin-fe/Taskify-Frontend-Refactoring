@@ -11,7 +11,7 @@ import Skeleton from '@/components/skeleton/Skeleton';
 import { usePagination } from '@/hooks/usePagination';
 import useQuery from '@/hooks/useQuery';
 import { getInvitationList } from '@/lib/apis/Invitations';
-import type { InvitationResponse, Invitation } from '@/types/invitations';
+import type { DashboardInvitationResponse, Invitation } from '@/types/invitations';
 
 const INVITES_PAGE_SIZE = 5;
 
@@ -28,7 +28,7 @@ export default function InvitesEdit() {
     [dashboardId, currentPage]
   );
 
-  const { data: inviteData, isLoading } = useQuery<InvitationResponse>({
+  const { data: inviteData, isLoading } = useQuery<DashboardInvitationResponse>({
     fetchFn: () => getInvitationList(params),
     params,
   });
@@ -49,9 +49,6 @@ export default function InvitesEdit() {
       {/* 여기에 취소 버튼 등의 UI 추후 추가 */}
     </div>
   ));
-
-  const isUpdating = isLoading && invitations.length > 0;
-  const isInitialLoading = isLoading && invitations.length === 0;
 
   const skeletonItems = Array(INVITES_PAGE_SIZE)
     .fill(0)
@@ -79,14 +76,10 @@ export default function InvitesEdit() {
       <DashboardBody>
         <DashboardList title='이메일' titleClassName='sm:pl-7 pl-5 pt-[20px] sm:pt-[31px]'>
           <div className='relative min-h-[250px]'>
-            {isInitialLoading ? (
+            {isLoading ? (
               <>{skeletonItems}</>
             ) : invitesListItems.length > 0 ? (
-              <>
-                {invitesListItems}
-
-                {isUpdating && <>{skeletonItems}</>}
-              </>
+              <>{invitesListItems}</>
             ) : (
               <div className='p-5 text-center text-gray-400'>현재 초대 내역이 없습니다.</div>
             )}
