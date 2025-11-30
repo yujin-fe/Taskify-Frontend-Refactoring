@@ -95,6 +95,7 @@ export default function DashboardDetail() {
     refetch,
   } = useQuery<ColumnsResponse>({
     fetchFn: () => getColumnList(dashboardId || ''),
+    params: { dashboardId },
   });
 
   const createMutation = useMutation<ColumnsData, CreateColumnType>({
