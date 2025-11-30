@@ -78,21 +78,29 @@ export default function InvitesEdit() {
       </DashboardHeader>
       <DashboardBody>
         <DashboardList title='이메일' titleClassName='sm:pl-7 pl-5 pt-[20px] sm:pt-[31px]'>
-          {isInitialLoading ? (
-            skeletonItems
-          ) : invitesListItems.length > 0 ? (
-            <>
-              {invitesListItems}
+          <div className='relative min-h-[250px]'>
+            {isInitialLoading ? (
+              <>
+                {skeletonItems}
 
-              {isUpdating && (
                 <div className='bg-white/70 absolute inset-0 flex items-center justify-center backdrop-blur-[1px]'>
-                  <div className='p-5 text-center text-gray-400'>업데이트 중...</div>
+                  <div className='p-5 text-center text-gray-400'>데이터 로딩 중...</div>
                 </div>
-              )}
-            </>
-          ) : (
-            <div className='p-5 text-center text-gray-400'>현재 초대 내역이 없습니다.</div>
-          )}
+              </>
+            ) : invitesListItems.length > 0 ? (
+              <>
+                {invitesListItems}
+
+                {isUpdating && (
+                  <div className='bg-white/70 absolute inset-0 flex items-center justify-center backdrop-blur-[1px]'>
+                    <div className='p-5 text-center text-gray-400'>업데이트 중...</div>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className='p-5 text-center text-gray-400'>현재 초대 내역이 없습니다.</div>
+            )}
+          </div>
         </DashboardList>
       </DashboardBody>
     </DashboardContainer>
