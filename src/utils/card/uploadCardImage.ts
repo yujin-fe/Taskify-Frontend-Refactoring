@@ -15,7 +15,7 @@ export const uploadCardImage = async (columnId: number, file: File | null) => {
     });
 
     return res?.imageUrl ?? null;
-  } catch {
-    throw new Error('이미지 업로드 중 오류가 발생했습니다.');
+  } catch (error) {
+    throw new Error('이미지 업로드 중 오류가 발생했습니다.', { cause: error });
   }
 };
