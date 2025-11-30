@@ -65,7 +65,7 @@ const cardDataArray = [
 ];
 
 export default function DashboardDetail() {
-  const { dashboardId } = useParams();
+  const { dashboardId } = useParams<{ dashboardId: string }>();
   const isCollapsed = localStorage.getItem('sidebar-collapsed') === 'true';
 
   const {
@@ -77,18 +77,39 @@ export default function DashboardDetail() {
   const {
     data: columnDataList,
     isLoading: isColumnLoading,
-    refetch,
+    setData: setColumnDataList,
   } = useQuery<ColumnsResponse>({
-    fetchFn: () => getColumnList(dashboardId!),
+    fetchFn: () => getColumnList(dashboardId || ''),
   });
 
   const createMutation = useMutation<ColumnsData, CreateColumnType>({
     mutationFn: (reqBody) => createColumn(reqBody),
-    onSuccess: () => {
-      refetch();
+    onSuccess: (response) => {
+      if (!response) {
+        return;
+      }
+      setColumnDataList((prev) => {
+        if (!prev) {
+          return {
+            result: 'SUCCESS',
+            data: [response],
+          };
+        }
+
+        return {
+          ...prev,
+          data: [...prev.data, response],
+        };
+      });
+
       handleCreateColumnModalClose();
     },
   });
+
+  if (!dashboardId) {
+    // TODO: 나중에 404 페이지로 리턴
+    return <div>유효하지 않은 대시보드입니다.</div>;
+  }
 
   if (isColumnLoading || !columnDataList) {
     return (
