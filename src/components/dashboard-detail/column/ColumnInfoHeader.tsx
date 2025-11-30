@@ -8,7 +8,7 @@ interface ColumnInfoHeaderProps {
 
 export default function ColumnInfoHeader({ title, totalCount, onClick }: ColumnInfoHeaderProps) {
   return (
-    <div className='mb-[24px] flex items-center justify-between'>
+    <div className='mb-[8px] flex items-center justify-between'>
       <div className='flex items-center gap-[8px] select-none'>
         <div className='h-[8px] w-[8px] rounded-full bg-primary' />
         <span className='font-2lg-bold'>{title}</span>
