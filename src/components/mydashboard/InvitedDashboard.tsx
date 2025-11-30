@@ -7,7 +7,7 @@ import DashboardHeader from '@/components/dashboard/table/DashboardHeader';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 import { useResponsiveValue } from '@/hooks/useResponsiveValue';
 import { getMyInvitations } from '@/lib/apis/Invitations';
-import type { InvitationParams, Invitation, InvitationResponse } from '@/types/invitations';
+import type { InvitationParams, Invitation, MyInvitationResponse } from '@/types/invitations';
 const INVITATION_LIST_SIZE = 7;
 
 export default function InvitedDashboard() {
@@ -21,7 +21,7 @@ export default function InvitedDashboard() {
     title: null,
   };
 
-  const onSuccess = (prevData: InvitationResponse | null, newData: InvitationResponse) => {
+  const onSuccess = (prevData: MyInvitationResponse | null, newData: MyInvitationResponse) => {
     if (!prevData) {
       return newData;
     }
