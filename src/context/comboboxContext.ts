@@ -4,8 +4,8 @@ interface ComboboxContextType {
   id: string;
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
-  selectedValue: string;
-  setSelectedValue: (value: string) => void;
+  selectedValue: number;
+  setSelectedValue: (value: number) => void;
   searchQuery: string;
   setSearchQuery: (query: string) => void;
   selectedNode: null | React.ReactNode;

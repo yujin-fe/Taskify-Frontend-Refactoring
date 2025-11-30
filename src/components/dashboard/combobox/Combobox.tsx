@@ -8,8 +8,8 @@ import useComboboxState from '@/hooks/useComboboxState';
 interface ComboboxProps {
   id: string;
   children: React.ReactNode;
-  value: string;
-  setValue: (value: string) => void;
+  value: number;
+  setValue: (value: number) => void;
 }
 
 /**
