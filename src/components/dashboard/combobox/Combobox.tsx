@@ -6,6 +6,7 @@ import ComboboxContext from '@/context/comboboxContext';
 import useComboboxState from '@/hooks/useComboboxState';
 
 interface ComboboxProps {
+  id: string;
   children: React.ReactNode;
   value: string;
   setValue: (value: string) => void;
@@ -30,12 +31,13 @@ interface ComboboxProps {
  *   </Combobox.List>
  * </Combobox>
  */
-export default function Combobox({ children, value, setValue }: ComboboxProps) {
+export default function Combobox({ id, children, value, setValue }: ComboboxProps) {
   const { isOpen, setIsOpen, searchQuery, setSearchQuery, selectedNode, setSelectedNode } =
     useComboboxState();
 
   const contextValue = useMemo(
     () => ({
+      id,
       selectedValue: value,
       setSelectedValue: setValue,
       isOpen,
@@ -45,7 +47,17 @@ export default function Combobox({ children, value, setValue }: ComboboxProps) {
       selectedNode,
       setSelectedNode,
     }),
-    [value, setValue, isOpen, setIsOpen, searchQuery, setSearchQuery, selectedNode, setSelectedNode]
+    [
+      id,
+      value,
+      setValue,
+      isOpen,
+      setIsOpen,
+      searchQuery,
+      setSearchQuery,
+      selectedNode,
+      setSelectedNode,
+    ]
   );
 
   return (

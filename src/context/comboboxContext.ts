@@ -1,6 +1,7 @@
 import { createContext } from 'react';
 
 interface ComboboxContextType {
+  id: string;
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
   selectedValue: string;
