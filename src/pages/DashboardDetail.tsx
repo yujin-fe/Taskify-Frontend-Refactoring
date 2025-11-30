@@ -294,6 +294,7 @@ export default function DashboardDetail() {
 
       {deleteColumnModal.isOpen && selectedColumn && (
         <DeleteColumnModal
+          isLoading={deleteMutation.isLoading}
           serverErrorMessage={deleteMutation.error}
           onDelete={handleSubmitDeleteColumn}
         />
