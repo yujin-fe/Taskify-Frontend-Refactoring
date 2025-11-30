@@ -9,8 +9,8 @@ import type { Assignee } from '@/types/card';
 interface ComboboxProps {
   id: string;
   children: React.ReactNode;
-  value: Assignee;
-  setValue: (value: Assignee) => void;
+  value: Assignee | null;
+  setValue: (value: Assignee | null) => void;
 }
 
 /**
