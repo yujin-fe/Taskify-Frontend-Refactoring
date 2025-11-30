@@ -67,7 +67,7 @@ export default function MyDashboard() {
             </div>
           )}
         </section>
-        <section className='mt-10 h-[650px] max-w-[1022px] rounded-lg bg-gray-0'>
+        <section className='mt-10 h-fit max-w-[1022px] rounded-lg bg-gray-0 pb-2.5'>
           <InvitedDashboard />
         </section>
       </div>
