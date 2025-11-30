@@ -3,11 +3,10 @@ import DashboardCard from '@/components/dashboard-detail/card/DashboardCard';
 import ColumnInfoHeader from '@/components/dashboard-detail/column/ColumnInfoHeader';
 import CreateCardModal from '@/components/dashboard-detail/modal/CreateCardModal';
 import Skeleton from '@/components/skeleton/Skeleton';
+import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 import useMutation from '@/hooks/useMutation';
-import useQuery from '@/hooks/useQuery';
 import useUserContext from '@/hooks/useUserContext';
 import { createCard, getCardData, type CreateCardType } from '@/lib/apis/cards';
-import { getMemberList } from '@/lib/apis/members';
 import type { CardInitialValueType, CardsResponse } from '@/types/card';
 import type { ColumnsData } from '@/types/column';
 import type { MembersResponse } from '@/types/members';
@@ -17,15 +16,19 @@ import { uploadCardImage } from '@/utils/card/uploadCardImage';
 interface ColumnCardListProps {
   column: ColumnsData;
   dashboardId: string;
+  memberData: MembersResponse | null;
   isCreateOpen: boolean;
   onHeaderClick: () => void;
   onOpenCreate: () => void;
   onCloseCreate: () => void;
 }
 
+const CARD_LIST_SIZE = 5;
+
 export default function ColumnCardList({
   column,
   dashboardId,
+  memberData,
   isCreateOpen,
   onHeaderClick,
   onOpenCreate,
@@ -33,18 +36,25 @@ export default function ColumnCardList({
 }: ColumnCardListProps) {
   const { userProfile } = useUserContext();
 
-  const cardQuery = useQuery<CardsResponse>({
-    fetchFn: () =>
-      getCardData({
-        size: 20,
-        cursorId: null,
-        columnId: column.id,
-      }),
-  });
+  const {
+    data: infiniteData,
+    isLoading,
+    error,
+    lastItemRef,
+  } = useInfiniteScroll<CardsResponse, { size: number; columnId: number }>({
+    fetchFn: (params) => getCardData(params),
+    params: { size: CARD_LIST_SIZE, columnId: column.id },
+    onSuccess: (prev, next) => {
+      if (!prev) {
+        return next;
+      }
 
-  const memberQuery = useQuery<MembersResponse>({
-    fetchFn: () => getMemberList({ dashboardId }),
-    params: { dashboardId },
+      return {
+        ...next,
+        cards: [...prev.cards, ...next.cards],
+        totalCount: next.totalCount,
+      };
+    },
   });
 
   // card mutation
@@ -56,13 +66,22 @@ export default function ColumnCardList({
     },
   });
 
-  if (cardQuery.isLoading || !cardQuery.data || !memberQuery.data) {
+  if (isLoading && !infiniteData) {
     return (
       <div className='flex flex-col gap-[16px]'>
         <Skeleton className='mb-[8px] h-[24px] w-[120px] rounded' />
         <Skeleton className='flex flex-col overflow-hidden rounded-[6px] p-[18px] pb-[6px] select-none sm:flex-row sm:items-center sm:px-[20px] sm:py-[16px] md:max-w-[314px] md:flex-col md:items-start' />
       </div>
     );
+  }
+
+  if (!infiniteData || !memberData) {
+    return null;
+  }
+
+  // TODO: 오류 컴포넌트 구현
+  if (error) {
+    return <div>오류가 발생했습니다.</div>;
   }
 
   // card handler
@@ -81,29 +100,35 @@ export default function ColumnCardList({
     await createCardMutation.mutate(reqBody);
   };
 
-  const { cards, totalCount } = cardQuery.data;
+  const { cards, totalCount } = infiniteData;
 
   return (
     <>
-      <div className='flex flex-col gap-[16px]'>
-        <ColumnInfoHeader title={column.title} totalCount={totalCount} onClick={onHeaderClick} />
-        <CreateButton
-          onClick={() => {
-            createCardMutation.reset();
-            onOpenCreate();
-          }}
-        />
-        {cards.map((card) => (
-          <DashboardCard key={card.id} cardData={card} />
-        ))}
-      </div>
+      <ColumnInfoHeader title={column.title} totalCount={totalCount} onClick={onHeaderClick} />
+      <CreateButton
+        className='mb-[16px] min-h-[40px]'
+        onClick={() => {
+          createCardMutation.reset();
+          onOpenCreate();
+        }}
+      />
+      <ul className='flex flex-col gap-[16px]'>
+        {cards.map((card, index) => {
+          const isLast = index === cards.length - 1;
+          return (
+            <li key={card.id} ref={isLast ? lastItemRef : undefined}>
+              <DashboardCard cardData={card} />
+            </li>
+          );
+        })}
+      </ul>
 
       {/* 할 일 생성 모달 */}
       {isCreateOpen && (
         <CreateCardModal
           serverErrorMessage={createCardMutation.error}
           onSubmit={handleSubmitCreateCard}
-          memberData={memberQuery.data}
+          memberData={memberData}
         />
       )}
     </>
