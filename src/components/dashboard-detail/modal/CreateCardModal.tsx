@@ -51,8 +51,6 @@ export default function CreateCardModal({
     }
   };
 
-  console.log(memberData.members[0].userId);
-
   const isDisabled = formValue.title.trim() === '' || formValue.description.trim() === '';
 
   return (
