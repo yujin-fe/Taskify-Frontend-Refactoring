@@ -18,7 +18,6 @@ import { uploadCardImage } from '@/utils/card/uploadCardImage';
 
 interface ColumnCardListProps {
   column: ColumnsData;
-  selectedColumn: ColumnsData | null;
   dashboardId: string;
   onHeaderClick: () => void;
   onCreateCardClick: () => void;
@@ -26,7 +25,6 @@ interface ColumnCardListProps {
 
 export default function ColumnCardList({
   column,
-  selectedColumn,
   dashboardId,
   onHeaderClick,
   onCreateCardClick,
@@ -61,7 +59,7 @@ export default function ColumnCardList({
     return (
       <div className='flex flex-col gap-[16px]'>
         <Skeleton className='mb-[8px] h-[24px] w-[120px] rounded' />
-        <Skeleton className='flex flex-col overflow-hidden rounded-[6px] border border-gray-300 bg-gray-0 p-[12px] pb-[6px] select-none sm:flex-row sm:items-center sm:px-[20px] sm:py-[16px] md:max-w-[314px] md:flex-col md:items-start' />
+        <Skeleton className='flex flex-col overflow-hidden rounded-[6px] p-[18px] pb-[6px] select-none sm:flex-row sm:items-center sm:px-[20px] sm:py-[16px] md:max-w-[314px] md:flex-col md:items-start' />
       </div>
     );
   }
@@ -71,14 +69,10 @@ export default function ColumnCardList({
     formValue: CardInitialValueType,
     imageFile: File | null
   ) => {
-    if (!selectedColumn) {
-      return;
-    }
-
-    const imageUrl = await uploadCardImage(selectedColumn.id, imageFile);
+    const imageUrl = await uploadCardImage(column.id, imageFile);
     const reqBody = createCardRequestBody(
       formValue,
-      selectedColumn.id,
+      column.id,
       dashboardId,
       imageUrl,
       userProfile?.id
@@ -105,7 +99,7 @@ export default function ColumnCardList({
       </div>
 
       {/* 할 일 생성 모달 */}
-      {createCardModal.isOpen && (
+      {createCardModal.isOpen && column.id && (
         <CreateCardModal
           serverErrorMessage={createCardMutation.error}
           onSubmit={handleSubmitCreateCard}
