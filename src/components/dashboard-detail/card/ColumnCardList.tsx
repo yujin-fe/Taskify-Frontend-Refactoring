@@ -4,6 +4,7 @@ import ColumnInfoHeader from '@/components/dashboard-detail/column/ColumnInfoHea
 import CreateCardModal from '@/components/dashboard-detail/modal/CreateCardModal';
 import Skeleton from '@/components/skeleton/Skeleton';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
+import { useModal } from '@/hooks/useModal';
 import useMutation from '@/hooks/useMutation';
 import useUserContext from '@/hooks/useUserContext';
 import { createCard, getCardData, type CreateCardType } from '@/lib/apis/cards';
@@ -17,10 +18,7 @@ interface ColumnCardListProps {
   column: ColumnsData;
   dashboardId: string;
   memberData: MembersResponse | null;
-  isCreateOpen: boolean;
   onHeaderClick: () => void;
-  onOpenCreate: () => void;
-  onCloseCreate: () => void;
 }
 
 const CARD_LIST_SIZE = 5;
@@ -29,12 +27,11 @@ export default function ColumnCardList({
   column,
   dashboardId,
   memberData,
-  isCreateOpen,
   onHeaderClick,
-  onOpenCreate,
-  onCloseCreate,
 }: ColumnCardListProps) {
   const { userProfile } = useUserContext();
+  const CREATE_MODAL_NAME = `CREATE_CARD_${column.id}`;
+  const createCardModal = useModal(CREATE_MODAL_NAME);
 
   const {
     data: infiniteData,
@@ -60,7 +57,7 @@ export default function ColumnCardList({
   const createCardMutation = useMutation({
     mutationFn: (reqBody: CreateCardType) => createCard(reqBody),
     onSuccess: (newCard) => {
-      onCloseCreate();
+      createCardModal.handleModalClose();
 
       infiniteSetData((prev) => {
         if (!prev) {
@@ -118,7 +115,7 @@ export default function ColumnCardList({
         className='mb-[16px] min-h-[40px]'
         onClick={() => {
           createCardMutation.reset();
-          onOpenCreate();
+          createCardModal.handleModalOpen();
         }}
       />
       <ul className='flex flex-col gap-[16px]'>
@@ -133,8 +130,9 @@ export default function ColumnCardList({
       </ul>
 
       {/* 할 일 생성 모달 */}
-      {isCreateOpen && (
+      {createCardModal.isOpen && (
         <CreateCardModal
+          modalName={CREATE_MODAL_NAME}
           serverErrorMessage={createCardMutation.error}
           onSubmit={handleSubmitCreateCard}
           memberData={memberData}
