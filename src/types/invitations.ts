@@ -27,6 +27,6 @@ export interface Invitation {
 }
 
 export interface InvitationResponse {
-  cursorId: number;
+  cursorId: number | null;
   invitations: Invitation[];
 }
