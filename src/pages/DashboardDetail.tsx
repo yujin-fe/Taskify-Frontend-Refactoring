@@ -86,7 +86,7 @@ export default function DashboardDetail() {
   });
 
   const { data: memberData } = useQuery<MembersResponse>({
-    fetchFn: () => getMemberList({ dashboardId: dashboardId! }),
+    fetchFn: () => getMemberList({ dashboardId: dashboardId ?? '' }),
   });
 
   // column mutation
