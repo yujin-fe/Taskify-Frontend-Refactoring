@@ -38,6 +38,7 @@ export default function ColumnCardList({
 
   const {
     data: infiniteData,
+    setData: infiniteSetData,
     isLoading,
     error,
     lastItemRef,
@@ -48,7 +49,6 @@ export default function ColumnCardList({
       if (!prev) {
         return next;
       }
-
       return {
         ...next,
         cards: [...prev.cards, ...next.cards],
@@ -57,12 +57,21 @@ export default function ColumnCardList({
     },
   });
 
-  // card mutation
   const createCardMutation = useMutation({
     mutationFn: (reqBody: CreateCardType) => createCard(reqBody),
-    onSuccess: () => {
-      // TODO: 카드 데이터에 업데이트 필요
+    onSuccess: (newCard) => {
       onCloseCreate();
+
+      infiniteSetData((prev) => {
+        if (!prev) {
+          return prev;
+        }
+        return {
+          ...prev,
+          cards: [...prev.cards, newCard],
+          totalCount: prev.totalCount + 1,
+        };
+      });
     },
   });
 
