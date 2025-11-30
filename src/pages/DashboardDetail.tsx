@@ -1,15 +1,23 @@
+import { useState } from 'react';
 import { useParams } from 'react-router';
 import CreateButton from '@/components/dashboard/CreateButton';
 import DashboardCard from '@/components/dashboard-detail/card/DashboardCard';
 import ColumnContainer from '@/components/dashboard-detail/column/ColumnContainer';
 import ColumnInfoHeader from '@/components/dashboard-detail/column/ColumnInfoHeader';
+import ChangeColumnModal from '@/components/dashboard-detail/modal/ChangeColumnModal';
 import CreateColumnModal from '@/components/dashboard-detail/modal/CreateColumnModal';
 import ColumnSkeleton from '@/components/skeleton/ColumnSkeleton';
-import { CREATE_COLUMN } from '@/constants/modalName';
+import { CHANGE_COLUMN, CREATE_COLUMN } from '@/constants/modalName';
 import { useModal } from '@/hooks/useModal';
 import useMutation from '@/hooks/useMutation';
 import useQuery from '@/hooks/useQuery';
-import { createColumn, getColumnList, type CreateColumnType } from '@/lib/apis/columns';
+import {
+  changeColumn,
+  createColumn,
+  getColumnList,
+  type ChangeColumnType,
+  type CreateColumnType,
+} from '@/lib/apis/columns';
 import type { ColumnsData, ColumnsResponse } from '@/types/column';
 import { cn } from '@/utils/cn';
 
@@ -64,15 +72,18 @@ const cardDataArray = [
   },
 ];
 
+interface ChangeColumnVariables {
+  columnId: number;
+  body: ChangeColumnType;
+}
+
 export default function DashboardDetail() {
   const { dashboardId } = useParams<{ dashboardId: string }>();
   const isCollapsed = localStorage.getItem('sidebar-collapsed') === 'true';
+  const [selectedColumn, setSelectedColumn] = useState<ColumnsData | null>(null);
 
-  const {
-    isOpen: isCreateColumnModalOpen,
-    handleModalOpen: handleCreateColumnModalOpen,
-    handleModalClose: handleCreateColumnModalClose,
-  } = useModal(CREATE_COLUMN);
+  const createColumnModal = useModal(CREATE_COLUMN);
+  const changeColumnModal = useModal(CHANGE_COLUMN);
 
   const {
     data: columnDataList,
@@ -102,7 +113,38 @@ export default function DashboardDetail() {
         };
       });
 
-      handleCreateColumnModalClose();
+      createColumnModal.handleModalClose();
+    },
+  });
+
+  const updateMutation = useMutation<ColumnsData, ChangeColumnVariables>({
+    mutationFn: ({ columnId, body }) => changeColumn(columnId, body),
+    onSuccess: (updated) => {
+      if (!updated) {
+        return;
+      }
+
+      setColumnDataList((prev) => {
+        if (!prev) {
+          return prev;
+        }
+
+        return {
+          ...prev,
+          data: prev.data.map((col) =>
+            col.id === updated.id
+              ? {
+                  ...col,
+                  title: updated.title,
+                  updatedAt: updated.updatedAt,
+                }
+              : col
+          ),
+        };
+      });
+
+      setSelectedColumn(null);
+      changeColumnModal.handleModalClose();
     },
   });
 
@@ -134,6 +176,25 @@ export default function DashboardDetail() {
     });
   };
 
+  const handleSubmitChangeColumn = async (nextTitle: string) => {
+    if (!selectedColumn) {
+      return;
+    }
+
+    const isDuplicate = columnDataList.data.some(
+      (col) => col.title.trim() === nextTitle && col.id !== selectedColumn.id
+    );
+
+    if (isDuplicate) {
+      throw new Error('중복된 컬럼 이름입니다.');
+    }
+
+    await updateMutation.mutate({
+      columnId: selectedColumn.id,
+      body: { title: nextTitle },
+    });
+  };
+
   const canAddColumn = columnDataList.data.length < 10;
 
   return (
@@ -146,7 +207,11 @@ export default function DashboardDetail() {
               <ColumnInfoHeader
                 title={column.title}
                 totalCount={5}
-                onClick={() => console.log('컬럼 수정 모달')}
+                onClick={() => {
+                  setSelectedColumn(column);
+                  updateMutation.reset();
+                  changeColumnModal.handleModalOpen();
+                }}
               />
               <div className='flex flex-col gap-[16px]'>
                 <CreateButton onClick={() => console.log('할일 생성 모달')} />
@@ -163,7 +228,10 @@ export default function DashboardDetail() {
             {/* 데스크탑 버튼 */}
             <CreateButton
               className='mx-[20px] mt-[68px] hidden w-[354px] shrink-0 font-2lg-bold md:flex'
-              onClick={handleCreateColumnModalOpen}>
+              onClick={() => {
+                createMutation.reset();
+                createColumnModal.handleModalOpen();
+              }}>
               새로운 컬럼 추가하기
             </CreateButton>
 
@@ -175,17 +243,28 @@ export default function DashboardDetail() {
               )}>
               <CreateButton
                 className='h-[70px] w-full shrink-0 font-2lg-bold'
-                onClick={handleCreateColumnModalOpen}>
+                onClick={() => {
+                  createMutation.reset();
+                  createColumnModal.handleModalOpen();
+                }}>
                 새로운 컬럼 추가하기
               </CreateButton>
             </div>
           </>
         )}
       </div>
-      {isCreateColumnModalOpen && (
+      {createColumnModal.isOpen && (
         <CreateColumnModal
           serverErrorMessage={createMutation.error}
           onSubmit={handleSubmitCreateColumn}
+        />
+      )}
+
+      {changeColumnModal.isOpen && selectedColumn && (
+        <ChangeColumnModal
+          initialName={selectedColumn.title}
+          serverErrorMessage={updateMutation.error}
+          onSubmit={handleSubmitChangeColumn}
         />
       )}
     </>
