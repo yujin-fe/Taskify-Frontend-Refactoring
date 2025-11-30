@@ -11,7 +11,7 @@ export default function ComboboxItem({ children, value }: ComboboxItemProps) {
   const { selectedValue, setSelectedValue, setIsOpen, setSearchQuery, setSelectedNode } =
     useComboboxContext();
 
-  const isSelected = selectedValue?.nickname === value.nickname;
+  const isSelected = selectedValue?.id === value.id || selectedValue?.userId === value.userId;
 
   const handleListClick = () => {
     if (isSelected) {
