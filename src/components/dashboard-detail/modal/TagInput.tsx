@@ -66,7 +66,7 @@ export default function TagInput({ tags, setTags }: TagInputProps) {
           onKeyDown={handleKeyDown}
         />
       </div>
-      <span className='font-md-medium text-error'>{error}</span>
+      {error && <span className='font-md-medium text-error'>{error}</span>}
     </div>
   );
 }
