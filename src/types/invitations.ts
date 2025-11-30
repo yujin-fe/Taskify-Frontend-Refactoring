@@ -1,4 +1,3 @@
-
 export interface Invitation {
   id: number;
   inviter: {
