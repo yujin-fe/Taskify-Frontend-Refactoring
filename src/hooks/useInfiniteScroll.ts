@@ -80,9 +80,16 @@ const useInfiniteScroll = <TData extends InfiniteScrollResType, TParams = object
     };
   }, [cursor]);
 
+  const resetData = () => {
+    setData(null);
+    setCursor(undefined);
+    initLoadRef.current = true;
+  };
+
   return {
     data,
     setData,
+    resetData,
     isLoading,
     error,
     lastItemRef,

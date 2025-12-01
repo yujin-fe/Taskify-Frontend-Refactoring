@@ -33,28 +33,38 @@ export default function InvitedDashboard() {
     };
   };
 
-  const { data, error, setData, lastItemRef } = useInfiniteScroll({
+  const { data, error, setData, resetData, lastItemRef } = useInfiniteScroll({
     fetchFn: (params) => getMyInvitations(params),
     params,
     onSuccess,
   });
 
-  const handleSearch = async (value: string) => {
-    if (!value) {
-      setSearch(value);
-      const data = await getMyInvitations({
-        size: 100,
-        cursorId: undefined,
-        title: null,
-      });
-      setData(data);
-    }
+  const handleSearch = (value: string) => {
     setSearch(value);
+  };
+
+  const handleResetSearchbar = async () => {
+    resetData();
+    setSearch('');
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    if (!search) {
+      resetData();
+      setSearch('');
+    }
+    e.preventDefault();
     const data = await getMyInvitations({
-      title: value,
+      title: search,
     });
     setData(data);
   };
+
+  //글자를쓰고 있을 때 -> value가 있음 -> 엔터로 제출
+  //글자를 다 지우면 -> value가 0이되는 순간 onchange
+  //onchange이벤트는 value가 있을때는 동작하지 않고 없을때만 리셋을 시킨다.
+  //onchange이벤트는 e.target.value를 value 상태에 넣어두고 value가 없을때는 리셋데이터를 한다.
+  //엔터를 눌렀을때만 폼을 제출한다.
 
   //TODO: 에러발생 컴포넌트
   if (error) {
@@ -114,7 +124,7 @@ export default function InvitedDashboard() {
     );
   };
 
-  return params.title === null && invitations.length === 0 ? (
+  return invitations.length === 0 && (search === null || search === '') ? (
     nullList()
   ) : (
     <>
@@ -125,14 +135,19 @@ export default function InvitedDashboard() {
               초대받은 대시보드
             </Title>
           </DashboardHeader>
-          <Input value={search ?? ''} onChange={handleSearch}>
-            <Input.Group className='flex h-[40px] items-center'>
-              <Input.PrefixIcon>
-                <Icons.Search className='text-gray-700' />
-              </Input.PrefixIcon>
-              <Input.Field placeholder='검색' />
-            </Input.Group>
-          </Input>
+          <form onSubmit={(e) => handleSubmit(e)}>
+            <Input value={search ?? ''} onChange={handleSearch}>
+              <Input.Group className='flex h-[40px] items-center'>
+                <Input.PrefixIcon>
+                  <Icons.Search className='text-gray-700' />
+                </Input.PrefixIcon>
+                <Input.SuffixButton ariaLabel='검색창 초기화' onClick={handleResetSearchbar}>
+                  <Icons.Close />
+                </Input.SuffixButton>
+                <Input.Field placeholder='검색' />
+              </Input.Group>
+            </Input>
+          </form>
         </div>
         <div className='flex max-h-[625px] flex-col sm:h-[400px] lg:h-[464px]'>
           {!isMobile && (
