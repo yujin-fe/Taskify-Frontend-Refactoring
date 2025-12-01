@@ -7,7 +7,7 @@ interface GetCommentListParams {
   cardId: number;
 }
 
-interface CreateCommentType {
+export interface CreateCommentType {
   content: string;
   cardId: number;
   columnId: number;
