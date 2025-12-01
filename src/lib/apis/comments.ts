@@ -29,7 +29,7 @@ export const createComment = async (reqBody: CreateCommentType) => {
 };
 
 /** 댓글 수정 api */
-export const changeComment = async (commentId: number, reqBody: { content: string }) => {
+export const updateComment = async (commentId: number, reqBody: { content: string }) => {
   const res = await api.put(`/comments/${commentId}`, reqBody);
   return res;
 };

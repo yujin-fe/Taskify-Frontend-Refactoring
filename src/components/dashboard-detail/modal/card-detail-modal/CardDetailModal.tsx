@@ -7,7 +7,7 @@ import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 import useMutation from '@/hooks/useMutation';
 import { useResponsiveValue } from '@/hooks/useResponsiveValue';
 import {
-  changeComment,
+  updateComment,
   createComment,
   deleteComment,
   getCommentList,
@@ -81,7 +81,7 @@ export default function CardDetailModal({ closeModal, columnId, cardId }: CardDe
 
   const updateCommentMutation = useMutation({
     mutationFn: ({ id, content }: { id: number; content: string }) =>
-      changeComment(id, { content }),
+      updateComment(id, { content }),
 
     onSuccess: (newdata) => {
       commentList.setData((prev) => {
