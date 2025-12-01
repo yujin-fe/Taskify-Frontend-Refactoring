@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { useState } from 'react';
 import Icons from '@/assets/icons';
 import notInvited from '@/assets/images/dashboard/no-invited-dashboard.png';
@@ -73,8 +74,10 @@ export default function InvitedDashboard() {
       });
       setData(data);
     } catch (error) {
-      console.error(error);
-      //TODO: 에러처리
+      if (axios.isAxiosError(error)) {
+        setConfirmMessage(`${error?.response?.data?.message}: 오류가 발생했습니다.`);
+        handleModalOpen();
+      }
     }
   };
 
@@ -99,8 +102,10 @@ export default function InvitedDashboard() {
       handleModalOpen();
       await mutate({ invitationId, reqBody });
     } catch (error) {
-      setConfirmMessage(`${error}: 오류가 발생했습니다.`);
-      handleModalOpen();
+      if (axios.isAxiosError(error)) {
+        setConfirmMessage(`${error?.response?.data?.message}: 오류가 발생했습니다.`);
+        handleModalOpen();
+      }
     }
   };
 
