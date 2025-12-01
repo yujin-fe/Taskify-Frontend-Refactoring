@@ -122,7 +122,7 @@ export default function InvitedDashboard() {
     );
   };
 
-  return invitations.length === 0 && (search === null || search === '') ? (
+  return invitations.length === 0 && search === null ? (
     nullList()
   ) : (
     <>
