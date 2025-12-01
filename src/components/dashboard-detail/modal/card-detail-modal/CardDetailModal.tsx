@@ -83,7 +83,7 @@ export default function CardDetailModal({ closeModal, columnId, cardId }: CardDe
     mutationFn: ({ id, content }: { id: number; content: string }) =>
       updateComment(id, { content }),
 
-    onSuccess: (newdata) => {
+    onSuccess: (newData) => {
       commentList.setData((prev) => {
         if (!prev) {
           return prev;
@@ -91,7 +91,7 @@ export default function CardDetailModal({ closeModal, columnId, cardId }: CardDe
         return {
           ...prev,
           comments: prev.comments.map((c) =>
-            c.id === newdata.id ? { ...c, content: newdata.content } : c
+            c.id === newData.id ? { ...c, content: newData.content } : c
           ),
         };
       });
