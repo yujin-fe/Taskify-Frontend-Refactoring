@@ -22,6 +22,7 @@ import type { InfiniteScrollReturn } from '@/types/infiniteScroll';
 
 export interface CardDetailModalContentProps {
   cardData: CardDetailResponse | null;
+  columnTitle: string;
   comment: string;
   commentList: InfiniteScrollReturn<CommentListResponse>;
   setComment: React.Dispatch<React.SetStateAction<string>>;
@@ -35,13 +36,19 @@ export interface CardDetailModalContentProps {
 
 interface CardDetailModal {
   columnId: number;
+  columnTitle: string;
   cardId: number;
   closeModal: () => void;
 }
 
 const COMMENT_LIST_SIZE = 5;
 
-export default function CardDetailModal({ closeModal, columnId, cardId }: CardDetailModal) {
+export default function CardDetailModal({
+  closeModal,
+  columnTitle,
+  columnId,
+  cardId,
+}: CardDetailModal) {
   const { dashboardId } = useParams();
   const [comment, setComment] = useState('');
   const isDesktop = useResponsiveValue({
@@ -167,6 +174,7 @@ export default function CardDetailModal({ closeModal, columnId, cardId }: CardDe
       <div className='modal-dimmed'>
         {isDesktop ? (
           <CardDetailModalDesktop
+            columnTitle={columnTitle}
             cardData={cardDetailQuery.data}
             commentList={commentList}
             comment={comment}
@@ -180,6 +188,7 @@ export default function CardDetailModal({ closeModal, columnId, cardId }: CardDe
           />
         ) : (
           <CardDetailModalMobile
+            columnTitle={columnTitle}
             cardData={cardDetailQuery.data}
             commentList={commentList}
             comment={comment}

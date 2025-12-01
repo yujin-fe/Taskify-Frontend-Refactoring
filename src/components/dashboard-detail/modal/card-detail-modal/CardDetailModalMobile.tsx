@@ -12,6 +12,7 @@ import { DUE_DATE } from '@/constants/requestCardData';
 import { getProfileColorForId } from '@/utils/avatar';
 
 export default function CardDetailModalMobile({
+  columnTitle,
   cardData,
   comment,
   commentList,
@@ -70,7 +71,7 @@ export default function CardDetailModalMobile({
           </div>
         </div>
         <div className='mt-[16px] flex flex-wrap items-center gap-[12px]'>
-          <CardStatusBadge title='To Do' />
+          <CardStatusBadge title={columnTitle} />
           <div className='h-[20px] w-0 border-r border-gray-300' />
           <div className='flex gap-[8px]'>
             {tags
