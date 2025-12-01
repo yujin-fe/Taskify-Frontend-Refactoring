@@ -54,10 +54,14 @@ export default function InvitedDashboard() {
       resetData();
       return;
     }
-    const data = await getMyInvitations({
-      title: search,
-    });
-    setData(data);
+    try {
+      const data = await getMyInvitations({
+        title: search,
+      });
+      setData(data);
+    } catch (error) {
+      return error;
+    }
   };
 
   //TODO: 에러발생 컴포넌트
