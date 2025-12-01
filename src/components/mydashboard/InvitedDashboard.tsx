@@ -3,8 +3,10 @@ import Icons from '@/assets/icons';
 import notInvited from '@/assets/images/dashboard/no-invited-dashboard.png';
 import Button from '@/components/common/Button';
 import Input from '@/components/common/input/Input';
+import BaseModalFrame from '@/components/common/modal/BaseModalFrame';
 import Title from '@/components/common/Title';
 import DashboardHeader from '@/components/dashboard/table/DashboardHeader';
+import useBaseModal from '@/hooks/useBaseModal';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 import useMutation from '@/hooks/useMutation';
 import { useResponsiveValue } from '@/hooks/useResponsiveValue';
@@ -18,11 +20,13 @@ interface ResponseInvitationReqType {
 }
 export default function InvitedDashboard() {
   const [search, setSearch] = useState<null | string>(null);
+  const [confirmMessage, setConfirmMessage] = useState('');
   const isMobile = useResponsiveValue({
     mobile: true,
     tablet: false,
     desktop: false,
   });
+  const { isOpen, handleModalClose, handleModalOpen } = useBaseModal();
 
   const params: InvitationParams = {
     size: INVITATION_LIST_SIZE,
@@ -88,22 +92,21 @@ export default function InvitedDashboard() {
     return null;
   }
 
-  const handleApprove = async (id: number) => {
-    console.log('수락');
-    const invitationId: string = id.toString();
+  const handleResponse = async (invitation: Invitation, inviteAccepted: boolean) => {
+    const invitationId: string = invitation.id.toString();
     const reqBody = {
-      inviteAccepted: true,
+      inviteAccepted,
     };
-    await mutate({ invitationId, reqBody });
-  };
-
-  const handleReject = async (id: number) => {
-    console.log('거절');
-    const invitationId: string = id.toString();
-    const reqBody = {
-      inviteAccepted: false,
-    };
-    await mutate({ invitationId, reqBody });
+    try {
+      await mutate({ invitationId, reqBody });
+      setConfirmMessage(
+        `${invitation.dashboard.title} 초대를 ${inviteAccepted ? '수락' : '거절'}했습니다!`
+      );
+      handleModalOpen();
+    } catch (error) {
+      setConfirmMessage(`${error}: 오류가 발생했습니다.`);
+      handleModalOpen();
+    }
   };
 
   const invitations: Invitation[] = data.invitations;
@@ -146,14 +149,14 @@ export default function InvitedDashboard() {
               <Button
                 size={'sm'}
                 className='flex flex-1'
-                onClick={() => handleApprove(invitation.id)}>
+                onClick={() => handleResponse(invitation, true)}>
                 수락
               </Button>
               <Button
                 theme={'secondary'}
                 size={'sm'}
                 className='flex flex-1'
-                onClick={() => handleReject(invitation.id)}>
+                onClick={() => handleResponse(invitation, false)}>
                 거절
               </Button>
             </div>
@@ -220,14 +223,14 @@ export default function InvitedDashboard() {
                     <Button
                       size={'sm'}
                       className='max-md:font-14-medium flex-none max-md:h-[30px] max-md:min-w-[72px] max-md:p-0'
-                      onClick={() => handleApprove(invitation.id)}>
+                      onClick={() => handleResponse(invitation, true)}>
                       수락
                     </Button>
                     <Button
                       theme={'secondary'}
                       size={'sm'}
                       className='max-md:font-14-medium flex-none max-md:h-[30px] max-md:min-w-[72px] max-md:p-0'
-                      onClick={() => handleReject(invitation.id)}>
+                      onClick={() => handleResponse(invitation, false)}>
                       거절
                     </Button>
                   </div>
@@ -237,6 +240,7 @@ export default function InvitedDashboard() {
           </ul>
         </div>
       </div>
+      {isOpen && <BaseModalFrame setOnModal={handleModalClose}>{confirmMessage}</BaseModalFrame>}
     </>
   );
 }
