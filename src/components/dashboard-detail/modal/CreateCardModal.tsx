@@ -68,7 +68,7 @@ export default function CreateCardModal({
                 id='assigneeUserId'
                 value={formValue.assigneeUser}
                 setValue={handleChange('assigneeUser')}>
-                <Combobox.Trigger name='담당자' placeholder='이름을 입력해 주세요' />
+                <Combobox.Trigger type='avatar' name='담당자' placeholder='이름을 입력해 주세요' />
                 <Combobox.List>
                   {memberData.members.map((m) => (
                     <Combobox.Item key={m.id} value={m}>
