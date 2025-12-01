@@ -3,7 +3,6 @@ import { useParams } from 'react-router';
 import ModalPortal from '@/components/common/modal/ModalPortal';
 import CardDetailModalDesktop from '@/components/dashboard-detail/modal/card-detail-modal/CardDetailModalDesktop';
 import CardDetailModalMobile from '@/components/dashboard-detail/modal/card-detail-modal/CardDetailModalMobile';
-import Skeleton from '@/components/skeleton/Skeleton';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 import useMutation from '@/hooks/useMutation';
 import useQuery from '@/hooks/useQuery';
@@ -160,14 +159,6 @@ export default function CardDetailModal({
   const handleCardDelete = () => {
     console.log('TODO: 카드 삭제 api 연결');
   };
-
-  if (cardDetailQuery.isLoading || !cardDetailQuery.data) {
-    <ModalPortal>
-      <div className='modal-dimmed'>
-        <Skeleton className='' />
-      </div>
-    </ModalPortal>;
-  }
 
   return (
     <ModalPortal>
