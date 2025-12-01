@@ -34,7 +34,7 @@ export default function DetailLayout() {
       setCompletedInviteeUser(resData.invitee.nickname);
       openBaseModal();
       closeInviteModal();
-      localStorage.setItem(inviteeEmail, REQUESTED_EMAIL);
+      localStorage.setItem(inviteeEmail + dashboardId, REQUESTED_EMAIL);
     } catch (err) {
       if (axios.isAxiosError(err)) {
         setApiErrorMsg(err.response?.data?.message ?? '오류가 발생했습니다.');
@@ -53,6 +53,7 @@ export default function DetailLayout() {
           setErrorMsg={setInputErrorMsg}
           onSubmit={handleInviteSubmit}
           apiErrorMsg={apiErrorMsg}
+          dashboardId={dashboardId}
         />
       )}
       {baseModalIsOpen && (

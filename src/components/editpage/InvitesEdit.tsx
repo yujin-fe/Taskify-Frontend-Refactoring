@@ -78,7 +78,7 @@ export default function InvitesEdit() {
       );
       if (invitation) {
         const inviteeEmail = invitation?.invitee?.email;
-        localStorage.removeItem(inviteeEmail);
+        localStorage.removeItem(inviteeEmail + dashboardId);
       }
       setDeleteMessage('초대 취소가 완료되었습니다.');
       openCancelModal();
@@ -220,6 +220,7 @@ export default function InvitesEdit() {
           setErrorMsg={setInputErrorMsg}
           onSubmit={handleInviteSubmit}
           apiErrorMsg={apiErrorMsg}
+          dashboardId={dashboardId}
         />
       )}
 
