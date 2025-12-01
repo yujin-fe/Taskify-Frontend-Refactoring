@@ -1,7 +1,8 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useContext } from 'react';
 import { useParams } from 'react-router';
 import Button from '@/components/common/Button';
 import Input from '@/components/common/input/Input';
+import BaseModalFrame from '@/components/common/modal/BaseModalFrame';
 import FormModal from '@/components/common/modal/FormModal';
 import Title from '@/components/common/Title';
 import ColorPicker from '@/components/dashboard/ColorPicker';
@@ -9,33 +10,70 @@ import DashboardCreateModal from '@/components/dashboard/modal/DashboardCreateMo
 import DashboardContainer from '@/components/dashboard/table/DashboardContainer';
 import DashboardHeader from '@/components/dashboard/table/DashboardHeader';
 import { DEFAULT_COLOR, type ColorHex } from '@/constants/color';
+import { DashboardContext } from '@/context/dashboardContext';
+import useBaseModal from '@/hooks/useBaseModal';
 import useMutation from '@/hooks/useMutation';
 import { changeDashboard, type ChangeDashboardParams } from '@/lib/apis/dashboards';
 import type { Dashboard } from '@/types/dashboardsData';
 
 export default function DashboardNameEdit() {
   const { dashboardId } = useParams<{ dashboardId: string }>();
+  const { dashboardsData, isLoading: contextIsLoading } = useContext(DashboardContext);
+
+  const {
+    isOpen: baseModalIsOpen,
+    handleModalOpen: openBaseModal,
+    handleModalClose: closeBaseModal,
+  } = useBaseModal();
 
   const numericDashboardId = useMemo(() => {
     return dashboardId ? Number(dashboardId) : null;
   }, [dashboardId]);
 
-  const [selectedColor, setSelectedColor] = useState<ColorHex>(DEFAULT_COLOR);
-  const [dashboardName, setDashboardName] = useState('비브리지');
+  const currentDashboard = useMemo(() => {
+    if (numericDashboardId && dashboardsData) {
+      return dashboardsData.dashboards.find((d) => d.id === numericDashboardId);
+    }
+    return null;
+  }, [numericDashboardId, dashboardsData]);
 
-  const disabled = dashboardName.trim() === '';
+  const dashboardTitle = useMemo(() => {
+    return currentDashboard?.title ?? '대시보드 로딩 중...';
+  }, [currentDashboard]);
+
+  const dashboardColor = useMemo(() => {
+    return (currentDashboard?.color as ColorHex) || DEFAULT_COLOR;
+  }, [currentDashboard]);
+
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  const [editingName, setEditingName] = useState(dashboardTitle);
+
+  const [selectedColor, setSelectedColor] = useState<ColorHex>(dashboardColor);
+
+  if (!isInitialized && currentDashboard) {
+    setEditingName(currentDashboard.title);
+    setSelectedColor((currentDashboard.color as ColorHex) || DEFAULT_COLOR);
+    setIsInitialized(true);
+  }
+
+  const disabled = editingName.trim() === '';
 
   const updateDashboardMutation = useMutation<Dashboard, ChangeDashboardParams>({
     mutationFn: (data) => {
       if (!numericDashboardId) {
         throw new Error('Dashboard ID가 없습니다.');
       }
-
       return changeDashboard(numericDashboardId, data);
     },
-
-    onSuccess: (updatedDashboard) => {
-      alert(`대시보드 "${updatedDashboard!.title}"의 정보가 성공적으로 변경되었습니다.`);
+    onSuccess: (updated) => {
+      if (updated?.title) {
+        setEditingName(updated.title);
+      }
+      if (updated?.color) {
+        setSelectedColor(updated.color as ColorHex);
+      }
+      openBaseModal();
     },
   });
 
@@ -46,7 +84,7 @@ export default function DashboardNameEdit() {
     }
 
     updateDashboardMutation.mutate({
-      title: dashboardName,
+      title: editingName,
       color: selectedColor,
     });
   };
@@ -55,19 +93,28 @@ export default function DashboardNameEdit() {
     return <div>유효하지 않은 대시보드 ID입니다.</div>;
   }
 
+  if (contextIsLoading || !currentDashboard) {
+    return (
+      <div>
+        {contextIsLoading ? '대시보드 정보를 로딩 중입니다.' : '대시보드 정보를 찾을 수 없습니다.'}
+      </div>
+    );
+  }
+
   return (
-    <DashboardContainer type='EditDashboardName'>
+    <DashboardContainer type='EditDashboardName' key={numericDashboardId}>
       <DashboardCreateModal />
+
       <DashboardHeader>
         <Title as='h2' size='xl' weight='bold' className='pb-[24px]'>
-          {dashboardName}
+          {dashboardTitle}
         </Title>
       </DashboardHeader>
 
       <FormModal.Form onSubmit={handleSubmit}>
         <FormModal.Body>
           <div className='flex flex-col gap-[16px]'>
-            <Input value={dashboardName} onChange={(value) => setDashboardName(value)}>
+            <Input value={editingName} onChange={(value) => setEditingName(value)}>
               <Input.Label className='label-style'>대시보드 이름</Input.Label>
               <Input.Group>
                 <Input.Field
@@ -77,20 +124,32 @@ export default function DashboardNameEdit() {
                 />
               </Input.Group>
             </Input>
+
             <ColorPicker selectedColor={selectedColor} setSelectedColor={setSelectedColor} />
           </div>
         </FormModal.Body>
-        <FormModal.Footer className='pt-[32px] sm:pt-[40px]'>
-          <Button
-            theme={'primary'}
-            type='submit'
-            size='lg'
-            className='sm: px-[56px] py-[12px] sm:px-[46px]'
-            disabled={disabled || updateDashboardMutation.isLoading}>
-            {updateDashboardMutation.isLoading ? '변경 중...' : '변경'}
-          </Button>
-        </FormModal.Footer>
+
+        <Button
+          theme='primary'
+          type='submit'
+          size='lg'
+          className='mt-[32px] w-full py-[12px] sm:mt-[40px] sm:px-[46px] sm:px-[56px] lg:w-[564px]'
+          disabled={disabled || updateDashboardMutation.isLoading}>
+          {updateDashboardMutation.isLoading ? '변경 중...' : '변경'}
+        </Button>
       </FormModal.Form>
+
+      {baseModalIsOpen && (
+        <BaseModalFrame setOnModal={closeBaseModal}>
+          <div className='text-center'>
+            <p className='mb-2 text-lg font-bold'>변경 완료! 🎉</p>
+            <p>
+              대시보드 이름이 <span className='font-semibold'>{editingName}</span>으로
+              변경되었습니다.
+            </p>
+          </div>
+        </BaseModalFrame>
+      )}
     </DashboardContainer>
   );
 }

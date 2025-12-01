@@ -34,7 +34,7 @@ export default function InvitesEdit() {
     handleModalClose: closeBaseModal,
   } = useBaseModal();
 
-  const handleopen = useModal(INVITE).handleModalOpen;
+  const handleOpen = useModal(INVITE).handleModalOpen;
   const { handleModalClose: handleCloseInviteModal, isOpen: inviteModalIsOpen } = useModal(INVITE);
 
   const {
@@ -196,7 +196,7 @@ export default function InvitesEdit() {
           className='rounded-[4px] border border-gray-200'
         />
         <div className='mr-5 sm:mr-7'>
-          <InviteButton type='items' onClick={handleopen} />
+          <InviteButton type='items' onClick={handleOpen} />
         </div>
       </DashboardHeader>
       <DashboardBody>
