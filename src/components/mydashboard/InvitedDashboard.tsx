@@ -49,22 +49,16 @@ export default function InvitedDashboard() {
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     if (!search) {
       resetData();
-      setSearch('');
+      return;
     }
-    e.preventDefault();
     const data = await getMyInvitations({
       title: search,
     });
     setData(data);
   };
-
-  //글자를쓰고 있을 때 -> value가 있음 -> 엔터로 제출
-  //글자를 다 지우면 -> value가 0이되는 순간 onchange
-  //onchange이벤트는 value가 있을때는 동작하지 않고 없을때만 리셋을 시킨다.
-  //onchange이벤트는 e.target.value를 value 상태에 넣어두고 value가 없을때는 리셋데이터를 한다.
-  //엔터를 눌렀을때만 폼을 제출한다.
 
   //TODO: 에러발생 컴포넌트
   if (error) {
