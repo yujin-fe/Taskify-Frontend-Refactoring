@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Avatar from '@/components/common/avatar/Avatar';
 import type { CommentListResponse } from '@/types/comment';
-import { formatServerDueDate } from '@/utils/formatDateTime';
+import { formatDateForServer } from '@/utils/formatDateTime';
 
 interface CommentListProps {
   avatarSize?: 's' | 'm';
@@ -68,7 +68,7 @@ export default function CommentList({
                   {comment.author.nickname}
                 </span>
                 <span className='text-[10px] text-gray-400 sm:font-xs-regular'>
-                  {formatServerDueDate(comment.updatedAt)}
+                  {formatDateForServer(comment.updatedAt)}
                 </span>
               </div>
 

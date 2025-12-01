@@ -32,7 +32,7 @@ export function formatDueDate(date?: string | Date | null) {
   return `${yyyy}-${mm}-${dd} ${hh}:${min}`;
 }
 
-export function formatServerDueDate(date?: string | Date | null) {
+export function formatDateForServer(date?: string | Date | null) {
   if (!date) {
     return '';
   }
