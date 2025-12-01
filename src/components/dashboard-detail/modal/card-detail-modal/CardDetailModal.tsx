@@ -61,7 +61,7 @@ export default function CardDetailModal({ closeModal, columnId, cardId }: CardDe
     },
   });
 
-  const createCardMutation = useMutation<Comment, CreateCommentType>({
+  const createCommentMutation = useMutation<Comment, CreateCommentType>({
     mutationFn: (reqBody: CreateCommentType) => createComment(reqBody),
     onSuccess: (newComment) => {
       setComment('');
@@ -116,8 +116,12 @@ export default function CardDetailModal({ closeModal, columnId, cardId }: CardDe
   });
 
   const handleCommentSubmit = async () => {
+    if (!comment.trim()) {
+      return;
+    }
+
     const reqBody = { content: comment, cardId, columnId, dashboardId: Number(dashboardId) };
-    await createCardMutation.mutate(reqBody);
+    await createCommentMutation.mutate(reqBody);
   };
 
   const handleCommentEdit = async (commentId: number, newContent: string) => {
