@@ -10,7 +10,7 @@ import DashboardCreateModal from '@/components/dashboard/modal/DashboardCreateMo
 import DashboardContainer from '@/components/dashboard/table/DashboardContainer';
 import DashboardHeader from '@/components/dashboard/table/DashboardHeader';
 import { DEFAULT_COLOR, type ColorHex } from '@/constants/color';
-import { DashboardContext, type DashboardContextType } from '@/context/dashboardContext';
+import { DashboardContext } from '@/context/dashboardContext';
 import useBaseModal from '@/hooks/useBaseModal';
 import useMutation from '@/hooks/useMutation';
 import { changeDashboard, type ChangeDashboardParams } from '@/lib/apis/dashboards';
@@ -18,9 +18,7 @@ import type { Dashboard } from '@/types/dashboardsData';
 
 export default function DashboardNameEdit() {
   const { dashboardId } = useParams<{ dashboardId: string }>();
-  const { dashboardsData, isLoading: contextIsLoading } = useContext(
-    DashboardContext
-  ) as DashboardContextType;
+  const { dashboardsData, isLoading: contextIsLoading } = useContext(DashboardContext);
 
   const {
     isOpen: baseModalIsOpen,
@@ -158,7 +156,7 @@ export default function DashboardNameEdit() {
           theme='primary'
           type='submit'
           size='lg'
-          className='mt-[32px] w-full py-[12px] sm:mt-[40px] sm:px-[46px] sm:px-[56px] lg:w-[564px]'
+          className='mt-[32px] w-full py-[12px] sm:mt-[40px] sm:px-[46px] lg:w-[564px]'
           disabled={disabled || updateDashboardMutation.isLoading}>
           {updateDashboardMutation.isLoading ? '변경 중...' : '변경'}
         </Button>
