@@ -33,3 +33,9 @@ export const changeComment = async (commentId: number, reqBody: { content: strin
   const res = await api.put(`/comments/${commentId}`, reqBody);
   return res;
 };
+
+/** 댓글 삭제 api */
+export const deleteComment = async (commentId: number) => {
+  const res = await api.delete(`/comments/${commentId}`);
+  return res;
+};
