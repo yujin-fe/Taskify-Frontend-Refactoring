@@ -15,7 +15,7 @@ interface DashboardCardProps {
 export default function DashboardCard({ cardData }: DashboardCardProps) {
   const { imageUrl, tags, title, dueDate, assignee } = cardData;
   const [isImageError, setIsImageError] = useState(false);
-  const modal = useModal(`card_Detail_${cardData.id}`);
+  const modal = useModal(`cardDetail_${cardData.id}`);
 
   return (
     <>
