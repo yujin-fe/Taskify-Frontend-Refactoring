@@ -38,7 +38,7 @@ export default function CardDetailModalDesktop({
           laoreet eros, vel aliquet diam elit at leo.
         </p>
         <img
-          className='h-ful h-[260px] w-full rounded-[6px] object-cover'
+          className='h-[260px] w-full rounded-[6px] object-cover'
           src='https://i.namu.wiki/i/d1A_wD4kuLHmOOFqJdVlOXVt1TWA9NfNt_HA0CS0Y_N0zayUAX8olMuv7odG2FiDLDQZIRBqbPQwBSArXfEJlQ.webp'
           alt=''
         />
