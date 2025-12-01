@@ -60,7 +60,8 @@ export default function InvitedDashboard() {
       });
       setData(data);
     } catch (error) {
-      return error;
+      console.error(error);
+      //TODO: 에러처리
     }
   };
 
