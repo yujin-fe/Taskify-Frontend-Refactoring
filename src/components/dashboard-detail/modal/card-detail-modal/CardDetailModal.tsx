@@ -5,7 +5,9 @@ import CardDetailModalDesktop from '@/components/dashboard-detail/modal/card-det
 import CardDetailModalMobile from '@/components/dashboard-detail/modal/card-detail-modal/CardDetailModalMobile';
 import useCardDetail from '@/hooks/dashboard-detail/useCardDetail';
 import useCommentActions from '@/hooks/dashboard-detail/useCommentActions';
+import useMutation from '@/hooks/useMutation';
 import { useResponsiveValue } from '@/hooks/useResponsiveValue';
+import { deleteCard } from '@/lib/apis/cards';
 import type { CardDetailResponse } from '@/types/card';
 import type { CommentListResponse } from '@/types/comment';
 import type { InfiniteScrollReturn } from '@/types/infiniteScroll';
@@ -29,6 +31,7 @@ interface CardDetailModal {
   columnTitle: string;
   cardId: number;
   closeModal: () => void;
+  onDeleteCard: (id: number) => void;
 }
 
 export default function CardDetailModal({
@@ -36,6 +39,7 @@ export default function CardDetailModal({
   columnTitle,
   columnId,
   cardId,
+  onDeleteCard,
 }: CardDetailModal) {
   const { dashboardId } = useParams();
   const [comment, setComment] = useState('');
@@ -51,6 +55,14 @@ export default function CardDetailModal({
     Number(dashboardId),
     () => setComment('')
   );
+
+  const deleteCardMutation = useMutation<void, number>({
+    mutationFn: (cardId) => deleteCard(cardId),
+
+    onSuccess: (_, deletedId) => {
+      onDeleteCard(deletedId);
+    },
+  });
 
   const handleCommentSubmit = async () => {
     if (!comment.trim()) {
@@ -71,8 +83,9 @@ export default function CardDetailModal({
     console.log('TODO: 할 일 수정 모달 연결, 이 모달은 꺼져야함');
   };
 
-  const handleCardDelete = () => {
-    console.log('TODO: 카드 삭제 api 연결');
+  const handleCardDelete = async () => {
+    await deleteCardMutation.mutate(cardId);
+    closeModal();
   };
 
   return (
