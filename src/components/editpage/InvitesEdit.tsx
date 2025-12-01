@@ -25,7 +25,7 @@ export default function InvitesEdit() {
   const { currentPage, handlePrev, handleNext, isPrevDisabled } = usePagination();
   const { dashboardId } = useParams<{ dashboardId: string }>();
   const { isOpen, handleModalOpen, handleModalClose: setIsOpen } = useBaseModal();
-  const [cancleMessage, setDeleteMessage] = useState<string>('');
+  const [cancelMessage, setDeleteMessage] = useState<string>('');
 
   const params = useMemo(
     () => ({
@@ -54,7 +54,7 @@ export default function InvitesEdit() {
   const isNextDisabled = currentPage >= calculatedTotalPages;
   const invitations: Invitation[] = useMemo(() => inviteData?.invitations || [], [inviteData]);
 
-  const cancleMutation = useMutation<unknown, DeleteInvitationParams>({
+  const cancelMutation = useMutation<unknown, DeleteInvitationParams>({
     mutationFn: ({ dashboardId, invitationId }) => deleteInvitationdata(dashboardId, invitationId),
     onSuccess: () => {
       setDeleteMessage('초대 취소가 완료되었습니다.');
@@ -77,7 +77,7 @@ export default function InvitesEdit() {
   }
 
   const handleCancle = async (dashboardId: number, id: number) => {
-    await cancleMutation.mutate({ dashboardId, invitationId: id });
+    await cancelMutation.mutate({ dashboardId, invitationId: id });
   };
   if (!inviteData) {
     return null;
@@ -145,7 +145,7 @@ export default function InvitesEdit() {
       </DashboardBody>
       {isOpen && (
         <BaseModalFrame setOnModal={setIsOpen}>
-          <p>{cancleMessage}</p>
+          <p>{cancelMessage}</p>
         </BaseModalFrame>
       )}
     </DashboardContainer>
