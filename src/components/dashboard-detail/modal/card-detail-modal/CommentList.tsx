@@ -34,6 +34,10 @@ export default function CommentList({
   };
 
   const submitEdit = (id: number) => {
+    if (!editValue.trim()) {
+      return;
+    }
+
     onEdit(id, editValue);
     cancelEdit();
   };
@@ -96,6 +100,7 @@ export default function CommentList({
                     className='resize-none rounded border border-gray-300 p-2 text-sm outline-0 focus:border focus:border-primary'
                     value={editValue}
                     onChange={(e) => setEditValue(e.target.value)}
+                    aria-label='댓글 수정'
                   />
                   <div className='flex gap-[8px]'>
                     <button
