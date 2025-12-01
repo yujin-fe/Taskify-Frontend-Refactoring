@@ -9,6 +9,7 @@ import { useResponsiveValue } from '@/hooks/useResponsiveValue';
 import {
   changeComment,
   createComment,
+  deleteComment,
   getCommentList,
   type CreateCommentType,
 } from '@/lib/apis/comments';
@@ -21,7 +22,7 @@ export interface CardDetailModalContentProps {
   setComment: React.Dispatch<React.SetStateAction<string>>;
   handleCommentSubmit: () => void;
   handleCommentEdit: (commentId: number, newContent: string) => void;
-  handleCommentDelete?: (commentId: number) => void;
+  handleCommentDelete: (commentId: number) => void;
   handleCardEdit: () => void;
   handleCardDelete: () => void;
   closeModal: () => void;
@@ -97,6 +98,23 @@ export default function CardDetailModal({ closeModal, columnId, cardId }: CardDe
     },
   });
 
+  const deleteCommentMutation = useMutation<void, { id: number }>({
+    mutationFn: ({ id }) => deleteComment(id),
+    onSuccess: (_, variables) => {
+      const deletedId = variables.id;
+
+      commentList.setData((prev) => {
+        if (!prev) {
+          return prev;
+        }
+        return {
+          ...prev,
+          comments: prev.comments.filter((c) => c.id !== deletedId),
+        };
+      });
+    },
+  });
+
   const handleCommentSubmit = async () => {
     const reqBody = { content: comment, cardId, columnId, dashboardId: Number(dashboardId) };
     await createCardMutation.mutate(reqBody);
@@ -104,6 +122,10 @@ export default function CardDetailModal({ closeModal, columnId, cardId }: CardDe
 
   const handleCommentEdit = async (commentId: number, newContent: string) => {
     await updateCommentMutation.mutate({ id: commentId, content: newContent });
+  };
+
+  const handleCommentDelete = async (commentId: number) => {
+    await deleteCommentMutation.mutate({ id: commentId });
   };
 
   const handleCardEdit = () => {
@@ -124,6 +146,7 @@ export default function CardDetailModal({ closeModal, columnId, cardId }: CardDe
             setComment={setComment}
             handleCommentSubmit={handleCommentSubmit}
             handleCommentEdit={handleCommentEdit}
+            handleCommentDelete={handleCommentDelete}
             closeModal={closeModal}
             handleCardEdit={handleCardEdit}
             handleCardDelete={handleCardDelete}
@@ -135,6 +158,7 @@ export default function CardDetailModal({ closeModal, columnId, cardId }: CardDe
             setComment={setComment}
             handleCommentSubmit={handleCommentSubmit}
             handleCommentEdit={handleCommentEdit}
+            handleCommentDelete={handleCommentDelete}
             closeModal={closeModal}
             handleCardEdit={handleCardEdit}
             handleCardDelete={handleCardDelete}

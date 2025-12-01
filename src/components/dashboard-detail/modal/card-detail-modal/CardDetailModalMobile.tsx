@@ -15,6 +15,7 @@ export default function CardDetailModalMobile({
   setComment,
   handleCommentSubmit,
   handleCommentEdit,
+  handleCommentDelete,
   handleCardEdit,
   handleCardDelete,
   closeModal,
@@ -89,6 +90,7 @@ export default function CardDetailModalMobile({
             data={commentList.data}
             lastItemRef={commentList.lastItemRef}
             onEdit={handleCommentEdit}
+            onDelete={handleCommentDelete}
             avatarSize={'s'}
           />
         )}

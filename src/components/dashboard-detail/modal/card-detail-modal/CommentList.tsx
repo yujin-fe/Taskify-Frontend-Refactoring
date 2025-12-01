@@ -8,6 +8,7 @@ interface CommentListProps {
   data: CommentListResponse;
   lastItemRef: React.RefObject<HTMLLIElement | null>;
   onEdit: (id: number, content: string) => void;
+  onDelete: (id: number) => void;
 }
 
 const commentButtonStyle = 'cursor-pointer text-[10px] text-gray-400 underline sm:text-[12px]';
@@ -17,6 +18,7 @@ export default function CommentList({
   data,
   lastItemRef,
   onEdit,
+  onDelete,
 }: CommentListProps) {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editValue, setEditValue] = useState('');
@@ -83,7 +85,7 @@ export default function CommentList({
                     <button
                       type='button'
                       className={commentButtonStyle}
-                      onClick={() => console.log('삭제')}>
+                      onClick={() => onDelete(comment.id)}>
                       삭제
                     </button>
                   </div>

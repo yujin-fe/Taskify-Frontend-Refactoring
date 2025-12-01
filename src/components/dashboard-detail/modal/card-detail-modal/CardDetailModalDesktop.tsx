@@ -15,6 +15,7 @@ export default function CardDetailModalDesktop({
   setComment,
   handleCommentSubmit,
   handleCommentEdit,
+  handleCommentDelete,
   handleCardEdit,
   handleCardDelete,
   closeModal,
@@ -58,6 +59,7 @@ export default function CardDetailModalDesktop({
             data={commentList.data}
             lastItemRef={commentList.lastItemRef}
             onEdit={handleCommentEdit}
+            onDelete={handleCommentDelete}
           />
         )}
         <div className='pointer-events-none sticky bottom-0 left-0 h-[40px] w-full bg-gradient-to-t from-gray-0 to-transparent' />
