@@ -4,7 +4,7 @@ import Input from '@/components/common/input/Input';
 import FormModal from '@/components/common/modal/FormModal';
 import { INVITE } from '@/constants/modalName';
 import { useModal } from '@/hooks/useModal';
-import { validateEmail } from '@/utils/validation';
+import { validateEmail, validateInvitation } from '@/utils/validation';
 
 interface DashboardInviteModalProps {
   inviteeEmail: string;
@@ -34,18 +34,24 @@ export default function DashboardInviteModal({
 
   const handleChange = (value: string) => {
     setInviteeEmail(value);
-
     if (errorMsg) {
       setErrorMsg('');
     }
   };
 
   const handleBlur = () => {
+    if (validateInvitation(inviteeEmail)) {
+      setErrorMsg(() => validateInvitation(inviteeEmail));
+      return;
+    }
     const message = validateEmail(inviteeEmail);
     setErrorMsg(message);
   };
 
-  const disabled = inviteeEmail.trim() === '' || validateEmail(inviteeEmail) !== '';
+  const disabled =
+    inviteeEmail.trim() === ''
+    || validateEmail(inviteeEmail) !== ''
+    || validateInvitation(inviteeEmail) !== '';
 
   return (
     <FormModal closeBtn modalName={INVITE}>
