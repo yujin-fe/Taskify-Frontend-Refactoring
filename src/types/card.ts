@@ -33,3 +33,13 @@ export interface CardInitialValueType {
   tags: string[];
   imageUrl: string | null;
 }
+
+export interface CardEditFormValue {
+  columnId: number;
+  assigneeUser: Assignee | null;
+  title: string;
+  description: string;
+  dueDate: string;
+  tags: string[];
+  imageUrl: string | null;
+}
