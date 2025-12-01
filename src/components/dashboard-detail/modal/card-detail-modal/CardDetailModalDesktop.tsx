@@ -6,6 +6,7 @@ import Dropdown from '@/components/dashboard/dropdown/Dropdown';
 import Tag from '@/components/dashboard/Tag';
 import CardStatusBadge from '@/components/dashboard-detail/card/CardStatusBadge';
 import type { CardDetailModalContentProps } from '@/components/dashboard-detail/modal/card-detail-modal/CardDetailModal';
+import CommentList from '@/components/dashboard-detail/modal/card-detail-modal/CommentList';
 import { getProfileColorForId } from '@/utils/avatar';
 
 export default function CardDetailModalDesktop({
@@ -18,7 +19,7 @@ export default function CardDetailModalDesktop({
 }: CardDetailModalContentProps) {
   return (
     <div className='mx-[32px] hidden w-full max-w-[730px] items-start gap-[14px] rounded-[8px] bg-gray-0 py-[30px] pr-[28px] pl-[18px] sm:flex'>
-      <div className='scrollbar-hidden h-[calc(100dvh-500px)] grow overflow-y-auto'>
+      <div className='scrollbar-hidden relative h-[calc(100dvh-500px)] grow overflow-y-auto'>
         <Title size={'2xl'} weight={'bold'} className='mb-[24px]'>
           새로운 일정 관리 Taskify
         </Title>
@@ -50,10 +51,8 @@ export default function CardDetailModalDesktop({
           <Comment.Field />
           <Comment.Submit />
         </Comment.Root>
-        {/* TODO: 댓글 컴포넌트 구현 */}
-        <ul className='mt-[24px]'>
-          <li className='h-[400px] bg-gray-300'>댓글영역</li>
-        </ul>
+        <CommentList />
+        <div className='pointer-events-none sticky bottom-0 left-0 h-[40px] w-full bg-gradient-to-t from-gray-0 to-transparent' />
       </div>
       <div className='flex flex-col items-end'>
         <div className='mb-[24px] flex items-center gap-[24px] pr-[10px]'>
