@@ -3,9 +3,12 @@ import { useParams } from 'react-router';
 import ModalPortal from '@/components/common/modal/ModalPortal';
 import CardDetailModalDesktop from '@/components/dashboard-detail/modal/card-detail-modal/CardDetailModalDesktop';
 import CardDetailModalMobile from '@/components/dashboard-detail/modal/card-detail-modal/CardDetailModalMobile';
+import Skeleton from '@/components/skeleton/Skeleton';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 import useMutation from '@/hooks/useMutation';
+import useQuery from '@/hooks/useQuery';
 import { useResponsiveValue } from '@/hooks/useResponsiveValue';
+import { getCardDetail } from '@/lib/apis/cards';
 import {
   updateComment,
   createComment,
@@ -13,10 +16,12 @@ import {
   getCommentList,
   type CreateCommentType,
 } from '@/lib/apis/comments';
+import type { CardDetailResponse } from '@/types/card';
 import type { Comment, CommentListResponse } from '@/types/comment';
 import type { InfiniteScrollReturn } from '@/types/infiniteScroll';
 
 export interface CardDetailModalContentProps {
+  cardData: CardDetailResponse | null;
   comment: string;
   commentList: InfiniteScrollReturn<CommentListResponse>;
   setComment: React.Dispatch<React.SetStateAction<string>>;
@@ -42,6 +47,11 @@ export default function CardDetailModal({ closeModal, columnId, cardId }: CardDe
   const isDesktop = useResponsiveValue({
     mobile: false,
     desktop: true,
+  });
+
+  const cardDetailQuery = useQuery<CardDetailResponse, { cardId: number }>({
+    fetchFn: () => getCardDetail(cardId),
+    params: { cardId },
   });
 
   const commentList = useInfiniteScroll<
@@ -144,11 +154,20 @@ export default function CardDetailModal({ closeModal, columnId, cardId }: CardDe
     console.log('TODO: 카드 삭제 api 연결');
   };
 
+  if (cardDetailQuery.isLoading || !cardDetailQuery.data) {
+    <ModalPortal>
+      <div className='modal-dimmed'>
+        <Skeleton className='' />
+      </div>
+    </ModalPortal>;
+  }
+
   return (
     <ModalPortal>
       <div className='modal-dimmed'>
         {isDesktop ? (
           <CardDetailModalDesktop
+            cardData={cardDetailQuery.data}
             commentList={commentList}
             comment={comment}
             setComment={setComment}
@@ -161,6 +180,7 @@ export default function CardDetailModal({ closeModal, columnId, cardId }: CardDe
           />
         ) : (
           <CardDetailModalMobile
+            cardData={cardDetailQuery.data}
             commentList={commentList}
             comment={comment}
             setComment={setComment}
