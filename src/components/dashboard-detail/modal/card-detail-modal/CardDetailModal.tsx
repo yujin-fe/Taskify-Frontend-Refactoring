@@ -116,6 +116,10 @@ export default function CardDetailModal({ closeModal, columnId, cardId }: CardDe
   });
 
   const handleCommentSubmit = async () => {
+    if (!dashboardId) {
+      return;
+    }
+
     if (!comment.trim()) {
       return;
     }
