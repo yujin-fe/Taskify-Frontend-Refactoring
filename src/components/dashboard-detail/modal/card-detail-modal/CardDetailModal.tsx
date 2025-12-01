@@ -6,7 +6,12 @@ import CardDetailModalMobile from '@/components/dashboard-detail/modal/card-deta
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 import useMutation from '@/hooks/useMutation';
 import { useResponsiveValue } from '@/hooks/useResponsiveValue';
-import { createComment, getCommentList, type CreateCommentType } from '@/lib/apis/comments';
+import {
+  changeComment,
+  createComment,
+  getCommentList,
+  type CreateCommentType,
+} from '@/lib/apis/comments';
 import type { Comment, CommentListResponse } from '@/types/comment';
 import type { InfiniteScrollReturn } from '@/types/infiniteScroll';
 
@@ -15,6 +20,8 @@ export interface CardDetailModalContentProps {
   commentList: InfiniteScrollReturn<CommentListResponse>;
   setComment: React.Dispatch<React.SetStateAction<string>>;
   handleCommentSubmit: () => void;
+  handleCommentEdit: (commentId: number, newContent: string) => void;
+  handleCommentDelete?: (commentId: number) => void;
   handleCardEdit: () => void;
   handleCardDelete: () => void;
   closeModal: () => void;
@@ -71,9 +78,32 @@ export default function CardDetailModal({ closeModal, columnId, cardId }: CardDe
     },
   });
 
+  const updateCommentMutation = useMutation({
+    mutationFn: ({ id, content }: { id: number; content: string }) =>
+      changeComment(id, { content }),
+
+    onSuccess: (newdata) => {
+      commentList.setData((prev) => {
+        if (!prev) {
+          return prev;
+        }
+        return {
+          ...prev,
+          comments: prev.comments.map((c) =>
+            c.id === newdata.id ? { ...c, content: newdata.content } : c
+          ),
+        };
+      });
+    },
+  });
+
   const handleCommentSubmit = async () => {
     const reqBody = { content: comment, cardId, columnId, dashboardId: Number(dashboardId) };
     await createCardMutation.mutate(reqBody);
+  };
+
+  const handleCommentEdit = async (commentId: number, newContent: string) => {
+    await updateCommentMutation.mutate({ id: commentId, content: newContent });
   };
 
   const handleCardEdit = () => {
@@ -93,6 +123,7 @@ export default function CardDetailModal({ closeModal, columnId, cardId }: CardDe
             comment={comment}
             setComment={setComment}
             handleCommentSubmit={handleCommentSubmit}
+            handleCommentEdit={handleCommentEdit}
             closeModal={closeModal}
             handleCardEdit={handleCardEdit}
             handleCardDelete={handleCardDelete}
@@ -103,6 +134,7 @@ export default function CardDetailModal({ closeModal, columnId, cardId }: CardDe
             comment={comment}
             setComment={setComment}
             handleCommentSubmit={handleCommentSubmit}
+            handleCommentEdit={handleCommentEdit}
             closeModal={closeModal}
             handleCardEdit={handleCardEdit}
             handleCardDelete={handleCardDelete}

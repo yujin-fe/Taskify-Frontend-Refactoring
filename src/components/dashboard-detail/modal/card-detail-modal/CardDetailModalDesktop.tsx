@@ -14,6 +14,7 @@ export default function CardDetailModalDesktop({
   comment,
   setComment,
   handleCommentSubmit,
+  handleCommentEdit,
   handleCardEdit,
   handleCardDelete,
   closeModal,
@@ -53,7 +54,11 @@ export default function CardDetailModalDesktop({
           <Comment.Submit />
         </Comment.Root>
         {commentList.data && (
-          <CommentList data={commentList.data} lastItemRef={commentList.lastItemRef} />
+          <CommentList
+            data={commentList.data}
+            lastItemRef={commentList.lastItemRef}
+            onEdit={handleCommentEdit}
+          />
         )}
         <div className='pointer-events-none sticky bottom-0 left-0 h-[40px] w-full bg-gradient-to-t from-gray-0 to-transparent' />
       </div>
