@@ -10,7 +10,7 @@ import CommentList from '@/components/dashboard-detail/modal/card-detail-modal/C
 import { getProfileColorForId } from '@/utils/avatar';
 
 export default function CardDetailModalDesktop({
-  commentListData,
+  commentList,
   comment,
   setComment,
   handleCommentSubmit,
@@ -52,7 +52,9 @@ export default function CardDetailModalDesktop({
           <Comment.Field />
           <Comment.Submit />
         </Comment.Root>
-        {commentListData && <CommentList data={commentListData} />}
+        {commentList.data && (
+          <CommentList data={commentList.data} lastItemRef={commentList.lastItemRef} />
+        )}
         <div className='pointer-events-none sticky bottom-0 left-0 h-[40px] w-full bg-gradient-to-t from-gray-0 to-transparent' />
       </div>
       <div className='flex flex-col items-end'>
