@@ -9,8 +9,6 @@ interface ComboboxContextType {
   setSelectedValue: (value: Assignee | null) => void;
   searchQuery: string;
   setSearchQuery: (query: string) => void;
-  selectedNode: null | React.ReactNode;
-  setSelectedNode: (node: null | React.ReactNode) => void;
 }
 
 const ComboboxContext = createContext<ComboboxContextType | null>(null);

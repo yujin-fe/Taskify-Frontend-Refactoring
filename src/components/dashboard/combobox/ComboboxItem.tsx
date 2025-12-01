@@ -8,18 +8,15 @@ export interface ComboboxItemProps {
 }
 
 export default function ComboboxItem({ children, value }: ComboboxItemProps) {
-  const { selectedValue, setSelectedValue, setIsOpen, setSearchQuery, setSelectedNode } =
-    useComboboxContext();
+  const { selectedValue, setSelectedValue, setIsOpen, setSearchQuery } = useComboboxContext();
 
   const isSelected = selectedValue?.id === value.id || selectedValue?.userId === value.userId;
 
   const handleListClick = () => {
     if (isSelected) {
       setSelectedValue(null);
-      setSelectedNode(null);
     } else {
       setSelectedValue(value);
-      setSelectedNode(children);
     }
     setIsOpen(false);
     setSearchQuery('');
