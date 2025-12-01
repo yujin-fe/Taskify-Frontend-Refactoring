@@ -48,7 +48,19 @@ export const getCardListData = async (params: GetCardListDataParams) => {
 };
 
 /** 카드(할 일) 수정 api */
-export const changeCard = async (cardId: number, reqBody: ChangeCardType) => {
+export const updateCard = async (cardId: number, reqBody: ChangeCardType) => {
   const res = await api.put(`/cards/${cardId}`, reqBody);
+  return res;
+};
+
+/** 카드 상세 조회 api */
+export const getCardDetail = async (cardId: number) => {
+  const res = await api.get(`/cards/${cardId}`);
+  return res.data;
+};
+
+/** 카드 삭제 api */
+export const deleteCard = async (cardId: number) => {
+  const res = await api.delete(`/cards/${cardId}`);
   return res;
 };

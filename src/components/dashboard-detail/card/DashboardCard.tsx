@@ -11,9 +11,16 @@ import { getProfileColorForId } from '@/utils/avatar';
 interface DashboardCardProps {
   cardData: CardDetailResponse;
   columnId: number;
+  columnTitle: string;
+  onDeleteCard: () => void;
 }
 
-export default function DashboardCard({ cardData, columnId }: DashboardCardProps) {
+export default function DashboardCard({
+  cardData,
+  columnId,
+  columnTitle,
+  onDeleteCard,
+}: DashboardCardProps) {
   const { imageUrl, tags, title, dueDate, assignee } = cardData;
   const [isImageError, setIsImageError] = useState(false);
   const modal = useModal(`cardDetail_${cardData.id}`);
@@ -67,6 +74,8 @@ export default function DashboardCard({ cardData, columnId }: DashboardCardProps
           cardId={cardData.id}
           columnId={columnId}
           closeModal={modal.handleModalClose}
+          columnTitle={columnTitle}
+          onDeleteCard={onDeleteCard}
         />
       )}
     </>
