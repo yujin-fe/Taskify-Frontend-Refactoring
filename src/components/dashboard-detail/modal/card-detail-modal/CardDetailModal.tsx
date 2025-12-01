@@ -3,11 +3,10 @@ import { useParams } from 'react-router';
 import ModalPortal from '@/components/common/modal/ModalPortal';
 import CardDetailModalDesktop from '@/components/dashboard-detail/modal/card-detail-modal/CardDetailModalDesktop';
 import CardDetailModalMobile from '@/components/dashboard-detail/modal/card-detail-modal/CardDetailModalMobile';
+import useCardDetail from '@/hooks/dashboard-detail/useCardDetail';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 import useMutation from '@/hooks/useMutation';
-import useQuery from '@/hooks/useQuery';
 import { useResponsiveValue } from '@/hooks/useResponsiveValue';
-import { getCardDetail } from '@/lib/apis/cards';
 import {
   updateComment,
   createComment,
@@ -55,10 +54,7 @@ export default function CardDetailModal({
     desktop: true,
   });
 
-  const cardDetailQuery = useQuery<CardDetailResponse, { cardId: number }>({
-    fetchFn: () => getCardDetail(cardId),
-    params: { cardId },
-  });
+  const cardDetailQuery = useCardDetail(cardId);
 
   const commentList = useInfiniteScroll<
     CommentListResponse,
