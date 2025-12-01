@@ -1,7 +1,7 @@
 import { createContext } from 'react';
 import { type DashboardsResponse } from '@/types/dashboardsData';
 
-interface DashboardContextType {
+export interface DashboardContextType {
   dashboardsData: DashboardsResponse | null;
   isLoading: boolean;
 }

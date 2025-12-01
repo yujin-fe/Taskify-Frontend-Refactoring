@@ -10,7 +10,7 @@ import DashboardCreateModal from '@/components/dashboard/modal/DashboardCreateMo
 import DashboardContainer from '@/components/dashboard/table/DashboardContainer';
 import DashboardHeader from '@/components/dashboard/table/DashboardHeader';
 import { DEFAULT_COLOR, type ColorHex } from '@/constants/color';
-import { DashboardContext } from '@/context/dashboardContext';
+import { DashboardContext, type DashboardContextType } from '@/context/dashboardContext';
 import useBaseModal from '@/hooks/useBaseModal';
 import useMutation from '@/hooks/useMutation';
 import { changeDashboard, type ChangeDashboardParams } from '@/lib/apis/dashboards';
@@ -18,7 +18,9 @@ import type { Dashboard } from '@/types/dashboardsData';
 
 export default function DashboardNameEdit() {
   const { dashboardId } = useParams<{ dashboardId: string }>();
-  const { dashboardsData, isLoading: contextIsLoading } = useContext(DashboardContext);
+  const { dashboardsData, isLoading: contextIsLoading } = useContext(
+    DashboardContext
+  ) as DashboardContextType;
 
   const {
     isOpen: baseModalIsOpen,
@@ -26,38 +28,51 @@ export default function DashboardNameEdit() {
     handleModalClose: closeBaseModal,
   } = useBaseModal();
 
-  const numericDashboardId = useMemo(() => {
-    return dashboardId ? Number(dashboardId) : null;
-  }, [dashboardId]);
+  const numericDashboardId = useMemo(
+    () => (dashboardId ? Number(dashboardId) : null),
+    [dashboardId]
+  );
 
   const currentDashboard = useMemo(() => {
-    if (numericDashboardId && dashboardsData) {
-      return dashboardsData.dashboards.find((d) => d.id === numericDashboardId);
+    if (numericDashboardId && dashboardsData?.dashboards) {
+      return dashboardsData.dashboards.find((d: Dashboard) => d.id === numericDashboardId);
     }
     return null;
   }, [numericDashboardId, dashboardsData]);
 
-  const dashboardTitle = useMemo(() => {
-    return currentDashboard?.title ?? '대시보드 로딩 중...';
-  }, [currentDashboard]);
+  const [editingName, setEditingName] = useState(() => currentDashboard?.title ?? '');
+  const [selectedColor, setSelectedColor] = useState<ColorHex>(
+    () => (currentDashboard?.color as ColorHex) || DEFAULT_COLOR
+  );
 
-  const dashboardColor = useMemo(() => {
-    return (currentDashboard?.color as ColorHex) || DEFAULT_COLOR;
-  }, [currentDashboard]);
+  const finalTitle = useMemo(
+    () => currentDashboard?.title ?? '대시보드 로딩 중...',
+    [currentDashboard]
+  );
 
-  const [isInitialized, setIsInitialized] = useState(false);
+  const [isNameChanged, setIsNameChanged] = useState(false);
+  const [isColorChanged, setIsColorChanged] = useState(false);
 
-  const [editingName, setEditingName] = useState(dashboardTitle);
+  const isNameModified = useMemo(
+    () => editingName !== currentDashboard?.title,
+    [editingName, currentDashboard]
+  );
+  const isColorModified = useMemo(
+    () => selectedColor !== ((currentDashboard?.color as ColorHex) || DEFAULT_COLOR),
+    [selectedColor, currentDashboard]
+  );
 
-  const [selectedColor, setSelectedColor] = useState<ColorHex>(dashboardColor);
+  const disabled = useMemo(() => {
+    if (!isNameModified && !isColorModified) {
+      return true;
+    }
 
-  if (!isInitialized && currentDashboard) {
-    setEditingName(currentDashboard.title);
-    setSelectedColor((currentDashboard.color as ColorHex) || DEFAULT_COLOR);
-    setIsInitialized(true);
-  }
+    if (isNameModified && !isColorModified && editingName.trim() === '') {
+      return true;
+    }
 
-  const disabled = editingName.trim() === '';
+    return false;
+  }, [isNameModified, isColorModified, editingName]);
 
   const updateDashboardMutation = useMutation<Dashboard, ChangeDashboardParams>({
     mutationFn: (data) => {
@@ -67,13 +82,23 @@ export default function DashboardNameEdit() {
       return changeDashboard(numericDashboardId, data);
     },
     onSuccess: (updated) => {
-      if (updated?.title) {
-        setEditingName(updated.title);
+      if (!updated) {
+        return;
       }
-      if (updated?.color) {
-        setSelectedColor(updated.color as ColorHex);
+
+      const nameModified = updated.title !== finalTitle;
+      const colorModified =
+        updated.color !== ((currentDashboard?.color as ColorHex) || DEFAULT_COLOR);
+
+      setIsNameChanged(nameModified);
+      setIsColorChanged(colorModified);
+
+      setEditingName(updated.title);
+      setSelectedColor(updated.color as ColorHex);
+
+      if (nameModified || colorModified) {
+        openBaseModal();
       }
-      openBaseModal();
     },
   });
 
@@ -107,14 +132,14 @@ export default function DashboardNameEdit() {
 
       <DashboardHeader>
         <Title as='h2' size='xl' weight='bold' className='pb-[24px]'>
-          {dashboardTitle}
+          {finalTitle}
         </Title>
       </DashboardHeader>
 
       <FormModal.Form onSubmit={handleSubmit}>
         <FormModal.Body>
           <div className='flex flex-col gap-[16px]'>
-            <Input value={editingName} onChange={(value) => setEditingName(value)}>
+            <Input value={editingName} onChange={setEditingName}>
               <Input.Label className='label-style'>대시보드 이름</Input.Label>
               <Input.Group>
                 <Input.Field
@@ -143,10 +168,14 @@ export default function DashboardNameEdit() {
         <BaseModalFrame setOnModal={closeBaseModal}>
           <div className='text-center'>
             <p className='mb-2 text-lg font-bold'>변경 완료! 🎉</p>
-            <p>
-              대시보드 이름이 <span className='font-semibold'>{editingName}</span>으로
-              변경되었습니다.
-            </p>
+
+            {isNameChanged && isColorChanged ? (
+              <p>대시보드가 변경되었습니다.</p>
+            ) : isNameChanged ? (
+              <p>대시보드 이름이 변경되었습니다.</p>
+            ) : isColorChanged ? (
+              <p>대시보드 컬러가 변경되었습니다.</p>
+            ) : null}
           </div>
         </BaseModalFrame>
       )}
