@@ -56,7 +56,14 @@ export default function InvitesEdit() {
 
   const cancelMutation = useMutation<unknown, DeleteInvitationParams>({
     mutationFn: ({ dashboardId, invitationId }) => deleteInvitationdata(dashboardId, invitationId),
-    onSuccess: () => {
+    onSuccess: (_, value: DeleteInvitationParams) => {
+      const invitation = invitations.find(
+        (inv) => inv.id.toString() === value.invitationId.toString()
+      );
+      if (invitation) {
+        const inviteeEmail = invitation?.invitee?.email;
+        localStorage.removeItem(inviteeEmail);
+      }
       setDeleteMessage('초대 취소가 완료되었습니다.');
       handleModalOpen();
       refetch();
