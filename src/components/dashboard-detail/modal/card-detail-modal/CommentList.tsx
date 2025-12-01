@@ -30,20 +30,20 @@ export default function CommentList({ avatarSize = 'm', data }: CommentListProps
     <ul className='mt-[16px] flex flex-col gap-[20px] sm:mt-[24px]'>
       {data.comments.map((comment) => (
         <li key={comment.id} className='flex gap-[8px] sm:gap-[12px]'>
-          <Avatar size={avatarSize} user={{ userId: 123, nickname: '야호', profileImageUrl: null }}>
+          <Avatar size={avatarSize} user={comment.author}>
             <Avatar.Img />
             <Avatar.Fallback />
           </Avatar>
           <div className='flex flex-col'>
             <div className='flex items-center gap-[8px]'>
               <span className='font-xs-semibold leading-[14px] sm:font-md-semibold sm:leading-[17px]'>
-                정만철
+                {comment.author.nickname}
               </span>
-              <span className='text-[10px] text-gray-400 sm:font-xs-regular'>2022.12.27 14:00</span>
+              <span className='text-[10px] text-gray-400 sm:font-xs-regular'>
+                {comment.updatedAt}
+              </span>
             </div>
-            <p className='font-xs-regular sm:font-md-regular'>
-              오늘안에 CCC 까지 만들 수 있을까요?
-            </p>
+            <p className='font-xs-regular sm:font-md-regular'>{comment.content}</p>
             <div className='mt-[8px] flex gap-[8px] sm:mt-[10px]'>
               <button type='button' className={commentListButtonStyle} onClick={handleCommentEdit}>
                 수정
