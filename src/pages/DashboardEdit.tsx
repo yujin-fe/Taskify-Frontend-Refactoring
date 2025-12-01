@@ -14,6 +14,7 @@ export default function DashboardEdit() {
   const backPath = dashboardId ? `/dashboard/${dashboardId}` : '/';
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [resetKey, setResetKey] = useState(0);
 
   const numericDashboardId = useMemo(() => {
     return dashboardId ? Number(dashboardId) : null;
@@ -31,6 +32,8 @@ export default function DashboardEdit() {
     if (idToDelete !== null) {
       await deleteDashboard(idToDelete);
 
+      setResetKey((prev) => prev + 1);
+
       navigate('/mydashboard');
     }
   };
@@ -44,11 +47,13 @@ export default function DashboardEdit() {
       <div className='mt-[16px] sm:mt-[20px]'>
         <BackButton to={backPath} />
       </div>
-      <div className='mt-[10px] flex flex-col gap-4 sm:mt-[20px] lg:mt-[34px]'>
+
+      <div key={resetKey} className='mt-[10px] flex flex-col gap-4 sm:mt-[20px] lg:mt-[34px]'>
         <DashboardNameEdit />
         <MembersEdit />
         <InvitesEdit />
       </div>
+
       <Button
         theme='outlined'
         className='mt-[24px] mb-[124px] h-[52px] w-full sm:mb-[71px] sm:h-[62px] sm:w-[320px] lg:mb-[57px]'
