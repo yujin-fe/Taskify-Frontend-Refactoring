@@ -39,7 +39,7 @@ export default function CardDetailModal({ closeModal, columnId, cardId }: CardDe
       }
       return {
         ...next,
-        cards: [...prev.comments, ...next.comments],
+        comments: [...prev.comments, ...next.comments],
       };
     },
   });
