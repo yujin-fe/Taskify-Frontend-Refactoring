@@ -48,13 +48,8 @@ export default function InvitedDashboard() {
     onSuccess: getSuccess,
   });
 
-  const putSuccess = () => {
-    resetData();
-  };
-
   const { mutate } = useMutation<Invitation, ResponseInvitationReqType>({
     mutationFn: ({ invitationId, reqBody }) => responseInvtitation(invitationId, reqBody),
-    onSuccess: putSuccess,
   });
 
   const handleSearch = (value: string) => {
@@ -98,11 +93,11 @@ export default function InvitedDashboard() {
       inviteAccepted,
     };
     try {
-      await mutate({ invitationId, reqBody });
       setConfirmMessage(
         `${invitation.dashboard.title} 초대를 ${inviteAccepted ? '수락' : '거절'}했습니다!`
       );
       handleModalOpen();
+      await mutate({ invitationId, reqBody });
     } catch (error) {
       setConfirmMessage(`${error}: 오류가 발생했습니다.`);
       handleModalOpen();
@@ -166,7 +161,7 @@ export default function InvitedDashboard() {
     );
   };
 
-  return invitations.length === 0 && search === null ? (
+  return !isOpen && invitations.length === 0 && search === null ? (
     nullList()
   ) : (
     <>
@@ -240,7 +235,15 @@ export default function InvitedDashboard() {
           </ul>
         </div>
       </div>
-      {isOpen && <BaseModalFrame setOnModal={handleModalClose}>{confirmMessage}</BaseModalFrame>}
+      {isOpen && (
+        <BaseModalFrame
+          setOnModal={() => {
+            handleModalClose();
+            resetData();
+          }}>
+          {confirmMessage}
+        </BaseModalFrame>
+      )}
     </>
   );
 }
