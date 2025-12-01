@@ -22,6 +22,7 @@ export default function DashboardCard({ cardData }: DashboardCardProps) {
       <div
         onClick={modal.handleModalOpen}
         role='button'
+        tabIndex={0}
         className='flex cursor-pointer flex-col overflow-hidden rounded-[6px] border border-gray-300 bg-gray-0 p-[12px] pb-[6px] select-none sm:flex-row sm:items-center sm:px-[20px] sm:py-[16px] md:max-w-[314px] md:flex-col md:items-start'>
         {imageUrl && !isImageError && (
           <div className='mr-0 mb-[6px] aspect-[17/10] h-[150px] sm:mr-[20px] sm:mb-0 sm:h-[53px] md:mr-0 md:mb-[15px] md:h-[160px] md:w-[274px]'>
