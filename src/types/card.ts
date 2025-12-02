@@ -1,3 +1,5 @@
+import type { UserComboboxValue } from '@/components/dashboard/combobox/Combobox';
+
 export type Assignee = {
   profileImageUrl: string | null;
   nickname: string;
@@ -10,7 +12,7 @@ export interface CardDetailResponse {
   title: string;
   description: string;
   tags: string[];
-  dueDate: string | null;
+  dueDate: string;
   assignee: Assignee;
   imageUrl: string | null;
   teamId: string;
@@ -26,7 +28,7 @@ export interface CardsResponse {
 }
 
 export interface CardInitialValueType {
-  assigneeUser: Assignee | null;
+  assigneeUser: UserComboboxValue | null;
   title: string;
   description: string;
   dueDate: string;
