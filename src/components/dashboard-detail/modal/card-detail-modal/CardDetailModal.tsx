@@ -129,6 +129,10 @@ export default function CardDetailModal({
     await updateCardMutation.mutate({ id: cardId, body });
   };
 
+  const currentColumnId = cardDetailQuery.data?.columnId ?? columnId;
+  const currentColumnTitle =
+    columnListData?.data.find((col) => col.id === currentColumnId)?.title ?? columnTitle;
+
   return (
     <>
       {detailModal.isOpen && (
@@ -136,7 +140,7 @@ export default function CardDetailModal({
           <div className='modal-dimmed'>
             {isDesktop ? (
               <CardDetailModalDesktop
-                columnTitle={columnTitle}
+                columnTitle={currentColumnTitle}
                 cardData={cardDetailQuery.data}
                 commentList={commentList}
                 comment={comment}
@@ -150,7 +154,7 @@ export default function CardDetailModal({
               />
             ) : (
               <CardDetailModalMobile
-                columnTitle={columnTitle}
+                columnTitle={currentColumnTitle}
                 cardData={cardDetailQuery.data}
                 commentList={commentList}
                 comment={comment}
