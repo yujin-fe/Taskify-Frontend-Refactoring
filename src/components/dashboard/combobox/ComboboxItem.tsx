@@ -13,7 +13,7 @@ export interface ComboboxItemProps {
 export default function ComboboxItem({ children, value }: ComboboxItemProps) {
   const { selectedValue, setSelectedValue, setIsOpen, setSearchQuery } = useComboboxContext();
 
-  const isSelected = selectedValue?.id === value.id;
+  const isSelected = selectedValue?.id !== undefined && selectedValue.id === value.id;
 
   const handleListClick = () => {
     if (isSelected) {
