@@ -1,16 +1,19 @@
 import Icons from '@/assets/icons';
+import type {
+  UserComboboxValue,
+  StatusComboboxValue,
+} from '@/components/dashboard/combobox/Combobox';
 import useComboboxContext from '@/hooks/useComboboxContext';
-import type { Assignee } from '@/types/card';
 
 export interface ComboboxItemProps {
   children: React.ReactNode;
-  value: Assignee;
+  value: UserComboboxValue | StatusComboboxValue;
 }
 
 export default function ComboboxItem({ children, value }: ComboboxItemProps) {
   const { selectedValue, setSelectedValue, setIsOpen, setSearchQuery } = useComboboxContext();
 
-  const isSelected = selectedValue?.id === value.id || selectedValue?.userId === value.userId;
+  const isSelected = selectedValue?.id === value.id;
 
   const handleListClick = () => {
     if (isSelected) {
