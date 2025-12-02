@@ -5,7 +5,7 @@ import Title from '@/components/common/Title';
 
 export default function HomeHeroSection() {
   return (
-    <section className='flex flex-col items-center gap-12 px-[40px]'>
+    <section className='flex flex-col items-center gap-12'>
       <div className='flex w-full justify-center px-[40px]'>
         <div className='w-full max-w-[722px] overflow-hidden rounded-lg'>
           <img
