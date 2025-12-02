@@ -11,7 +11,7 @@ import { createCard, getCardListData, type CreateCardType } from '@/lib/apis/car
 import type { CardDetailResponse, CardInitialValueType, CardsResponse } from '@/types/card';
 import type { ColumnsData, ColumnsResponse } from '@/types/column';
 import type { MembersResponse } from '@/types/members';
-import { createCardRequestBody } from '@/utils/card/createCardReqBody';
+import { createCardRequestBody } from '@/utils/card/createCardRequestBody';
 import { uploadCardImage } from '@/utils/card/uploadCardImage';
 
 interface ColumnCardListProps {
