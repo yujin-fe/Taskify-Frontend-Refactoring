@@ -78,7 +78,6 @@ export default function CardDetailModal({
   const updateCardMutation = useUpdateCard({
     onSuccess: (updated) => {
       onUpdateCard(updated);
-      cardDetailQuery.refetch();
       editModal.handleModalCloseAll();
     },
   });
