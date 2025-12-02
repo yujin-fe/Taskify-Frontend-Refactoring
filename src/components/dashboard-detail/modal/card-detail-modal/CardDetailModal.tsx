@@ -9,6 +9,7 @@ import useCommentActions from '@/hooks/dashboard-detail/useCommentActions';
 import { useModal } from '@/hooks/useModal';
 import useMutation from '@/hooks/useMutation';
 import { useResponsiveValue } from '@/hooks/useResponsiveValue';
+import useUserContext from '@/hooks/useUserContext';
 import { deleteCard, updateCard, type UpdateCardType } from '@/lib/apis/cards';
 import type { CardDetailResponse, CardEditFormValue } from '@/types/card';
 import type { ColumnsResponse } from '@/types/column';
@@ -54,6 +55,7 @@ export default function CardDetailModal({
   columnListData,
 }: CardDetailModalProps) {
   const { dashboardId } = useParams();
+  const { userProfile } = useUserContext();
   const [comment, setComment] = useState('');
   const isDesktop = useResponsiveValue({ mobile: false, desktop: true });
   const editModal = useModal(`editCard_${cardId}`);
@@ -119,7 +121,7 @@ export default function CardDetailModal({
       formValue,
       cardDetailQuery.data,
       uploadedImageUrl,
-      formValue.columnId
+      userProfile?.id
     );
 
     await updateCardMutation.mutate({ id: cardId, body });
