@@ -9,9 +9,7 @@ export const updateCardRequestBody = (
   imageUrl: string | null,
   currentUserId?: number
 ): UpdateCardType => {
-  const formattedDueDate = formValue.dueDate
-    ? formatDueDate(formValue.dueDate)
-    : formatDueDate(new Date(DUE_DATE));
+  const formattedDueDate = formValue.dueDate ? formatDueDate(formValue.dueDate) : DUE_DATE;
 
   const normalizedTags = formValue.tags && formValue.tags.length > 0 ? formValue.tags : [''];
 
