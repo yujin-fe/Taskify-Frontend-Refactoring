@@ -6,7 +6,7 @@ import Input from '@/components/common/input/Input';
 import Label from '@/components/common/Label';
 import FormModal from '@/components/common/modal/FormModal';
 import TextArea from '@/components/common/TextArea';
-import Combobox from '@/components/dashboard/combobox/Combobox';
+import Combobox, { type StatusComboboxValue } from '@/components/dashboard/combobox/Combobox';
 import CardStatusBadge from '@/components/dashboard-detail/card/CardStatusBadge';
 import TagInput from '@/components/dashboard-detail/modal/TagInput';
 import { DUE_DATE, IMAGE_URL } from '@/constants/requestCardData';
@@ -42,8 +42,31 @@ export default function ChangeCardModal({
     setFormValue(initialValue);
   }, [initialValue]);
 
-  const handleChange = (key: keyof CardEditFormValue) => (value: string | Assignee | null) => {
+  const handleChange = (key: keyof CardEditFormValue) => (value: string | null) => {
     setFormValue((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const handleComboboxChange = (
+    key: 'columnId' | 'assigneeUser',
+    value: StatusComboboxValue | Assignee | null
+  ) => {
+    setFormValue((prev) => {
+      if (key === 'columnId') {
+        const newValue = value as StatusComboboxValue | null;
+        return {
+          ...prev,
+          columnId: newValue?.id ?? prev.columnId,
+        };
+      }
+      if (key === 'assigneeUser') {
+        const newValue = value as Assignee | null;
+        return {
+          ...prev,
+          assigneeUser: newValue,
+        };
+      }
+      return prev;
+    });
   };
 
   const isDisabled = useMemo(() => {
@@ -88,9 +111,12 @@ export default function ChangeCardModal({
                 </Label>
                 <Combobox
                   id='columnId'
-                  type='status'
-                  value={columnListData.data.find((col) => col.id === formValue.columnId)}
-                  setValue={(colObj) => handleChange('columnId')(colObj.id)}>
+                  value={
+                    columnListData.data
+                      .map((col) => ({ id: col.id, title: col.title }))
+                      .find((col) => col.id === formValue.columnId) ?? null
+                  }
+                  setValue={(value) => handleComboboxChange('columnId', value)}>
                   <Combobox.Trigger name='컬럼' placeholder='컬럼 선택' />
                   <Combobox.List>
                     {columnListData.data.map((col) => (
@@ -109,7 +135,7 @@ export default function ChangeCardModal({
                 <Combobox
                   id='assigneeUserId'
                   value={formValue.assigneeUser}
-                  setValue={handleChange('assigneeUser')}>
+                  setValue={(value) => handleComboboxChange('assigneeUser', value)}>
                   <Combobox.Trigger name='담당자' placeholder='이름을 입력해 주세요' />
                   <Combobox.List>
                     {memberData.members.map((m) => (
