@@ -117,10 +117,12 @@ export default function CardDetailModal({
   ): Promise<void> => {
     const uploadedImageUrl = await uploadCardImage(formValue.columnId, imageFile);
 
+    const nextImageUrl = uploadedImageUrl ?? cardDetailQuery.data?.imageUrl ?? null;
+
     const body = updateCardRequestBody(
       formValue,
       cardDetailQuery.data,
-      uploadedImageUrl,
+      nextImageUrl,
       userProfile?.id
     );
 
