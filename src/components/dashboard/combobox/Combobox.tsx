@@ -6,7 +6,7 @@ import ComboboxContext from '@/context/comboboxContext';
 import useComboboxState from '@/hooks/useComboboxState';
 
 export interface UserComboboxValue {
-  id: number;
+  id?: number;
   userId?: number;
   nickname: string;
   profileImageUrl: string | null;
