@@ -61,7 +61,7 @@ export default function ComboboxTrigger({ placeholder, name }: ComboboxTriggerPr
         <Avatar
           size='s'
           user={{
-            id: selectedValue.id,
+            id: selectedValue.userId ?? selectedValue.id,
             nickname: selectedValue.nickname,
             profileImageUrl: selectedValue.profileImageUrl,
           }}>
