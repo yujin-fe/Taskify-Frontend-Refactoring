@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { useParams } from 'react-router';
 import CreateButton from '@/components/dashboard/CreateButton';
 import ColumnCardList from '@/components/dashboard-detail/card/ColumnCardList';
@@ -115,9 +115,9 @@ export default function DashboardDetail() {
     },
   });
 
-  const registerRefetch = (columnId: number, fn: () => void) => {
+  const registerRefetch = useCallback((columnId: number, fn: () => void) => {
     columnRefetchMap.current[columnId] = fn;
-  };
+  }, []);
 
   const handleCardMoved = (fromColumnId: number, toColumnId: number) => {
     if (fromColumnId === toColumnId) {
