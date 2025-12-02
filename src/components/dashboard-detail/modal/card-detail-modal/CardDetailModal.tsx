@@ -80,7 +80,7 @@ export default function CardDetailModal({
       }
       onUpdateCard(updated);
       cardDetailQuery.refetch();
-      detailModal.handleModalOpenOnly();
+      editModal.handleModalClose();
     },
   });
 

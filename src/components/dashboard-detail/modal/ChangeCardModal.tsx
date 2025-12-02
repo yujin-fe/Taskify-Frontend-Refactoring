@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import Avatar from '@/components/common/avatar/Avatar';
 import Button from '@/components/common/Button';
 import ImageUpload from '@/components/common/ImageUpload';
@@ -40,10 +40,6 @@ export default function ChangeCardModal({
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [defaultImageUrl, setDefaultImageUrl] = useState<string | null>(initialValue.imageUrl);
   const [errorMessage, setErrorMessage] = useState('');
-
-  useEffect(() => {
-    setFormValue(initialValue);
-  }, [initialValue]);
 
   const handleChange = (key: keyof CardEditFormValue) => (value: string | null) => {
     setFormValue((prev) => ({ ...prev, [key]: value }));
