@@ -6,7 +6,9 @@ import Title from '@/components/common/Title';
 export default function HomeHeroSection() {
   return (
     <section className='flex flex-col items-center gap-12 px-[40px]'>
-      <img src={images.mainVisual} className='w-full lg:w-[722px]' alt='' />
+      <div className='aspect-video lg:w-[722px]'>
+        <img src={images.mainVisual} className='h-full w-full object-cover' alt='' />
+      </div>
       <Title
         className='flex flex-col items-center gap-1.5 text-[40px] leading-[48px] tracking-[-2px] whitespace-nowrap text-gray-0 md:flex-row md:gap-6 md:text-[56px] md:leading-[100px] lg:gap-7 lg:text-[76px]'
         weight={'bold'}>
