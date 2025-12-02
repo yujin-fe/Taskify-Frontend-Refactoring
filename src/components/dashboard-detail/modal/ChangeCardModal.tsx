@@ -6,12 +6,15 @@ import Input from '@/components/common/input/Input';
 import Label from '@/components/common/Label';
 import FormModal from '@/components/common/modal/FormModal';
 import TextArea from '@/components/common/TextArea';
-import Combobox, { type StatusComboboxValue } from '@/components/dashboard/combobox/Combobox';
+import Combobox, {
+  type StatusComboboxValue,
+  type UserComboboxValue,
+} from '@/components/dashboard/combobox/Combobox';
 import CardStatusBadge from '@/components/dashboard-detail/card/CardStatusBadge';
 import TagInput from '@/components/dashboard-detail/modal/TagInput';
 import { DUE_DATE, IMAGE_URL } from '@/constants/requestCardData';
 import { useModal } from '@/hooks/useModal';
-import type { Assignee, CardEditFormValue } from '@/types/card';
+import type { CardEditFormValue } from '@/types/card';
 import type { ColumnsResponse } from '@/types/column';
 import type { MembersResponse } from '@/types/members';
 
@@ -48,7 +51,7 @@ export default function ChangeCardModal({
 
   const handleComboboxChange = (
     key: 'columnId' | 'assigneeUser',
-    value: StatusComboboxValue | Assignee | null
+    value: StatusComboboxValue | UserComboboxValue | null
   ) => {
     setFormValue((prev) => {
       if (key === 'columnId') {
@@ -59,7 +62,7 @@ export default function ChangeCardModal({
         };
       }
       if (key === 'assigneeUser') {
-        const newValue = value as Assignee | null;
+        const newValue = value as UserComboboxValue | null;
         return {
           ...prev,
           assigneeUser: newValue,
@@ -95,7 +98,7 @@ export default function ChangeCardModal({
   };
 
   if (!columnListData) {
-    return;
+    return null;
   }
 
   return (
