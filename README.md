@@ -31,7 +31,7 @@ TypeScript 기반으로 복잡한 상태에서도 안정적인 코드를 유지�
 
 | <div align=center>팀장                                       | <div align=center>팀원                                 | <div align=center>팀원                                  |
 | ------------------------------------------------------------ | ------------------------------------------------------ | ------------------------------------------------------- |
-| <img src="public/readme/member1.png" width="120"/>           | <img src="public/readme/member2.png" width="120"/>     | <img src="public/readme/member3.png" width="120"/>      |
+| <img src="docs/member1.png" width="120"/>                    | <img src="docs/member2.png" width="120"/>              | <img src="docs/member3.png" width="120"/>               |
 | <div align=center>[이아름](https://github.com/aahreum)</div> | <div align=center>[정우연](https://github.com/jung518) | <div align=center>[현유진](https://github.com/yujin-fe) |
 
 ## 📋 역할 분배
@@ -100,7 +100,7 @@ TypeScript 기반으로 복잡한 상태에서도 안정적인 코드를 유지�
 ## 🗂️ 디렉토리 구조
 
 ```
-📦 Rolling-Frontend
+📦 Taskify-Frontend
  ┣ 📂.github                     # GitHub 이슈 및 PR 템플릿 관리
  ┣ 📂.husky                      # Git Hook 설정 (pre-commit, commit-msg)
  ┣ 📂.vscode                     # VSCode 개발 환경 설정 (확장, 스니펫, 설정 등)
@@ -146,14 +146,16 @@ TypeScript 기반으로 복잡한 상태에서도 안정적인 코드를 유지�
 
 ## 🖥️ 미리보기
 
-| 페이지         | 화면                                              |
-| -------------- | ------------------------------------------------- |
-| 내 대시보드    | <img src="public/readme/image-3.png" width=900>   |
-| 대시보드 상세  | <img src="public/readme/image-4.png" width=900>   |
-| 할일 생성      | <img src="public/readme/image-9.png" width="900"> |
-| 할일 상세 조회 | <img src="public/readme/image-8.png" width="900"> |
-| 대시보드 관리  | <img src="public/readme/image-6.png" width="900"> |
-| 계정 관리      | <img src="public/readme/image-7.png" width="900"> |
+| 페이지         | 화면                                     |
+| -------------- | ---------------------------------------- |
+| 내 대시보드    | <img src="docs/image-3.png" width=900>   |
+| 대시보드 추가  | <img src="docs/image-10.png" width=900>  |
+| 대시보드 상세  | <img src="docs/image-4.png" width=900>   |
+| 할일 생성      | <img src="docs/image-9.png" width="900"> |
+| 구성원 초대    | <img src="docs/image-11.png" width=900>  |
+| 할일 상세 조회 | <img src="docs/image-8.png" width="900"> |
+| 대시보드 관리  | <img src="docs/image-6.png" width="900"> |
+| 계정 관리      | <img src="docs/image-7.png" width="900"> |
 
 ## 🔗 Link
 
