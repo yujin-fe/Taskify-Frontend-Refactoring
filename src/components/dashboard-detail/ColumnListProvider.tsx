@@ -1,11 +1,11 @@
 import { ColumnListContext } from '@/context/columnListContext';
 import useQuery from '@/hooks/useQuery';
 import {
-  changeColumn,
+  updateColumn,
   createColumn,
   deleteColumn,
   getColumnList,
-  type ChangeColumnVariables,
+  type UpdateColumnVariables,
   type CreateColumnType,
 } from '@/lib/apis/columns';
 import type { ColumnsResponse } from '@/types/column';
@@ -44,8 +44,8 @@ export default function ColumnListProvider({ dashboardId, children }: ColumnList
     return data;
   };
 
-  const updateColumnFn = async ({ columnId, body }: ChangeColumnVariables) => {
-    const { data: updated } = await changeColumn(columnId, body);
+  const updateColumnFn = async ({ columnId, body }: UpdateColumnVariables) => {
+    const { data: updated } = await updateColumn(columnId, body);
 
     columnQuery.setData((prev) => {
       if (!prev) {
