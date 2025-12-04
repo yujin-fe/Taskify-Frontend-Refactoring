@@ -6,6 +6,11 @@ export interface CreateColumnType {
   dashboardId: number;
 }
 
+export interface ChangeColumnVariables {
+  columnId: number;
+  body: ChangeColumnType;
+}
+
 export interface ChangeColumnType {
   title: string;
 }
