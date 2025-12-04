@@ -1,3 +1,4 @@
+import type { AxiosResponse } from 'axios';
 import { ColumnListContext } from '@/context/columnListContext';
 import useQuery from '@/hooks/useQuery';
 import {
@@ -8,7 +9,7 @@ import {
   type UpdateColumnVariables,
   type CreateColumnType,
 } from '@/lib/apis/columns';
-import type { ColumnsResponse } from '@/types/column';
+import type { ColumnsData, ColumnsResponse } from '@/types/column';
 
 interface ColumnListProviderProps {
   dashboardId: string;
@@ -21,53 +22,51 @@ export default function ColumnListProvider({ dashboardId, children }: ColumnList
     params: { dashboardId },
   });
 
-  const createColumnFn = async (reqBody: CreateColumnType) => {
-    const { data } = await createColumn(reqBody);
+  const createColumnFn = async (reqBody: CreateColumnType): Promise<AxiosResponse<ColumnsData>> => {
+    const res = await createColumn(reqBody);
 
-    if (!data) {
-      return;
+    if (!res.data) {
+      return res;
     }
+
     columnQuery.setData((prev) => {
       if (!prev) {
-        return {
-          result: 'SUCCESS',
-          data: [data],
-        };
+        return { result: 'SUCCESS', data: [res.data] };
       }
-
-      return {
-        ...prev,
-        data: [...prev.data, data],
-      };
+      return { ...prev, data: [...prev.data, res.data] };
     });
 
-    return data;
+    return res;
   };
 
-  const updateColumnFn = async ({ columnId, body }: UpdateColumnVariables) => {
-    const { data: updated } = await updateColumn(columnId, body);
+  const updateColumnFn = async ({
+    columnId,
+    body,
+  }: UpdateColumnVariables): Promise<AxiosResponse<ColumnsData>> => {
+    const res = await updateColumn(columnId, body);
 
     columnQuery.setData((prev) => {
       if (!prev) {
         return prev;
       }
-
       return {
         ...prev,
-        data: prev.data.map((col) =>
-          col.id === updated.id
-            ? { ...col, title: updated.title, updatedAt: updated.updatedAt }
-            : col
-        ),
+        data: prev.data.map((col) => {
+          if (col.id === res.data.id) {
+            return { ...col, title: res.data.title, updatedAt: res.data.updatedAt };
+          }
+          return col;
+        }),
       };
     });
 
-    return updated;
+    return res;
   };
 
-  const deleteColumnFn = async (columnId: number) => {
-    await deleteColumn(columnId);
+  const deleteColumnFn = async (columnId: number): Promise<AxiosResponse<void>> => {
+    const res = await deleteColumn(columnId);
     columnQuery.refetch();
+    return res;
   };
 
   const value = {
