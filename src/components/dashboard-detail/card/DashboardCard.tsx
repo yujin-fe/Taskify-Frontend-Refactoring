@@ -1,3 +1,5 @@
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import { useState } from 'react';
 import Icons from '@/assets/icons';
 import Avatar from '@/components/common/avatar/Avatar';
@@ -30,10 +32,29 @@ export default function DashboardCard({
   const [isImageError, setIsImageError] = useState(false);
   const modal = useModal(`cardDetail_${cardData.id}`);
 
+  const { setNodeRef, attributes, listeners, transform, transition, isDragging } = useSortable({
+    id: cardData.id,
+    data: {
+      type: 'card',
+      cardId: cardData.id,
+      columnId: columnId,
+    },
+  });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.8 : 1,
+  };
+
   return (
     <>
       <div
-        onClick={modal.handleModalOpen}
+        ref={setNodeRef}
+        style={style}
+        {...attributes}
+        {...listeners}
+        onClick={() => !isDragging && modal.handleModalOpen()}
         role='button'
         tabIndex={0}
         className='flex cursor-pointer flex-col overflow-hidden rounded-[6px] border border-gray-300 bg-gray-0 p-[12px] pb-[6px] select-none sm:flex-row sm:items-center sm:px-[20px] sm:py-[16px] md:max-w-[314px] md:flex-col md:items-start'>
