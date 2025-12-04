@@ -1,4 +1,13 @@
 import { createContext } from 'react';
-import type { ColumnsResponse } from '@/types/column';
+import type { UpdateColumnVariables, CreateColumnType } from '@/lib/apis/columns';
+import type { ColumnsData } from '@/types/column';
 
-export const ColumnListContext = createContext<ColumnsResponse | null>(null);
+interface ColumnListContextType {
+  columnList: ColumnsData[] | [];
+  isLoading: boolean;
+  createColumn: (body: CreateColumnType) => Promise<ColumnsData>;
+  updateColumn: (vars: UpdateColumnVariables) => Promise<ColumnsData>;
+  deleteColumn: (columnId: number) => Promise<void>;
+}
+
+export const ColumnListContext = createContext<ColumnListContextType | null>(null);
