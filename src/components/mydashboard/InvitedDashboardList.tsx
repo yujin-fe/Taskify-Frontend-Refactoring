@@ -1,6 +1,7 @@
 import axios from 'axios';
 import Button from '@/components/common/Button';
 import BaseModalFrame from '@/components/common/modal/BaseModalFrame';
+import ListSkeleton from '@/components/skeleton/ListSkeleton';
 import useBaseModal from '@/hooks/useBaseModal';
 import { useInvitedDashboardCtx } from '@/hooks/useInvitedDashboardCtx';
 import useMutation from '@/hooks/useMutation';
@@ -12,7 +13,7 @@ interface ResponseInvitationReqType {
   invitationId: string;
   reqBody: { inviteAccepted: boolean };
 }
-export default function InvitedDashboardList() {
+export default function InvitedDashboardList({ isLoading }: { isLoading: boolean }) {
   const {
     ListData,
     lastItemRef,
@@ -109,38 +110,42 @@ export default function InvitedDashboardList() {
         </div>
       )}
       {/* TODO: 스켈레톤 교체 */}
-      <ul className='scrollbar-hidden w-full overflow-y-scroll'>
-        {!isMobile
-          && invitations?.map((invitation, ind) => (
-            <li
-              ref={invitations.length - 1 === ind ? lastItemRef : null}
-              key={invitation.id}
-              className={`flex w-full gap-[16px] border-b border-gray-200 py-[20px] sm:pl-[28px] md:pl-[76px]`}>
-              <span className='inline-block w-[153px] lg:w-[298px]'>
-                {invitation.dashboard.title}
-              </span>
-              <span className='inline-block w-[117px] lg:w-[306px]'>
-                {invitation.inviter.nickname}
-              </span>
-              <div className='flex w-[154px] gap-[10px] lg:w-[178px]'>
-                <Button
-                  size={'sm'}
-                  className='max-md:font-14-medium flex-none max-md:h-[30px] max-md:min-w-[72px] max-md:p-0'
-                  onClick={() => handleResponse(invitation, true)}>
-                  수락
-                </Button>
-                <Button
-                  theme={'secondary'}
-                  size={'sm'}
-                  className='max-md:font-14-medium flex-none max-md:h-[30px] max-md:min-w-[72px] max-md:p-0'
-                  onClick={() => handleResponse(invitation, false)}>
-                  거절
-                </Button>
-              </div>
-            </li>
-          ))}
-        {isMobile && mobileList()}
-      </ul>
+      {isLoading ? (
+        <ListSkeleton />
+      ) : (
+        <ul className='scrollbar-hidden w-full overflow-y-scroll'>
+          {!isMobile
+            && invitations?.map((invitation, ind) => (
+              <li
+                ref={invitations.length - 1 === ind ? lastItemRef : null}
+                key={invitation.id}
+                className={`flex w-full gap-[16px] border-b border-gray-200 py-[20px] sm:pl-[28px] md:pl-[76px]`}>
+                <span className='inline-block w-[153px] lg:w-[298px]'>
+                  {invitation.dashboard.title}
+                </span>
+                <span className='inline-block w-[117px] lg:w-[306px]'>
+                  {invitation.inviter.nickname}
+                </span>
+                <div className='flex w-[154px] gap-[10px] lg:w-[178px]'>
+                  <Button
+                    size={'sm'}
+                    className='max-md:font-14-medium flex-none max-md:h-[30px] max-md:min-w-[72px] max-md:p-0'
+                    onClick={() => handleResponse(invitation, true)}>
+                    수락
+                  </Button>
+                  <Button
+                    theme={'secondary'}
+                    size={'sm'}
+                    className='max-md:font-14-medium flex-none max-md:h-[30px] max-md:min-w-[72px] max-md:p-0'
+                    onClick={() => handleResponse(invitation, false)}>
+                    거절
+                  </Button>
+                </div>
+              </li>
+            ))}
+          {isMobile && mobileList()}
+        </ul>
+      )}
       {isOpen && (
         <BaseModalFrame
           setOnModal={() => {

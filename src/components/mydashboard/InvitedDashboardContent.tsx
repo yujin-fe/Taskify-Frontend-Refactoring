@@ -2,6 +2,7 @@ import { useState } from 'react';
 import notInvited from '@/assets/images/dashboard/no-invited-dashboard.png';
 import InvitedDashboardList from '@/components/mydashboard/InvitedDashboardList';
 import InvitedDashboardSearch from '@/components/mydashboard/InvitedDashboardSearch';
+import ListSkeleton from '@/components/skeleton/ListSkeleton';
 import { InvitedDashboardContext } from '@/context/invitedDashboardContext';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 import { getMyInvitations } from '@/lib/apis/Invitations';
@@ -30,6 +31,7 @@ export default function InvitedDashboardContent() {
     error: ListError,
     setData: setListData,
     resetData: resetListData,
+    isLoading,
     lastItemRef,
   } = useInfiniteScroll({
     fetchFn: (params) => getMyInvitations(params),
@@ -75,7 +77,7 @@ export default function InvitedDashboardContent() {
       }}>
       <div className='flex flex-col gap-6'>
         <InvitedDashboardSearch />
-        <InvitedDashboardList />
+        <InvitedDashboardList isLoading={isLoading} />
       </div>
     </InvitedDashboardContext>
   );
