@@ -6,10 +6,10 @@ interface InvitedDashboardContextType {
   setListData: Dispatch<SetStateAction<MyInvitationResponse | null>>;
   resetListData: () => void;
   lastItemRef: React.RefObject<HTMLLIElement | null>;
-  search: null | string;
-  setSearch: Dispatch<SetStateAction<null | string>>;
   confirmMessage: string | null;
   setConfirmMessage: Dispatch<SetStateAction<string>>;
+  search: string | null;
+  setSearch: Dispatch<SetStateAction<string | null>>;
 }
 
 export const InvitedDashboardContext = createContext({} as InvitedDashboardContextType);

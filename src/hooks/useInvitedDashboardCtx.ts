@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { InvitedDashboardContext } from '@/context/InvitedDashboardContext';
+import { InvitedDashboardContext } from '@/context/invitedDashboardContext';
 
 export const useInvitedDashboardCtx = () => {
   const context = useContext(InvitedDashboardContext);

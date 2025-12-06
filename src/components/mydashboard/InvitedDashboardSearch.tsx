@@ -7,11 +7,11 @@ import { getMyInvitations } from '@/lib/apis/Invitations';
 
 export default function InvitedDashboardSearch() {
   const {
-    search,
-    setSearch,
     resetListData: resetData,
     setListData: setData,
     setConfirmMessage,
+    search,
+    setSearch,
   } = useInvitedDashboardCtx();
   const { handleModalOpen } = useBaseModal();
   const handleSearch = (value: string) => {
@@ -43,7 +43,7 @@ export default function InvitedDashboardSearch() {
   };
 
   return (
-    <form onSubmit={(e) => handleSubmit(e)}>
+    <form onSubmit={(e) => handleSubmit(e)} className='px-4 md:px-7'>
       <Input value={search ?? ''} onChange={handleSearch}>
         <Input.Group className='flex h-[40px] items-center'>
           <Input.PrefixIcon>
