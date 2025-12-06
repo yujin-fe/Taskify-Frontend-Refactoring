@@ -1,19 +1,29 @@
+import { useDroppable } from '@dnd-kit/core';
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { useEffect } from 'react';
 import CreateButton from '@/components/dashboard/CreateButton';
 import DashboardCard from '@/components/dashboard-detail/card/DashboardCard';
 import ColumnInfoHeader from '@/components/dashboard-detail/column/ColumnInfoHeader';
 import CreateCardModal from '@/components/dashboard-detail/modal/CreateCardModal';
 import Skeleton from '@/components/skeleton/Skeleton';
+import useUpdateCard from '@/hooks/dashboard-detail/useUpdateCard';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 import { useModal } from '@/hooks/useModal';
 import useMutation from '@/hooks/useMutation';
 import useUserContext from '@/hooks/useUserContext';
 import { createCard, getCardListData, type CreateCardType } from '@/lib/apis/cards';
-import type { CardDetailResponse, CardInitialValueType, CardsResponse } from '@/types/card';
+import type {
+  CardDetailResponse,
+  CardEditFormValue,
+  CardInitialValueType,
+  CardsResponse,
+} from '@/types/card';
 import type { ColumnsData } from '@/types/column';
 import type { MembersResponse } from '@/types/members';
 import { createCardRequestBody } from '@/utils/card/createCardRequestBody';
+import { updateCardRequestBody } from '@/utils/card/updateCardRequestBody';
 import { uploadCardImage } from '@/utils/card/uploadCardImage';
+import { cn } from '@/utils/cn';
 
 interface ColumnCardListProps {
   column: ColumnsData;
@@ -21,6 +31,10 @@ interface ColumnCardListProps {
   memberData: MembersResponse | null;
   onHeaderClick: () => void;
   onRegisterRefetch: (columnId: number, fn: () => void) => void;
+  onRegisterMoveHandler: (
+    columnId: number,
+    fn: (cardId: number, toColumnId: number) => void
+  ) => void;
   onCardMoved: (fromColumnId: number, toColumnId: number) => void;
 }
 
@@ -32,11 +46,17 @@ export default function ColumnCardList({
   memberData,
   onHeaderClick,
   onRegisterRefetch,
+  onRegisterMoveHandler,
   onCardMoved,
 }: ColumnCardListProps) {
   const { userProfile } = useUserContext();
   const CREATE_MODAL_NAME = `CREATE_CARD_${column.id}`;
   const createCardModal = useModal(CREATE_MODAL_NAME);
+
+  const { setNodeRef, isOver } = useDroppable({
+    id: column.id,
+    data: { type: 'column', columnId: column.id },
+  });
 
   const {
     data: infiniteData,
@@ -60,9 +80,44 @@ export default function ColumnCardList({
     },
   });
 
+  const updateCardMutation = useUpdateCard({
+    onSuccess: (updated) => {
+      handleUpdateCard(updated);
+    },
+  });
+
   useEffect(() => {
     onRegisterRefetch(column.id, resetData);
   }, [column.id, onRegisterRefetch, resetData]);
+
+  useEffect(() => {
+    const moveHandler = (cardId: number, toColumnId: number) => {
+      if (!infiniteData) {
+        return;
+      }
+
+      const card = infiniteData.cards.find((c) => c.id === cardId);
+      if (!card) {
+        return;
+      }
+
+      const formValue: CardEditFormValue = {
+        columnId: toColumnId,
+        assigneeUser: card.assignee,
+        title: card.title,
+        description: card.description,
+        dueDate: card.dueDate,
+        tags: card.tags,
+        imageUrl: card.imageUrl,
+      };
+
+      const body = updateCardRequestBody(formValue, card, card.imageUrl ?? null, userProfile?.id);
+
+      updateCardMutation.mutate({ id: cardId, body });
+    };
+
+    onRegisterMoveHandler(column.id, moveHandler);
+  }, [column.id, infiniteData, onRegisterMoveHandler, updateCardMutation, userProfile?.id]);
 
   const createCardMutation = useMutation({
     mutationFn: (reqBody: CreateCardType) => createCard(reqBody),
@@ -177,23 +232,29 @@ export default function ColumnCardList({
           createCardModal.handleModalOpen();
         }}
       />
-      <ul className='flex flex-col gap-[16px]'>
-        {cards.map((card, index) => {
-          const isLast = index === cards.length - 1;
-          return (
-            <li key={card.id} ref={isLast ? lastItemRef : undefined}>
-              <DashboardCard
-                columnTitle={column.title}
-                columnId={column.id}
-                cardData={card}
-                onDeleteCard={() => handleDeleteCard(card.id)}
-                onUpdateCard={handleUpdateCard}
-                memberData={memberData}
-              />
-            </li>
-          );
-        })}
-      </ul>
+      <div ref={setNodeRef} className={cn(isOver && 'bg-violet-500-8', 'h-full')}>
+        <SortableContext
+          items={cards.map((card) => card.id)}
+          strategy={verticalListSortingStrategy}>
+          <ul className='flex flex-col gap-[16px]'>
+            {cards.map((card, index) => {
+              const isLast = index === cards.length - 1;
+              return (
+                <li key={card.id} ref={isLast ? lastItemRef : undefined}>
+                  <DashboardCard
+                    columnTitle={column.title}
+                    columnId={column.id}
+                    cardData={card}
+                    onDeleteCard={() => handleDeleteCard(card.id)}
+                    onUpdateCard={handleUpdateCard}
+                    memberData={memberData}
+                  />
+                </li>
+              );
+            })}
+          </ul>
+        </SortableContext>
+      </div>
       {/* 할 일 생성 모달 */}
       {createCardModal.isOpen && (
         <CreateCardModal
