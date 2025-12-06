@@ -2,7 +2,7 @@ import PageIndicator from '@/components/common/PageIndicator';
 import PageNation from '@/components/common/PageNation';
 import CreateButton from '@/components/dashboard/CreateButton';
 import DashboardNameCard from '@/components/mydashboard/DashboardNameCard';
-import InvitedDashboard from '@/components/mydashboard/InvitedDashboard';
+import InvitedDashboardFrame from '@/components/mydashboard/InvitedDashboardFrame';
 import { NEW_DASHBOARD } from '@/constants/modalName';
 import { useModal } from '@/hooks/useModal';
 import { usePagination } from '@/hooks/usePagination';
@@ -73,7 +73,7 @@ export default function MyDashboard() {
           )}
         </section>
         <section className='mt-10 h-fit max-w-[1022px] rounded-lg bg-gray-0 pb-2.5'>
-          <InvitedDashboard />
+          <InvitedDashboardFrame />
         </section>
       </div>
     </>
